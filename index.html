@@ -1,608 +1,421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<meta name="description" content="Personal Finance Dashboard">
+
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%232563eb'/%3E%3Cpath d='M10 19c0-3.3 2.7-6 6-6h32c3.3 0 6 2.7 6 6v26c0 3.3-2.7 6-6 6H16c-3.3 0-6-2.7-6-6V19Z' fill='white'/%3E%3Cpath d='m20 39 7-7 5 4 12-12' stroke='%232563eb' stroke-width='4' fill='none'/%3E%3C/svg%3E">
 
 <title>My Finance Dashboard</title>
-
-<link rel="icon" type="image/svg+xml"
-href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%232563eb'/%3E%3Cpath d='M10 19c0-3.3 2.7-6 6-6h32c3.3 0 6 2.7 6 6v26c0 3.3-2.7 6-6 6H16c-3.3 0-6-2.7-6-6V19Z' fill='white'/%3E%3Cpath d='M10 22h37c3.9 0 7 3.1 7 7v10H43c-4.4 0-8-3.6-8-8s3.6-8 8-8' fill='%23dbeafe'/%3E%3Cpath d='m20 39 7-7 5 4 12-12' stroke='%232563eb' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M38 24h6v6' stroke='%232563eb' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='44' cy='31' r='3' fill='%232563eb'/%3E%3C/svg%3E">
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
+:root{
+ --primary:#2563eb;
+ --primary2:#4f46e5;
+ --bg:#f1f5f9;
+ --card:#fff;
+ --text:#1e293b;
+ --muted:#64748b;
+ --border:#e2e8f0;
+ --danger:#dc2626;
+ --success:#16a34a;
+ --warning:#d97706;
+}
 
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial,Helvetica,sans-serif;
+ box-sizing:border-box;
+ margin:0;
+ padding:0;
+ font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-    background:#f1f5f9;
-    color:#1e293b;
-    padding:18px;
+ background:var(--bg);
+ color:var(--text);
+ padding:15px;
+ transition:.25s;
 }
 
-button,input,select{
-    font-size:15px;
+body.dark{
+ --bg:#0f172a;
+ --card:#1e293b;
+ --text:#f8fafc;
+ --muted:#94a3b8;
+ --border:#334155;
 }
 
-/* =====================================================
-   LOGIN
-===================================================== */
-
-#loginScreen{
-    min-height:90vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.login-card{
-    background:white;
-    width:100%;
-    max-width:420px;
-    padding:30px;
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
-
-.login-logo{
-    width:70px;
-    height:70px;
-    margin:0 auto 18px;
-    border-radius:20px;
-    background:linear-gradient(135deg,#2563eb,#4f46e5);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:white;
-    font-size:34px;
-}
-
-.login-card h1{
-    text-align:center;
-    margin-bottom:7px;
-}
-
-.login-card p{
-    text-align:center;
-    color:#64748b;
-    margin-bottom:22px;
-}
-
-.login-card label{
-    display:block;
-    font-size:13px;
-    font-weight:bold;
-    margin:12px 0 6px;
-}
-
-.login-input{
-    width:100%;
-    padding:13px;
-    border:1px solid #cbd5e1;
-    border-radius:9px;
-}
-
-.password-wrap{
-    position:relative;
-}
-
-.password-wrap input{
-    padding-right:50px;
-}
-
-.show-password{
-    position:absolute;
-    right:8px;
-    top:50%;
-    transform:translateY(-50%);
-    width:auto;
-    padding:7px 9px;
-    background:transparent;
-    color:#475569;
-    font-size:18px;
-}
-
-.login-button{
-    width:100%;
-    padding:13px;
-    margin-top:18px;
-    border:0;
-    border-radius:9px;
-    background:#2563eb;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.login-button:hover{
-    background:#1d4ed8;
-}
-
-.forgot-password{
-    display:block;
-    text-align:center;
-    margin-top:15px;
-    color:#2563eb;
-    font-size:14px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.forgot-password:hover{
-    text-decoration:underline;
-}
-
-.remember-row{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin-top:12px;
-    font-size:13px;
-    color:#475569;
-}
-
-.remember-row input{
-    width:auto;
-}
-
-.login-error{
-    color:#dc2626;
-    background:#fee2e2;
-    padding:10px;
-    border-radius:8px;
-    margin-top:14px;
-    font-size:13px;
-    display:none;
-}
-
-.login-success{
-    color:#166534;
-    background:#dcfce7;
-    padding:10px;
-    border-radius:8px;
-    margin-top:14px;
-    font-size:13px;
-    display:none;
-}
-
-.login-status{
-    text-align:center;
-    margin-top:12px;
-    color:#64748b;
-    font-size:13px;
-}
-
-/* =====================================================
-   APP
-===================================================== */
-
-#app{
-    display:none;
-}
-
-.container{
-    max-width:1100px;
-    margin:auto;
-}
-
-/* HEADER */
-
-.header{
-    text-align:center;
-    margin-bottom:22px;
-    position:relative;
-}
-
-.logo{
-    width:62px;
-    height:62px;
-    border-radius:18px;
-    background:linear-gradient(135deg,#2563eb,#4f46e5);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin:0 auto 12px;
-    box-shadow:0 10px 25px rgba(37,99,235,.28);
-}
-
-.header h1{
-    font-size:29px;
-}
-
-.header p{
-    color:#64748b;
-    margin-top:5px;
-}
-
-.user-bar{
-    margin-top:14px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
-.user-email{
-    color:#475569;
-    font-size:13px;
-}
-
-.logout-btn{
-    width:auto;
-    padding:8px 14px;
-    background:#ef4444;
-    color:white;
-    border:0;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-/* TOTAL */
-
-.total-card{
-    background:linear-gradient(135deg,#2563eb,#4f46e5);
-    color:white;
-    padding:28px;
-    border-radius:20px;
-    text-align:center;
-    margin-bottom:18px;
-    box-shadow:0 10px 25px rgba(37,99,235,.25);
-}
-
-.total-card p{
-    opacity:.9;
-}
-
-.total-card h2{
-    font-size:42px;
-    margin:9px 0;
-}
-
-/* CARD */
-
-.card{
-    background:white;
-    padding:21px;
-    border-radius:16px;
-    margin-bottom:18px;
-    box-shadow:0 4px 14px rgba(0,0,0,.06);
-}
-
-.card h2{
-    margin-bottom:17px;
-    font-size:20px;
-}
-
-/* FORM */
-
-.form-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:14px;
-}
-
-.full{
-    grid-column:1/-1;
-}
-
-label{
-    display:block;
-    font-size:13px;
-    font-weight:bold;
-    margin-bottom:6px;
-    color:#334155;
-}
-
-input,select{
-    width:100%;
-    padding:12px;
-    border-radius:9px;
-    border:1px solid #cbd5e1;
-    background:white;
-    color:#1e293b;
+button,input,select,textarea{
+ font-size:15px;
 }
 
 button{
-    width:100%;
-    padding:12px;
-    border-radius:9px;
-    border:0;
-    cursor:pointer;
-    font-weight:bold;
+ border:0;
+ cursor:pointer;
+ font-weight:bold;
+}
+
+input,select,textarea{
+ width:100%;
+ padding:11px;
+ border:1px solid var(--border);
+ border-radius:9px;
+ background:var(--card);
+ color:var(--text);
+}
+
+.container{
+ max-width:1150px;
+ margin:auto;
+}
+
+.card{
+ background:var(--card);
+ padding:20px;
+ border-radius:16px;
+ margin-bottom:18px;
+ box-shadow:0 4px 14px rgba(0,0,0,.06);
+}
+
+.card h2{
+ margin-bottom:16px;
+ font-size:20px;
 }
 
 .primary{
-    background:#2563eb;
-    color:white;
+ background:var(--primary);
+ color:white;
+ padding:11px 15px;
+ border-radius:9px;
 }
 
 .primary:hover{
-    background:#1d4ed8;
+ background:#1d4ed8;
 }
 
-.gray-btn{
-    background:#64748b;
-    color:white;
+.gray{
+ background:#64748b;
+ color:white;
+ padding:11px 15px;
+ border-radius:9px;
 }
 
-/* INFO */
-
-.info-box{
-    background:#eff6ff;
-    border-left:4px solid #2563eb;
-    padding:12px;
-    border-radius:7px;
-    font-size:13px;
-    color:#334155;
-    margin-bottom:15px;
+.danger{
+ background:#fee2e2;
+ color:#dc2626;
+ padding:8px 12px;
+ border-radius:8px;
 }
 
-/* PERIOD */
-
-.period-bar{
-    background:white;
-    padding:12px;
-    border-radius:15px;
-    margin-bottom:18px;
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    justify-content:center;
-    box-shadow:0 4px 12px rgba(0,0,0,.05);
+.success{
+ background:#dcfce7;
+ color:#166534;
+ padding:8px 12px;
+ border-radius:8px;
 }
 
-.period-btn{
-    width:auto;
-    padding:9px 17px;
-    border-radius:20px;
-    background:#e2e8f0;
-    color:#334155;
+.warning{
+ background:#fef3c7;
+ color:#92400e;
+ padding:8px 12px;
+ border-radius:8px;
 }
 
-.period-btn.active{
-    background:#2563eb;
-    color:white;
+label{
+ display:block;
+ font-size:13px;
+ font-weight:bold;
+ margin-bottom:6px;
+ color:var(--muted);
 }
 
-/* SUMMARY */
-
-.summary{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:14px;
-    margin-bottom:18px;
+.grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:12px;
 }
 
-.summary-card{
-    background:white;
-    padding:18px;
-    border-radius:15px;
-    box-shadow:0 4px 12px rgba(0,0,0,.05);
+.full{
+ grid-column:1/-1;
 }
 
-.summary-card p{
-    color:#64748b;
-    font-size:14px;
+.login-wrap{
+ min-height:94vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
 }
 
-.summary-card h3{
-    margin-top:7px;
-    font-size:22px;
+.login-card{
+ width:100%;
+ max-width:430px;
+ background:var(--card);
+ padding:30px;
+ border-radius:20px;
+ box-shadow:0 10px 35px rgba(0,0,0,.1);
 }
 
-.green{color:#16a34a}
-.red{color:#dc2626}
-.blue{color:#2563eb}
+.login-logo,.app-logo{
+ width:65px;
+ height:65px;
+ border-radius:18px;
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:white;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:34px;
+ margin:auto auto 15px;
+}
 
-/* ACCOUNTS */
+.login-card h1{
+ text-align:center;
+ margin-bottom:7px;
+}
+
+.login-card p{
+ text-align:center;
+ color:var(--muted);
+ margin-bottom:20px;
+}
+
+.login-card .field{
+ margin-bottom:12px;
+}
+
+.login-btn{
+ width:100%;
+ padding:13px;
+ border-radius:9px;
+ background:var(--primary);
+ color:white;
+ margin-top:7px;
+}
+
+.forgot{
+ display:block;
+ text-align:center;
+ color:var(--primary);
+ margin-top:14px;
+ cursor:pointer;
+ font-weight:bold;
+}
+
+.msg{
+ display:none;
+ padding:10px;
+ margin-top:12px;
+ border-radius:8px;
+ font-size:13px;
+}
+
+.error{
+ background:#fee2e2;
+ color:#991b1b;
+}
+
+.ok{
+ background:#dcfce7;
+ color:#166534;
+}
+
+#app{
+ display:none;
+}
+
+.header{
+ text-align:center;
+ margin-bottom:18px;
+}
+
+.app-logo{
+ margin-bottom:10px;
+ box-shadow:0 8px 25px rgba(37,99,235,.25);
+}
+
+.header h1{
+ font-size:29px;
+}
+
+.header p{
+ color:var(--muted);
+ margin-top:5px;
+}
+
+.userbar{
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ flex-wrap:wrap;
+ gap:8px;
+ margin-top:12px;
+}
+
+.logout{
+ background:#ef4444;
+ color:white;
+ padding:8px 13px;
+ border-radius:8px;
+}
+
+.install{
+ background:#16a34a;
+ color:white;
+ padding:8px 13px;
+ border-radius:8px;
+ display:none;
+}
+
+.nav{
+ display:flex;
+ gap:7px;
+ flex-wrap:wrap;
+ justify-content:center;
+ margin-bottom:18px;
+}
+
+.nav button{
+ padding:9px 13px;
+ border-radius:20px;
+ background:var(--card);
+ color:var(--text);
+ border:1px solid var(--border);
+}
+
+.nav button.active{
+ background:var(--primary);
+ color:white;
+}
+
+.total{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:white;
+ padding:28px;
+ border-radius:20px;
+ text-align:center;
+ margin-bottom:18px;
+}
+
+.total h2{
+ font-size:40px;
+ margin:8px;
+}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(5,1fr);
+ gap:10px;
+ margin-bottom:18px;
+}
+
+.stat{
+ background:var(--card);
+ padding:16px;
+ border-radius:14px;
+ box-shadow:0 3px 10px rgba(0,0,0,.05);
+}
+
+.stat small{
+ color:var(--muted);
+}
+
+.stat strong{
+ display:block;
+ font-size:20px;
+ margin-top:7px;
+}
+
+.green{color:var(--success)}
+.red{color:var(--danger)}
+.blue{color:var(--primary)}
+.orange{color:var(--warning)}
 
 .accounts{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:12px;
 }
 
 .account{
-    border:1px solid #e2e8f0;
-    border-radius:12px;
-    padding:17px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ padding:15px;
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ align-items:center;
 }
 
-.account-name{
-    font-weight:bold;
+.account-info strong{
+ display:block;
 }
 
-.account-balance{
-    color:#2563eb;
-    font-weight:bold;
+.account-info small{
+ color:var(--muted);
+ display:block;
+ margin-top:5px;
 }
 
-.delete-account-btn{
-    width:auto;
-    padding:7px 10px;
-    background:#fee2e2;
-    color:#dc2626;
-    border:1px solid #fecaca;
-    border-radius:7px;
-    cursor:pointer;
-    font-size:12px;
-    font-weight:bold;
-    flex-shrink:0;
+.account-actions{
+ display:flex;
+ gap:5px;
+ flex-wrap:wrap;
 }
 
-.delete-account-btn:hover{
-    background:#fecaca;
+.account-actions button{
+ width:auto;
+ padding:7px 9px;
+ border-radius:7px;
 }
 
-/* CHART */
-
-.chart-card{
-    min-height:390px;
+.chart-grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:18px;
 }
 
-.chart-container{
-    position:relative;
-    height:320px;
+.chart-box{
+ height:320px;
+ position:relative;
 }
-
-.chart-switch{
-    display:flex;
-    gap:7px;
-    margin-bottom:14px;
-    flex-wrap:wrap;
-}
-
-.chart-switch button{
-    width:auto;
-    padding:8px 13px;
-    border-radius:18px;
-    background:#e2e8f0;
-    color:#334155;
-    font-size:13px;
-}
-
-.chart-switch button.active{
-    background:#2563eb;
-    color:white;
-}
-
-/* PIE */
-
-.pie-info{
-    margin-top:15px;
-    display:grid;
-    gap:8px;
-}
-
-.pie-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:9px 10px;
-    border-radius:8px;
-    background:#f8fafc;
-    font-size:13px;
-}
-
-.pie-left{
-    display:flex;
-    align-items:center;
-    gap:7px;
-}
-
-.color-dot{
-    width:11px;
-    height:11px;
-    border-radius:50%;
-}
-
-/* ACCOUNT FORM */
-
-.account-form{
-    display:flex;
-    gap:10px;
-}
-
-.account-form button{
-    width:170px;
-}
-
-/* FILTER */
-
-.filter-box{
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:12px;
-    padding:14px;
-    margin-bottom:16px;
-}
-
-.filter-grid{
-    display:grid;
-    grid-template-columns:2fr 1.3fr 1.3fr 1.3fr 1.2fr;
-    gap:10px;
-}
-
-.filter-actions{
-    display:flex;
-    gap:8px;
-    margin-top:10px;
-}
-
-.filter-actions button{
-    width:auto;
-    padding:9px 16px;
-}
-
-.filter-summary{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:8px;
-    margin-bottom:15px;
-}
-
-.filter-summary-item{
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    padding:11px;
-    border-radius:9px;
-}
-
-.filter-summary-item span{
-    display:block;
-    color:#64748b;
-    font-size:11px;
-    margin-bottom:4px;
-}
-
-.filter-summary-item strong{
-    font-size:14px;
-}
-
-/* TRANSACTIONS */
 
 .transaction{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:14px 0;
-    border-bottom:1px solid #e2e8f0;
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ padding:14px 0;
+ border-bottom:1px solid var(--border);
 }
 
 .transaction:last-child{
-    border-bottom:none;
+ border-bottom:0;
 }
 
-.transaction-left{
-    display:flex;
-    align-items:center;
-    gap:10px;
+.tx-left{
+ display:flex;
+ gap:10px;
+ align-items:center;
+ min-width:0;
 }
 
-.transaction-icon{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-shrink:0;
+.tx-icon{
+ width:40px;
+ height:40px;
+ border-radius:50%;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ flex-shrink:0;
 }
 
 .income-icon{background:#dcfce7}
@@ -610,1016 +423,900 @@ button{
 .transfer-icon{background:#dbeafe}
 .opening-icon{background:#fef3c7}
 
-.transaction-name{
-    font-weight:bold;
+.tx-name{
+ font-weight:bold;
+ word-break:break-word;
 }
 
-.transaction-meta{
-    color:#64748b;
-    font-size:12px;
-    margin-top:4px;
+.tx-meta{
+ color:var(--muted);
+ font-size:12px;
+ margin-top:4px;
 }
 
-.transaction-right{
-    text-align:right;
+.tx-right{
+ text-align:right;
+ white-space:nowrap;
 }
 
-.transaction-amount{
-    font-weight:bold;
+.tx-buttons{
+ display:flex;
+ gap:5px;
+ justify-content:flex-end;
+ margin-top:5px;
 }
 
-.delete-btn{
-    width:auto;
-    padding:5px 8px;
-    background:#ef4444;
-    color:white;
-    border-radius:5px;
-    font-size:11px;
-    margin-top:5px;
+.tx-buttons button{
+ width:auto;
+ padding:5px 8px;
+ border-radius:6px;
+ font-size:11px;
+}
+
+.edit{
+ background:#dbeafe;
+ color:#1d4ed8;
+}
+
+.del{
+ background:#fee2e2;
+ color:#dc2626;
+}
+
+.filters{
+ display:grid;
+ grid-template-columns:2fr repeat(4,1fr);
+ gap:9px;
+}
+
+.filter-buttons{
+ display:flex;
+ gap:7px;
+ margin-top:10px;
+}
+
+.filter-buttons button{
+ width:auto;
+}
+
+.section{
+ display:none;
+}
+
+.section.active{
+ display:block;
+}
+
+.modal{
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.55);
+ display:none;
+ align-items:center;
+ justify-content:center;
+ padding:15px;
+ z-index:1000;
+}
+
+.modal-card{
+ width:100%;
+ max-width:550px;
+ max-height:90vh;
+ overflow:auto;
+ background:var(--card);
+ color:var(--text);
+ border-radius:18px;
+ padding:22px;
+}
+
+.modal-header{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:18px;
+}
+
+.close{
+ width:auto;
+ background:transparent;
+ color:var(--muted);
+ font-size:25px;
+}
+
+.form-actions{
+ display:flex;
+ gap:8px;
+ margin-top:15px;
+}
+
+.form-actions button{
+ width:auto;
+ flex:1;
+}
+
+.reminder{
+ border:1px solid var(--border);
+ padding:14px;
+ border-radius:12px;
+ margin-bottom:10px;
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+}
+
+.backup-area{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:10px;
+}
+
+.theme-grid{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:10px;
+}
+
+.theme{
+ height:65px;
+ border-radius:12px;
+ cursor:pointer;
+ border:3px solid transparent;
+}
+
+.theme.selected{
+ border-color:var(--text);
+}
+
+.info{
+ padding:12px;
+ background:rgba(37,99,235,.1);
+ border-left:4px solid var(--primary);
+ border-radius:7px;
+ margin-bottom:14px;
+ color:var(--text);
+ font-size:13px;
 }
 
 .empty{
-    text-align:center;
-    padding:30px;
-    color:#64748b;
+ text-align:center;
+ color:var(--muted);
+ padding:25px;
 }
 
-.connection{
-    text-align:center;
-    padding:8px;
-    margin-bottom:15px;
-    border-radius:8px;
-    font-size:13px;
-    background:#dcfce7;
-    color:#166534;
+.mobile-menu{
+ display:none;
 }
 
-/* MOBILE */
-
-@media(max-width:850px){
-
-    .filter-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .filter-summary{
-        grid-template-columns:repeat(3,1fr);
-    }
-
+@media(max-width:900px){
+ .stats{grid-template-columns:repeat(3,1fr)}
+ .filters{grid-template-columns:repeat(2,1fr)}
+ .chart-grid{grid-template-columns:1fr}
 }
 
-@media(max-width:750px){
-
-    .summary{
-        grid-template-columns:1fr;
-    }
-
-    .accounts{
-        grid-template-columns:1fr;
-    }
-
-    .form-grid{
-        grid-template-columns:1fr;
-    }
-
-    .full{
-        grid-column:auto;
-    }
-
+@media(max-width:700px){
+ body{padding:9px}
+ .grid{grid-template-columns:1fr}
+ .full{grid-column:auto}
+ .accounts{grid-template-columns:1fr}
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .theme-grid{grid-template-columns:repeat(2,1fr)}
+ .backup-area{grid-template-columns:1fr}
+ .transaction{align-items:flex-start}
+ .tx-left{max-width:68%}
+ .header h1{font-size:24px}
+ .total h2{font-size:32px}
 }
 
-@media(max-width:550px){
-
-    body{
-        padding:10px;
-    }
-
-    .login-card{
-        padding:23px;
-    }
-
-    .total-card h2{
-        font-size:32px;
-    }
-
-    .account-form{
-        flex-direction:column;
-    }
-
-    .account-form button{
-        width:100%;
-    }
-
-    .filter-grid{
-        grid-template-columns:1fr;
-    }
-
-    .filter-summary{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .transaction{
-        align-items:flex-start;
-    }
-
-    .transaction-left{
-        max-width:68%;
-    }
-
-    .account{
-        align-items:flex-start;
-    }
-
+@media(max-width:500px){
+ .filters{grid-template-columns:1fr}
+ .stats{grid-template-columns:1fr 1fr}
+ .login-card{padding:22px}
+ .nav{
+  overflow-x:auto;
+  justify-content:flex-start;
+  flex-wrap:nowrap;
+  padding-bottom:4px;
+ }
+ .nav button{
+  white-space:nowrap;
+ }
 }
-
 </style>
-
 </head>
 
 <body>
 
+<!-- LOGIN -->
 
-<!-- =====================================================
-     LOGIN SCREEN
-===================================================== -->
+<div id="loginScreen" class="login-wrap">
 
-<div id="loginScreen">
+<div class="login-card">
 
-    <div class="login-card">
+<div class="login-logo">💰</div>
 
-        <div class="login-logo">
-            💰
-        </div>
+<h1>My Finance Dashboard</h1>
 
-        <h1>
-            My Finance Dashboard
-        </h1>
+<p>Sign in to manage your finances</p>
 
-        <p>
-            Sign in to access your personal finances
-        </p>
+<div class="field">
+<label>Email</label>
+<input id="loginEmail" type="email" autocomplete="email" placeholder="Enter your email">
+</div>
 
+<div class="field">
+<label>Password</label>
+<input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter your password">
+</div>
 
-        <!-- EMAIL -->
+<label style="display:flex;gap:7px;align-items:center;font-weight:normal">
+<input id="rememberEmail" type="checkbox" style="width:auto">
+Remember my email
+</label>
 
-        <label>
-            Email
-        </label>
+<button class="login-btn" onclick="login()">🔐 Sign In</button>
 
-        <input
-            class="login-input"
-            type="email"
-            id="loginEmail"
-            placeholder="Enter your email"
-            autocomplete="email"
-        >
+<span class="forgot" onclick="forgotPassword()">🔑 Forgot Password?</span>
 
+<div id="loginError" class="msg error"></div>
+<div id="loginSuccess" class="msg ok"></div>
+<div id="loginStatus" style="text-align:center;color:var(--muted);margin-top:10px;font-size:13px"></div>
 
-        <!-- PASSWORD -->
-
-        <label>
-            Password
-        </label>
-
-        <div class="password-wrap">
-
-            <input
-                class="login-input"
-                type="password"
-                id="loginPassword"
-                placeholder="Enter your password"
-                autocomplete="current-password"
-            >
-
-            <button
-                type="button"
-                class="show-password"
-                onclick="togglePassword()"
-                id="showPasswordButton"
-            >
-                👁️
-            </button>
-
-        </div>
-
-
-        <!-- REMEMBER EMAIL -->
-
-        <div class="remember-row">
-
-            <input
-                type="checkbox"
-                id="rememberEmail"
-            >
-
-            <label
-                for="rememberEmail"
-                style="
-                    margin:0;
-                    font-weight:normal;
-                    cursor:pointer;
-                "
-            >
-                Remember my email
-            </label>
-
-        </div>
-
-
-        <!-- LOGIN -->
-
-        <button
-            class="login-button"
-            onclick="login()"
-        >
-            🔐 Sign In
-        </button>
-
-
-        <!-- FORGOT PASSWORD -->
-
-        <span
-            class="forgot-password"
-            onclick="forgotPassword()"
-        >
-            🔑 Forgot Password?
-        </span>
-
-
-        <!-- ERROR -->
-
-        <div
-            class="login-error"
-            id="loginError"
-        ></div>
-
-
-        <!-- SUCCESS -->
-
-        <div
-            class="login-success"
-            id="loginSuccess"
-        ></div>
-
-
-        <!-- STATUS -->
-
-        <div
-            class="login-status"
-            id="loginStatus"
-        ></div>
-
-    </div>
-
+</div>
 </div>
 
 
-<!-- =====================================================
-     APP
-===================================================== -->
+<!-- APP -->
 
 <div id="app">
 
 <div class="container">
 
+<header class="header">
 
-<!-- HEADER -->
+<div class="app-logo">💰</div>
 
-<div class="header">
+<h1>My Finance Dashboard</h1>
 
-    <div class="logo">
+<p>Personal money management</p>
 
-        <svg
-            viewBox="0 0 64 64"
-            width="38"
-            height="38"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+<div class="userbar">
 
-            <path
-                d="M10 19C10 15.686 12.686 13 16 13H48C51.314 13 54 15.686 54 19V45C54 48.314 51.314 51 48 51H16C12.686 51 10 48.314 10 45V19Z"
-                fill="white"
-            />
+<span id="userEmail" style="color:var(--muted);font-size:13px"></span>
 
-            <path
-                d="M10 22H47C50.866 22 54 25.134 54 29V39H43C38.582 39 35 35.418 35 31C35 26.582 38.582 22 43 22"
-                fill="#DBEAFE"
-            />
+<button id="installButton" class="install" onclick="installApp()">
+📱 Install App
+</button>
 
-            <path
-                d="M20 39L27 32L32 36L44 24"
-                stroke="#2563EB"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            />
+<button class="logout" onclick="logout()">🚪 Logout</button>
 
-            <path
-                d="M38 24H44V30"
-                stroke="#2563EB"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            />
+</div>
 
-            <circle
-                cx="44"
-                cy="31"
-                r="3"
-                fill="#2563EB"
-            />
-
-        </svg>
-
-    </div>
+</header>
 
 
-    <h1>
-        My Finance Dashboard
-    </h1>
+<nav class="nav">
 
-    <p>
-        Personal money management
-    </p>
+<button class="active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
+
+<button onclick="showSection('transactions',this)">📋 Transactions</button>
+
+<button onclick="showSection('accounts',this)">🏦 Accounts</button>
+
+<button onclick="showSection('reminders',this)">🔔 Reminders</button>
+
+<button onclick="showSection('backup',this)">💾 Backup</button>
+
+<button onclick="showSection('settings',this)">⚙️ Settings</button>
+
+</nav>
 
 
-    <div class="user-bar">
+<!-- DASHBOARD -->
 
-        <span
-            class="user-email"
-            id="userEmail"
-        ></span>
+<section id="dashboard" class="section active">
 
-        <button
-            class="logout-btn"
-            onclick="logout()"
-        >
-            🚪 Logout
-        </button>
+<div class="total">
 
-    </div>
+<p>Total Balance</p>
+
+<h2 id="totalBalance">Rs. 0.00</h2>
+
+<small>All accounts combined</small>
 
 </div>
 
 
-<div class="connection">
-    ☁️ Connected to Firebase
+<div class="stats">
+
+<div class="stat">
+<small>Income This Month</small>
+<strong class="green" id="monthIncome">Rs. 0.00</strong>
 </div>
 
+<div class="stat">
+<small>Expenses This Month</small>
+<strong class="red" id="monthExpense">Rs. 0.00</strong>
+</div>
 
-<!-- TOTAL BALANCE -->
+<div class="stat">
+<small>Monthly Savings</small>
+<strong class="blue" id="monthSavings">Rs. 0.00</strong>
+</div>
 
-<div class="total-card">
+<div class="stat">
+<small>Savings Rate</small>
+<strong class="blue" id="savingsRate">0%</strong>
+</div>
 
-    <p>
-        Total Balance
-    </p>
-
-    <h2 id="totalBalance">
-        Rs. 0.00
-    </h2>
-
-    <small>
-        All your accounts combined
-    </small>
+<div class="stat">
+<small>Transactions</small>
+<strong id="transactionCount">0</strong>
+</div>
 
 </div>
 
-
-<!-- ADD TRANSACTION -->
 
 <div class="card">
 
-    <h2>
-        ➕ Add Transaction
-    </h2>
+<h2>➕ Add Transaction</h2>
 
-    <div class="info-box">
+<div class="info">
+<b>Opening Balance:</b>
+Use this once when adding an account to record the money already held in that account.
+</div>
 
-        <b>Opening Balance:</b>
-        Add this only once for an account.
-        It represents the money you already had
-        when you started using this app.
+<div class="grid">
 
-    </div>
+<div>
+<label>Transaction Type</label>
 
+<select id="transactionType" onchange="changeTransactionType()">
 
-    <div class="form-grid">
+<option value="income">💵 Income</option>
+<option value="expense">💸 Expense</option>
+<option value="transfer">🔄 Transfer</option>
+<option value="opening">🟡 Opening Balance</option>
 
+</select>
+</div>
 
-        <div>
+<div>
+<label>Date</label>
+<input id="transactionDate" type="date">
+</div>
 
-            <label>
-                Transaction Type
-            </label>
+<div>
+<label>Description</label>
+<input id="description" placeholder="Salary, food, investment...">
+</div>
 
-            <select
-                id="transactionType"
-                onchange="changeTransactionType()"
-            >
+<div>
+<label>Amount</label>
+<input id="amount" type="number" min="0" step=".01" placeholder="Enter amount">
+</div>
 
-                <option value="income">
-                    💵 Income
-                </option>
+<div id="categoryBox">
+<label>Category</label>
 
-                <option value="expense">
-                    💸 Expense
-                </option>
+<select id="category">
+<option>Salary</option>
+<option>Business</option>
+<option>Freelance</option>
+<option>Food</option>
+<option>Transport</option>
+<option>Rent</option>
+<option>Bills</option>
+<option>Shopping</option>
+<option>Entertainment</option>
+<option>Health</option>
+<option>Education</option>
+<option>Investment</option>
+<option>Other</option>
+</select>
+</div>
 
-                <option value="transfer">
-                    🔄 Transfer
-                </option>
+<div>
+<label id="accountLabel">Account</label>
+<select id="fromAccount"></select>
+</div>
 
-                <option value="opening">
-                    🟡 Opening Balance
-                </option>
+<div id="toAccountBox" style="display:none">
+<label>To Account</label>
+<select id="toAccount"></select>
+</div>
 
-            </select>
+<div class="full">
+<button class="primary" onclick="saveTransaction()">➕ Add Transaction</button>
+</div>
 
-        </div>
-
-
-        <div>
-
-            <label>
-                Date
-            </label>
-
-            <input
-                type="date"
-                id="transactionDate"
-            >
-
-        </div>
-
-
-        <div>
-
-            <label>
-                Description
-            </label>
-
-            <input
-                type="text"
-                id="description"
-                placeholder="Salary, food, investment..."
-            >
-
-        </div>
-
-
-        <div>
-
-            <label>
-                Amount
-            </label>
-
-            <input
-                type="number"
-                id="amount"
-                placeholder="Enter amount"
-                min="0"
-                step="0.01"
-            >
-
-        </div>
-
-
-        <div id="categoryBox">
-
-            <label>
-                Category
-            </label>
-
-            <select id="category">
-
-                <option>Salary</option>
-                <option>Business</option>
-                <option>Freelance</option>
-                <option>Food</option>
-                <option>Transport</option>
-                <option>Rent</option>
-                <option>Bills</option>
-                <option>Shopping</option>
-                <option>Entertainment</option>
-                <option>Health</option>
-                <option>Education</option>
-                <option>Investment</option>
-                <option>Other</option>
-
-            </select>
-
-        </div>
-
-
-        <div>
-
-            <label id="accountLabel">
-                To Account
-            </label>
-
-            <select id="fromAccount"></select>
-
-        </div>
-
-
-        <div
-            id="toAccountBox"
-            style="display:none;"
-        >
-
-            <label>
-                To Account
-            </label>
-
-            <select id="toAccount"></select>
-
-        </div>
-
-
-        <div class="full">
-
-            <button
-                class="primary"
-                onclick="saveTransaction()"
-            >
-                Add Transaction
-            </button>
-
-        </div>
-
-    </div>
-
+</div>
 </div>
 
 
-<!-- PERIOD -->
+<div class="chart-grid">
 
-<div class="period-bar">
+<div class="card">
+<h2>🥧 Balance Distribution</h2>
+<div class="chart-box">
+<canvas id="balancePieChart"></canvas>
+</div>
+</div>
 
-    <button
-        class="period-btn active"
-        onclick="changePeriod('today',this)"
-    >
-        Today
-    </button>
+<div class="card">
+<h2>📈 Income vs Expenses</h2>
+<div class="chart-box">
+<canvas id="incomeExpenseChart"></canvas>
+</div>
+</div>
 
-    <button
-        class="period-btn"
-        onclick="changePeriod('month',this)"
-    >
-        This Month
-    </button>
+<div class="card">
+<h2>🛒 Spending by Category</h2>
+<div class="chart-box">
+<canvas id="categoryChart"></canvas>
+</div>
+</div>
 
-    <button
-        class="period-btn"
-        onclick="changePeriod('year',this)"
-    >
-        This Year
-    </button>
-
-    <button
-        class="period-btn"
-        onclick="changePeriod('all',this)"
-    >
-        All Time
-    </button>
+<div class="card">
+<h2>🏦 Account Growth</h2>
+<div class="chart-box">
+<canvas id="growthChart"></canvas>
+</div>
+</div>
 
 </div>
 
-
-<!-- SUMMARY -->
-
-<div class="summary">
-
-    <div class="summary-card">
-
-        <p>
-            💵 Income
-        </p>
-
-        <h3
-            class="green"
-            id="periodIncome"
-        >
-            Rs. 0.00
-        </h3>
-
-    </div>
+</section>
 
 
-    <div class="summary-card">
+<!-- TRANSACTIONS -->
 
-        <p>
-            💸 Expenses
-        </p>
+<section id="transactions" class="section">
 
-        <h3
-            class="red"
-            id="periodExpenses"
-        >
-            Rs. 0.00
-        </h3>
+<div class="card">
 
-    </div>
+<h2>📋 Transaction History</h2>
 
+<div class="filters">
 
-    <div class="summary-card">
+<div>
+<label>Search</label>
+<input id="historySearch" oninput="displayTransactions()" placeholder="Search description/category">
+</div>
 
-        <p>
-            💰 Savings
-        </p>
+<div>
+<label>Account</label>
+<select id="historyAccount" onchange="displayTransactions()">
+<option value="all">All Accounts</option>
+</select>
+</div>
 
-        <h3
-            class="blue"
-            id="periodSavings"
-        >
-            Rs. 0.00
-        </h3>
+<div>
+<label>Type</label>
+<select id="historyType" onchange="displayTransactions()">
+<option value="all">All Types</option>
+<option value="income">Income</option>
+<option value="expense">Expense</option>
+<option value="transfer">Transfer</option>
+<option value="opening">Opening</option>
+</select>
+</div>
 
-    </div>
+<div>
+<label>Period</label>
+<select id="historyPeriod" onchange="displayTransactions()">
+<option value="all">All Time</option>
+<option value="today">Today</option>
+<option value="week">This Week</option>
+<option value="month">This Month</option>
+<option value="year">This Year</option>
+</select>
+</div>
+
+<div>
+<label>Sort</label>
+<select id="historySort" onchange="displayTransactions()">
+<option value="newest">Newest</option>
+<option value="oldest">Oldest</option>
+<option value="highest">Highest Amount</option>
+<option value="lowest">Lowest Amount</option>
+</select>
+</div>
 
 </div>
+
+<div class="filter-buttons">
+
+<button class="gray" onclick="resetFilters()">🔄 Reset</button>
+
+</div>
+
+<br>
+
+<div id="transactionList"></div>
+
+</div>
+
+</section>
 
 
 <!-- ACCOUNTS -->
 
-<div class="card">
-
-    <h2>
-        🏦 My Accounts
-    </h2>
-
-    <div
-        class="accounts"
-        id="accountsList"
-    ></div>
-
-</div>
-
-
-<!-- PIE -->
-
-<div class="card chart-card">
-
-    <h2>
-        🥧 Balance Distribution
-    </h2>
-
-    <p
-        style="
-        color:#64748b;
-        font-size:13px;
-        margin-bottom:12px;
-        "
-    >
-        Your total money divided by account.
-    </p>
-
-
-    <div class="chart-container">
-
-        <canvas id="balancePieChart"></canvas>
-
-    </div>
-
-
-    <div
-        class="pie-info"
-        id="pieInfo"
-    ></div>
-
-</div>
-
-
-<!-- TREND -->
-
-<div class="card chart-card">
-
-    <h2>
-        📊 Financial Trend
-    </h2>
-
-
-    <div class="chart-switch">
-
-        <button
-            class="active"
-            onclick="changeTrend('incomeExpense',this)"
-        >
-            Income vs Expenses
-        </button>
-
-
-        <button
-            onclick="changeTrend('balance',this)"
-        >
-            Total Balance
-        </button>
-
-
-        <button
-            onclick="changeTrend('savings',this)"
-        >
-            Savings
-        </button>
-
-    </div>
-
-
-    <div class="chart-container">
-
-        <canvas id="trendChart"></canvas>
-
-    </div>
-
-</div>
-
-
-<!-- ADD ACCOUNT -->
+<section id="accounts" class="section">
 
 <div class="card">
 
-    <h2>
-        ➕ Add Account
-    </h2>
+<h2>🏦 Account Management</h2>
 
+<div class="grid">
 
-    <div class="account-form">
+<div>
+<label>Account Name</label>
+<input id="newAccountName" placeholder="e.g. Sampath Bank">
+</div>
 
-        <input
-            type="text"
-            id="newAccountName"
-            placeholder="e.g. HNB, Fixed Deposit, Cash"
-        >
+<div>
+<label>Account Type</label>
+<select id="newAccountType">
+<option>Bank Account</option>
+<option>Savings Account</option>
+<option>Current Account</option>
+<option>Fixed Deposit</option>
+<option>Cash</option>
+<option>Investment</option>
+<option>Credit Card</option>
+<option>Other</option>
+</select>
+</div>
 
+<div>
+<label>Bank / Institution</label>
+<input id="newBankName" placeholder="Bank name">
+</div>
 
-        <button
-            class="primary"
-            onclick="addAccount()"
-        >
-            Add Account
-        </button>
+<div>
+<label>Account Number</label>
+<input id="newAccountNumber" placeholder="Optional">
+</div>
 
-    </div>
+<div class="full">
+<button class="primary" onclick="addAccount()">➕ Add Account</button>
+</div>
 
 </div>
 
+</div>
 
-<!-- TRANSACTION HISTORY -->
 
 <div class="card">
 
-    <h2>
-        📋 Transaction History
-    </h2>
+<h2>My Accounts</h2>
 
-
-    <div class="filter-box">
-
-        <div class="filter-grid">
-
-
-            <div>
-
-                <label>
-                    Search
-                </label>
-
-                <input
-                    type="text"
-                    id="historySearch"
-                    placeholder="Search description or category..."
-                    oninput="displayTransactions()"
-                >
-
-            </div>
-
-
-            <div>
-
-                <label>
-                    Account
-                </label>
-
-                <select
-                    id="historyAccount"
-                    onchange="displayTransactions()"
-                >
-
-                    <option value="all">
-                        All Accounts
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div>
-
-                <label>
-                    Type
-                </label>
-
-                <select
-                    id="historyType"
-                    onchange="displayTransactions()"
-                >
-
-                    <option value="all">
-                        All Types
-                    </option>
-
-                    <option value="income">
-                        💵 Income
-                    </option>
-
-                    <option value="expense">
-                        💸 Expense
-                    </option>
-
-                    <option value="transfer">
-                        🔄 Transfer
-                    </option>
-
-                    <option value="opening">
-                        🟡 Opening Balance
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div>
-
-                <label>
-                    Period
-                </label>
-
-                <select
-                    id="historyPeriod"
-                    onchange="displayTransactions()"
-                >
-
-                    <option value="all">
-                        All Time
-                    </option>
-
-                    <option value="today">
-                        Today
-                    </option>
-
-                    <option value="week">
-                        This Week
-                    </option>
-
-                    <option value="month">
-                        This Month
-                    </option>
-
-                    <option value="year">
-                        This Year
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div>
-
-                <label>
-                    Sort
-                </label>
-
-                <select
-                    id="historySort"
-                    onchange="displayTransactions()"
-                >
-
-                    <option value="newest">
-                        Newest First
-                    </option>
-
-                    <option value="oldest">
-                        Oldest First
-                    </option>
-
-                    <option value="highest">
-                        Highest Amount
-                    </option>
-
-                    <option value="lowest">
-                        Lowest Amount
-                    </option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-
-        <div class="filter-actions">
-
-            <button
-                class="gray-btn"
-                onclick="resetHistoryFilters()"
-            >
-                🔄 Reset Filters
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div class="filter-summary">
-
-
-        <div class="filter-summary-item">
-
-            <span>
-                INCOME
-            </span>
-
-            <strong
-                class="green"
-                id="filteredIncome"
-            >
-                Rs. 0.00
-            </strong>
-
-        </div>
-
-
-        <div class="filter-summary-item">
-
-            <span>
-                EXPENSES
-            </span>
-
-            <strong
-                class="red"
-                id="filteredExpenses"
-            >
-                Rs. 0.00
-            </strong>
-
-        </div>
-
-
-        <div class="filter-summary-item">
-
-            <span>
-                TRANSFERS
-            </span>
-
-            <strong
-                class="blue"
-                id="filteredTransfers"
-            >
-                Rs. 0.00
-            </strong>
-
-        </div>
-
-
-        <div class="filter-summary-item">
-
-            <span>
-                OPENING
-            </span>
-
-            <strong id="filteredOpening">
-                Rs. 0.00
-            </strong>
-
-        </div>
-
-
-        <div class="filter-summary-item">
-
-            <span>
-                TRANSACTIONS
-            </span>
-
-            <strong id="filteredCount">
-                0
-            </strong>
-
-        </div>
-
-    </div>
-
-
-    <div id="transactionList"></div>
+<div id="accountsList" class="accounts"></div>
 
 </div>
 
+</section>
+
+
+<!-- REMINDERS -->
+
+<section id="reminders" class="section">
+
+<div class="card">
+
+<h2>🔔 Payment Reminders</h2>
+
+<div class="info">
+You can allow browser notifications and create reminders for bills, loans and other payments.
+</div>
+
+<button class="primary" onclick="requestNotifications()">
+🔔 Enable Notifications
+</button>
+
+<br><br>
+
+<div class="grid">
+
+<div>
+<label>Reminder</label>
+<input id="reminderTitle" placeholder="Electricity Bill">
+</div>
+
+<div>
+<label>Date</label>
+<input id="reminderDate" type="date">
+</div>
+
+<div>
+<label>Time</label>
+<input id="reminderTime" type="time" value="09:00">
+</div>
+
+<div>
+<label>Amount</label>
+<input id="reminderAmount" type="number" min="0" step=".01" placeholder="Optional">
+</div>
+
+<div class="full">
+<button class="primary" onclick="addReminder()">➕ Add Reminder</button>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>Your Reminders</h2>
+
+<div id="reminderList"></div>
+
+</div>
+
+</section>
+
+
+<!-- BACKUP -->
+
+<section id="backup" class="section">
+
+<div class="card">
+
+<h2>💾 Backup & Restore</h2>
+
+<div class="info">
+Your backup contains accounts, transactions and reminders. Keep your backup file somewhere safe.
+</div>
+
+<div class="backup-area">
+
+<button class="primary" onclick="downloadJSON()">
+💾 Download Backup
+</button>
+
+<label class="gray" style="text-align:center;cursor:pointer">
+📥 Restore Backup
+<input type="file" id="restoreFile" accept=".json" onchange="restoreBackup(event)" style="display:none">
+</label>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>📤 Export</h2>
+
+<div class="backup-area">
+
+<button class="primary" onclick="exportCSV()">📄 CSV</button>
+
+<button class="primary" onclick="exportExcel()">📊 Excel</button>
+
+<button class="primary" onclick="exportPDF()">📕 PDF</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SETTINGS -->
+
+<section id="settings" class="section">
+
+<div class="card">
+
+<h2>👤 Profile</h2>
+
+<div class="grid">
+
+<div>
+<label>Email</label>
+<input id="profileEmail" readonly>
+</div>
+
+<div>
+<label>Display Name</label>
+<input id="displayName" placeholder="Your name">
+</div>
+
+<div class="full">
+<button class="primary" onclick="saveProfile()">💾 Save Profile</button>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>🌙 Appearance</h2>
+
+<label>Theme</label>
+
+<div class="theme-grid">
+
+<div class="theme" style="background:#2563eb" onclick="setTheme('#2563eb','#4f46e5','blue')"></div>
+
+<div class="theme" style="background:#16a34a" onclick="setTheme('#16a34a','#15803d','green')"></div>
+
+<div class="theme" style="background:#7c3aed" onclick="setTheme('#7c3aed','#4f46e5','purple')"></div>
+
+<div class="theme" style="background:#ea580c" onclick="setTheme('#ea580c','#c2410c','orange')"></div>
+
+</div>
+
+<br>
+
+<button class="gray" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>🔐 Security</h2>
+
+<button class="primary" onclick="changePassword()">🔑 Change Password</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>ℹ️ App Information</h2>
+
+<p style="color:var(--muted)">
+My Finance Dashboard
+</p>
+
+<p style="color:var(--muted);margin-top:7px">
+Version 2.0
+</p>
+
+</div>
+
+</section>
+
+</div>
+</div>
+
+
+<!-- EDIT TRANSACTION MODAL -->
+
+<div id="editModal" class="modal">
+
+<div class="modal-card">
+
+<div class="modal-header">
+
+<h2>✏️ Edit Transaction</h2>
+
+<button class="close" onclick="closeModal('editModal')">×</button>
+
+</div>
+
+<input type="hidden" id="editId">
+
+<div class="grid">
+
+<div>
+<label>Type</label>
+<select id="editType">
+<option value="income">Income</option>
+<option value="expense">Expense</option>
+<option value="transfer">Transfer</option>
+<option value="opening">Opening</option>
+</select>
+</div>
+
+<div>
+<label>Date</label>
+<input id="editDate" type="date">
+</div>
+
+<div>
+<label>Description</label>
+<input id="editDescription">
+</div>
+
+<div>
+<label>Amount</label>
+<input id="editAmount" type="number" min="0" step=".01">
+</div>
+
+<div>
+<label>Category</label>
+<input id="editCategory">
+</div>
+
+<div>
+<label>Account</label>
+<select id="editAccount"></select>
+</div>
+
+<div id="editToBox">
+<label>To Account</label>
+<select id="editToAccount"></select>
+</div>
+
+</div>
+
+<div class="form-actions">
+
+<button class="gray" onclick="closeModal('editModal')">Cancel</button>
+
+<button class="primary" onclick="updateTransaction()">Save Changes</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- EDIT ACCOUNT MODAL -->
+
+<div id="accountModal" class="modal">
+
+<div class="modal-card">
+
+<div class="modal-header">
+
+<h2>✏️ Edit Account</h2>
+
+<button class="close" onclick="closeModal('accountModal')">×</button>
+
+</div>
+
+<input type="hidden" id="editAccountId">
+
+<div class="grid">
+
+<div>
+<label>Account Name</label>
+<input id="editAccountName">
+</div>
+
+<div>
+<label>Account Type</label>
+<select id="editAccountType">
+<option>Bank Account</option>
+<option>Savings Account</option>
+<option>Current Account</option>
+<option>Fixed Deposit</option>
+<option>Cash</option>
+<option>Investment</option>
+<option>Credit Card</option>
+<option>Other</option>
+</select>
+</div>
+
+<div>
+<label>Bank / Institution</label>
+<input id="editBankName">
+</div>
+
+<div>
+<label>Account Number</label>
+<input id="editAccountNumber">
+</div>
+
+</div>
+
+<div class="form-actions">
+
+<button class="gray" onclick="closeModal('accountModal')">Cancel</button>
+
+<button class="primary" onclick="updateAccount()">Save</button>
+
+</div>
 
 </div>
 
@@ -1629,3482 +1326,2121 @@ button{
 <script>
 
 /* =====================================================
-   FIREBASE
+ FIREBASE
 ===================================================== */
 
-const firebaseConfig = {
+const firebaseConfig={
 
-    apiKey:
-        "AIzaSyCWG9Jt_wRn49MiY5qXiU8uK3FS4giMhhw",
+apiKey:"AIzaSyCWG9Jt_wRn49MiY5qXiU8uK3FS4giMhhw",
 
-    authDomain:
-        "my-finance-dashboard-8ede7.firebaseapp.com",
+authDomain:"my-finance-dashboard-8ede7.firebaseapp.com",
 
-    projectId:
-        "my-finance-dashboard-8ede7",
+projectId:"my-finance-dashboard-8ede7",
 
-    storageBucket:
-        "my-finance-dashboard-8ede7.firebasestorage.app",
+storageBucket:"my-finance-dashboard-8ede7.firebasestorage.app",
 
-    messagingSenderId:
-        "669620241200",
+messagingSenderId:"669620241200",
 
-    appId:
-        "1:669620241200:web:b3456fea26b2ecb7d5fef5"
+appId:"1:669620241200:web:b3456fea26b2ecb7d5fef5"
 
 };
 
-
 firebase.initializeApp(firebaseConfig);
 
+const auth=firebase.auth();
 
-const auth =
-    firebase.auth();
+const db=firebase.firestore();
 
+let accounts=[];
+let transactions=[];
+let reminders=[];
 
-const db =
-    firebase.firestore();
+let charts={};
 
-
-/* =====================================================
-   DATA
-===================================================== */
-
-let accounts = [];
-
-let transactions = [];
-
-let selectedPeriod = "today";
-
-let selectedTrend = "incomeExpense";
-
-let balancePieChart = null;
-
-let trendChart = null;
+let deferredInstallPrompt=null;
 
 
 /* =====================================================
-   FIRESTORE REFERENCES
+ PWA INSTALL
 ===================================================== */
 
-function userAccountsRef(){
+window.addEventListener("beforeinstallprompt",e=>{
 
-    return db
-        .collection("users")
-        .doc(auth.currentUser.uid)
-        .collection("accounts");
+e.preventDefault();
+
+deferredInstallPrompt=e;
+
+document.getElementById("installButton").style.display="inline-block";
+
+});
+
+async function installApp(){
+
+if(!deferredInstallPrompt){
+
+alert("If the install button is not available, use your browser menu and choose 'Install app' or 'Add to Home screen'.");
+
+return;
 
 }
 
+deferredInstallPrompt.prompt();
 
-function userTransactionsRef(){
+await deferredInstallPrompt.userChoice;
 
-    return db
-        .collection("users")
-        .doc(auth.currentUser.uid)
-        .collection("transactions");
+deferredInstallPrompt=null;
 
-}
-
-
-/* =====================================================
-   REMEMBER EMAIL
-===================================================== */
-
-function loadRememberedEmail(){
-
-    const savedEmail =
-        localStorage.getItem(
-            "financeDashboardEmail"
-        );
-
-
-    if(savedEmail){
-
-        document.getElementById(
-            "loginEmail"
-        ).value = savedEmail;
-
-
-        document.getElementById(
-            "rememberEmail"
-        ).checked = true;
-
-    }
+document.getElementById("installButton").style.display="none";
 
 }
 
+if("serviceWorker" in navigator){
 
-loadRememberedEmail();
+window.addEventListener("load",()=>{
 
+navigator.serviceWorker.register("sw.js")
+.catch(e=>console.log("Service worker:",e));
 
-/* =====================================================
-   TOGGLE PASSWORD
-===================================================== */
-
-function togglePassword(){
-
-    const password =
-        document.getElementById(
-            "loginPassword"
-        );
-
-
-    const button =
-        document.getElementById(
-            "showPasswordButton"
-        );
-
-
-    if(password.type === "password"){
-
-        password.type = "text";
-
-        button.textContent = "🙈";
-
-    }else{
-
-        password.type = "password";
-
-        button.textContent = "👁️";
-
-    }
+});
 
 }
 
 
 /* =====================================================
-   LOGIN
+ HELPERS
 ===================================================== */
 
-async function login(){
+function today(){
 
-    const email =
-        document.getElementById(
-            "loginEmail"
-        )
-        .value
-        .trim();
+const d=new Date();
 
+return d.getFullYear()+"-"+
 
-    const password =
-        document.getElementById(
-            "loginPassword"
-        )
-        .value;
+String(d.getMonth()+1).padStart(2,"0")+"-"+
 
-
-    const remember =
-        document.getElementById(
-            "rememberEmail"
-        ).checked;
-
-
-    const error =
-        document.getElementById(
-            "loginError"
-        );
-
-
-    const success =
-        document.getElementById(
-            "loginSuccess"
-        );
-
-
-    const status =
-        document.getElementById(
-            "loginStatus"
-        );
-
-
-    error.style.display = "none";
-
-    success.style.display = "none";
-
-
-    if(!email || !password){
-
-        error.textContent =
-            "Please enter your email and password.";
-
-        error.style.display =
-            "block";
-
-        return;
-
-    }
-
-
-    if(remember){
-
-        localStorage.setItem(
-            "financeDashboardEmail",
-            email
-        );
-
-    }else{
-
-        localStorage.removeItem(
-            "financeDashboardEmail"
-        );
-
-    }
-
-
-    status.textContent =
-        "Signing in...";
-
-
-    try{
-
-        await auth.signInWithEmailAndPassword(
-            email,
-            password
-        );
-
-
-        status.textContent = "";
-
-
-    }catch(e){
-
-        status.textContent = "";
-
-        error.textContent =
-            friendlyAuthError(e);
-
-        error.style.display =
-            "block";
-
-    }
+String(d.getDate()).padStart(2,"0");
 
 }
 
+function money(v){
 
-/* =====================================================
-   FORGOT PASSWORD
-===================================================== */
+return "Rs. "+Number(v||0).toLocaleString("en-LK",{
 
-async function forgotPassword(){
+minimumFractionDigits:2,
+maximumFractionDigits:2
 
-    const emailInput =
-        document.getElementById(
-            "loginEmail"
-        );
-
-
-    const email =
-        emailInput.value.trim();
-
-
-    const error =
-        document.getElementById(
-            "loginError"
-        );
-
-
-    const success =
-        document.getElementById(
-            "loginSuccess"
-        );
-
-
-    const status =
-        document.getElementById(
-            "loginStatus"
-        );
-
-
-    error.style.display =
-        "none";
-
-    success.style.display =
-        "none";
-
-
-    if(!email){
-
-        error.textContent =
-            "Please enter your email address first.";
-
-        error.style.display =
-            "block";
-
-        emailInput.focus();
-
-        return;
-
-    }
-
-
-    status.textContent =
-        "Sending password reset email...";
-
-
-    try{
-
-        await auth.sendPasswordResetEmail(
-            email
-        );
-
-
-        status.textContent = "";
-
-
-        success.textContent =
-            "Password reset email sent. Please check your email inbox.";
-
-        success.style.display =
-            "block";
-
-
-    }catch(e){
-
-        status.textContent = "";
-
-
-        error.textContent =
-            friendlyAuthError(e);
-
-        error.style.display =
-            "block";
-
-    }
+});
 
 }
 
+function escapeHTML(v){
 
-/* =====================================================
-   LOGOUT
-===================================================== */
+const d=document.createElement("div");
 
-async function logout(){
+d.textContent=v??"";
 
-    try{
-
-        await auth.signOut();
-
-    }catch(e){
-
-        alert(
-            "Logout failed: " +
-            e.message
-        );
-
-    }
+return d.innerHTML;
 
 }
-
-
-/* =====================================================
-   AUTH ERROR
-===================================================== */
-
-function friendlyAuthError(error){
-
-    if(
-        error.code ===
-        "auth/invalid-credential"
-    ){
-
-        return "Incorrect email or password.";
-
-    }
-
-
-    if(
-        error.code ===
-        "auth/user-not-found"
-    ){
-
-        return "No account found with this email.";
-
-    }
-
-
-    if(
-        error.code ===
-        "auth/wrong-password"
-    ){
-
-        return "Incorrect password.";
-
-    }
-
-
-    if(
-        error.code ===
-        "auth/invalid-email"
-    ){
-
-        return "Please enter a valid email address.";
-
-    }
-
-
-    if(
-        error.code ===
-        "auth/too-many-requests"
-    ){
-
-        return "Too many attempts. Please try again later.";
-
-    }
-
-
-    if(
-        error.code ===
-        "auth/network-request-failed"
-    ){
-
-        return "Network error. Please check your internet connection.";
-
-    }
-
-
-    return error.message ||
-        "Login failed.";
-
-}
-
-
-/* =====================================================
-   AUTH STATE
-===================================================== */
-
-auth.onAuthStateChanged(
-    async user => {
-
-        if(user){
-
-            document.getElementById(
-                "loginScreen"
-            ).style.display =
-                "none";
-
-
-            document.getElementById(
-                "app"
-            ).style.display =
-                "block";
-
-
-            document.getElementById(
-                "userEmail"
-            ).textContent =
-                "Signed in as " +
-                user.email;
-
-
-            try{
-
-                await loadFirebaseData();
-
-                updateAll();
-
-            }catch(error){
-
-                console.error(error);
-
-                alert(
-                    "Firebase error: " +
-                    error.message
-                );
-
-            }
-
-        }else{
-
-            document.getElementById(
-                "loginScreen"
-            ).style.display =
-                "flex";
-
-
-            document.getElementById(
-                "app"
-            ).style.display =
-                "none";
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   LOAD FIREBASE DATA
-===================================================== */
-
-async function loadFirebaseData(){
-
-    accounts = [];
-
-    transactions = [];
-
-
-    const accountSnapshot =
-        await userAccountsRef().get();
-
-
-    accountSnapshot.forEach(
-        doc => {
-
-            accounts.push({
-
-                id:doc.id,
-
-                ...doc.data()
-
-            });
-
-        }
-    );
-
-
-    const transactionSnapshot =
-        await userTransactionsRef().get();
-
-
-    transactionSnapshot.forEach(
-        doc => {
-
-            transactions.push({
-
-                id:doc.id,
-
-                ...doc.data()
-
-            });
-
-        }
-    );
-
-
-    if(accounts.length === 0){
-
-        const defaults = [
-
-            {
-                name:"Sampath Bank"
-            },
-
-            {
-                name:"People's Bank"
-            },
-
-            {
-                name:"Cash in Hand"
-            },
-
-            {
-                name:"CAL"
-            }
-
-        ];
-
-
-        for(
-            const account
-            of defaults
-        ){
-
-            const ref =
-                await userAccountsRef()
-                    .add(account);
-
-
-            accounts.push({
-
-                id:ref.id,
-
-                ...account
-
-            });
-
-        }
-
-    }
-
-}
-
-
-/* =====================================================
-   DATE
-===================================================== */
-
-function todayString(){
-
-    const d =
-        new Date();
-
-
-    return (
-
-        d.getFullYear()
-
-        +
-
-        "-"
-
-        +
-
-        String(
-            d.getMonth()+1
-        ).padStart(2,"0")
-
-        +
-
-        "-"
-
-        +
-
-        String(
-            d.getDate()
-        ).padStart(2,"0")
-
-    );
-
-}
-
-
-document.getElementById(
-    "transactionDate"
-).value =
-    todayString();
-
-
-/* =====================================================
-   MONEY
-===================================================== */
-
-function money(value){
-
-    return "Rs. " +
-
-        Number(value)
-        .toLocaleString(
-            "en-LK",
-            {
-                minimumFractionDigits:2,
-                maximumFractionDigits:2
-            }
-        );
-
-}
-
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHTML(text){
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-
-    div.textContent =
-        text || "";
-
-
-    return div.innerHTML;
-
-}
-
-
-/* =====================================================
-   GET ACCOUNT
-===================================================== */
 
 function getAccount(id){
 
-    return accounts.find(
-        account =>
-            String(account.id)
-            ===
-            String(id)
-    );
+return accounts.find(a=>String(a.id)===String(id));
+
+}
+
+function accountsRef(){
+
+return db.collection("users")
+.doc(auth.currentUser.uid)
+.collection("accounts");
+
+}
+
+function transactionsRef(){
+
+return db.collection("users")
+.doc(auth.currentUser.uid)
+.collection("transactions");
+
+}
+
+function remindersRef(){
+
+return db.collection("users")
+.doc(auth.currentUser.uid)
+.collection("reminders");
 
 }
 
 
 /* =====================================================
-   ACCOUNT BALANCE
+ LOGIN
 ===================================================== */
 
-function getAccountBalance(accountId){
+const savedEmail=localStorage.getItem("financeEmail");
 
-    let balance = 0;
+if(savedEmail){
 
+document.getElementById("loginEmail").value=savedEmail;
 
-    transactions.forEach(
-        transaction => {
+document.getElementById("rememberEmail").checked=true;
 
-            const amount =
-                Number(
-                    transaction.amount
-                );
+}
 
+async function login(){
 
-            if(
-                transaction.type ===
-                "opening"
-            ){
+const email=document.getElementById("loginEmail").value.trim();
 
-                if(
-                    String(
-                        transaction.toAccount
-                    )
-                    ===
-                    String(accountId)
-                ){
+const password=document.getElementById("loginPassword").value;
 
-                    balance += amount;
+const error=document.getElementById("loginError");
 
-                }
+const status=document.getElementById("loginStatus");
 
-            }
+error.style.display="none";
 
+if(!email||!password){
 
-            else if(
-                transaction.type ===
-                "income"
-            ){
+error.textContent="Please enter your email and password.";
 
-                if(
-                    String(
-                        transaction.toAccount
-                    )
-                    ===
-                    String(accountId)
-                ){
+error.style.display="block";
 
-                    balance += amount;
+return;
 
-                }
+}
 
-            }
+if(document.getElementById("rememberEmail").checked){
 
+localStorage.setItem("financeEmail",email);
 
-            else if(
-                transaction.type ===
-                "expense"
-            ){
+}else{
 
-                if(
-                    String(
-                        transaction.fromAccount
-                    )
-                    ===
-                    String(accountId)
-                ){
+localStorage.removeItem("financeEmail");
 
-                    balance -= amount;
+}
 
-                }
+status.textContent="Signing in...";
 
-            }
+try{
 
+await auth.signInWithEmailAndPassword(email,password);
 
-            else if(
-                transaction.type ===
-                "transfer"
-            ){
+status.textContent="";
 
-                if(
-                    String(
-                        transaction.fromAccount
-                    )
-                    ===
-                    String(accountId)
-                ){
+}catch(e){
 
-                    balance -= amount;
+status.textContent="";
 
-                }
+error.textContent=friendlyError(e);
 
+error.style.display="block";
 
-                if(
-                    String(
-                        transaction.toAccount
-                    )
-                    ===
-                    String(accountId)
-                ){
+}
 
-                    balance += amount;
+}
 
-                }
+async function forgotPassword(){
 
-            }
+const email=document.getElementById("loginEmail").value.trim();
 
-        }
-    );
+const error=document.getElementById("loginError");
 
+const success=document.getElementById("loginSuccess");
 
-    return balance;
+if(!email){
+
+error.textContent="Enter your email address first.";
+
+error.style.display="block";
+
+return;
+
+}
+
+try{
+
+await auth.sendPasswordResetEmail(email);
+
+success.textContent="Password reset email sent. Check your inbox.";
+
+success.style.display="block";
+
+}catch(e){
+
+error.textContent=friendlyError(e);
+
+error.style.display="block";
+
+}
+
+}
+
+function friendlyError(e){
+
+const map={
+
+"auth/invalid-credential":"Incorrect email or password.",
+"auth/user-not-found":"No account found with this email.",
+"auth/wrong-password":"Incorrect password.",
+"auth/invalid-email":"Invalid email address.",
+"auth/too-many-requests":"Too many attempts. Try again later.",
+"auth/network-request-failed":"Network error."
+
+};
+
+return map[e.code]||e.message||"Login failed.";
+
+}
+
+async function logout(){
+
+await auth.signOut();
 
 }
 
 
 /* =====================================================
-   TOTAL BALANCE
+ AUTH
 ===================================================== */
 
-function getTotalBalance(){
+auth.onAuthStateChanged(async user=>{
 
-    return accounts.reduce(
-        (
-            total,
-            account
-        ) =>
-            total +
-            getAccountBalance(
-                account.id
-            ),
-        0
-    );
+if(!user){
+
+document.getElementById("loginScreen").style.display="flex";
+
+document.getElementById("app").style.display="none";
+
+return;
 
 }
 
+document.getElementById("loginScreen").style.display="none";
+
+document.getElementById("app").style.display="block";
+
+document.getElementById("userEmail").textContent=user.email;
+
+document.getElementById("profileEmail").value=user.email;
+
+await loadData();
+
+loadSettings();
+
+updateAll();
+
+loadReminders();
+
+});
+
 
 /* =====================================================
-   DROPDOWNS
+ LOAD DATA
 ===================================================== */
 
-function updateDropdowns(){
+async function loadData(){
 
-    const from =
-        document.getElementById(
-            "fromAccount"
-        );
+accounts=[];
+transactions=[];
 
+const a=await accountsRef().get();
 
-    const to =
-        document.getElementById(
-            "toAccount"
-        );
+a.forEach(d=>accounts.push({id:d.id,...d.data()}));
 
+const t=await transactionsRef().get();
 
-    const history =
-        document.getElementById(
-            "historyAccount"
-        );
+t.forEach(d=>transactions.push({id:d.id,...d.data()}));
 
+if(!accounts.length){
 
-    from.innerHTML = "";
+const defaults=[
 
-    to.innerHTML = "";
+{name:"Sampath Bank",type:"Bank Account",bank:"Sampath Bank"},
 
-    history.innerHTML =
-        `<option value="all">
-            All Accounts
-        </option>`;
+{name:"People's Bank",type:"Bank Account",bank:"People's Bank"},
 
+{name:"Cash in Hand",type:"Cash",bank:""},
 
-    accounts.forEach(
-        account => {
+{name:"CAL",type:"Investment",bank:""}
 
-            const option = `
+];
 
-                <option value="${escapeHTML(account.id)}">
+for(const x of defaults){
 
-                    ${escapeHTML(account.name)}
+const r=await accountsRef().add(x);
 
-                </option>
+accounts.push({id:r.id,...x});
 
-            `;
+}
 
-
-            from.innerHTML +=
-                option;
-
-
-            to.innerHTML +=
-                option;
-
-
-            history.innerHTML += `
-
-                <option value="${escapeHTML(account.id)}">
-
-                    ${escapeHTML(account.name)}
-
-                </option>
-
-            `;
-
-        }
-    );
+}
 
 }
 
 
 /* =====================================================
-   ADD ACCOUNT
+ NAVIGATION
+===================================================== */
+
+function showSection(id,button){
+
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+
+document.getElementById(id).classList.add("active");
+
+document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+
+button.classList.add("active");
+
+if(id==="dashboard")createCharts();
+
+if(id==="transactions")displayTransactions();
+
+if(id==="accounts")displayAccounts();
+
+if(id==="reminders")displayReminders();
+
+}
+
+
+/* =====================================================
+ TRANSACTION FORM
+===================================================== */
+
+document.getElementById("transactionDate").value=today();
+
+function changeTransactionType(){
+
+const type=document.getElementById("transactionType").value;
+
+const cat=document.getElementById("categoryBox");
+
+const to=document.getElementById("toAccountBox");
+
+const label=document.getElementById("accountLabel");
+
+cat.style.display="block";
+
+to.style.display="none";
+
+if(type==="transfer"){
+
+cat.style.display="none";
+
+to.style.display="block";
+
+label.textContent="From Account";
+
+}else if(type==="opening"){
+
+cat.style.display="none";
+
+label.textContent="Account";
+
+}else if(type==="income"){
+
+label.textContent="To Account";
+
+}else{
+
+label.textContent="Account";
+
+}
+
+updateAccountDropdowns();
+
+}
+
+function updateAccountDropdowns(){
+
+const ids=["fromAccount","toAccount","historyAccount","editAccount","editToAccount"];
+
+ids.forEach(id=>{
+
+const el=document.getElementById(id);
+
+if(!el)return;
+
+const old=el.value;
+
+el.innerHTML="";
+
+if(id==="historyAccount"){
+
+const o=document.createElement("option");
+
+o.value="all";
+
+o.textContent="All Accounts";
+
+el.appendChild(o);
+
+}
+
+accounts.forEach(a=>{
+
+const o=document.createElement("option");
+
+o.value=a.id;
+
+o.textContent=a.name;
+
+el.appendChild(o);
+
+});
+
+if(old)el.value=old;
+
+});
+
+}
+
+async function saveTransaction(){
+
+const type=document.getElementById("transactionType").value;
+
+const description=document.getElementById("description").value.trim();
+
+const amount=Number(document.getElementById("amount").value);
+
+const date=document.getElementById("transactionDate").value;
+
+const category=document.getElementById("category").value;
+
+const account=document.getElementById("fromAccount").value;
+
+const to=document.getElementById("toAccount").value;
+
+if(!description||!amount||amount<=0||!date){
+
+alert("Please complete the required fields.");
+
+return;
+
+}
+
+if(!account){
+
+alert("Please select an account.");
+
+return;
+
+}
+
+if(type==="transfer"&&account===to){
+
+alert("From and To accounts must be different.");
+
+return;
+
+}
+
+const data={
+
+type,
+description,
+amount,
+date,
+category,
+fromAccount:null,
+toAccount:null,
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
+
+};
+
+if(type==="income")data.toAccount=account;
+
+if(type==="expense")data.fromAccount=account;
+
+if(type==="opening"){
+
+const exists=transactions.some(t=>
+
+t.type==="opening"&&
+
+String(t.toAccount)===String(account)
+
+);
+
+if(exists){
+
+alert("An opening balance already exists for this account.");
+
+return;
+
+}
+
+data.toAccount=account;
+
+data.category="Opening Balance";
+
+}
+
+if(type==="transfer"){
+
+data.fromAccount=account;
+
+data.toAccount=to;
+
+data.category="Transfer";
+
+}
+
+try{
+
+const ref=await transactionsRef().add(data);
+
+transactions.push({id:ref.id,...data});
+
+document.getElementById("description").value="";
+
+document.getElementById("amount").value="";
+
+updateAll();
+
+alert("Transaction added successfully.");
+
+}catch(e){
+
+alert("Could not save transaction: "+e.message);
+
+}
+
+}
+
+
+/* =====================================================
+ BALANCES
+===================================================== */
+
+function getAccountBalance(id){
+
+let balance=0;
+
+transactions.forEach(t=>{
+
+const amount=Number(t.amount||0);
+
+if(t.type==="opening"&&String(t.toAccount)===String(id))
+balance+=amount;
+
+if(t.type==="income"&&String(t.toAccount)===String(id))
+balance+=amount;
+
+if(t.type==="expense"&&String(t.fromAccount)===String(id))
+balance-=amount;
+
+if(t.type==="transfer"){
+
+if(String(t.fromAccount)===String(id))balance-=amount;
+
+if(String(t.toAccount)===String(id))balance+=amount;
+
+}
+
+});
+
+return balance;
+
+}
+
+function totalBalance(){
+
+return accounts.reduce((sum,a)=>sum+getAccountBalance(a.id),0);
+
+}
+
+
+/* =====================================================
+ ACCOUNTS
 ===================================================== */
 
 async function addAccount(){
 
-    const input =
-        document.getElementById(
-            "newAccountName"
-        );
+const name=document.getElementById("newAccountName").value.trim();
 
+if(!name){
 
-    const name =
-        input.value.trim();
+alert("Enter account name.");
 
-
-    if(!name){
-
-        alert(
-            "Please enter an account name."
-        );
-
-        return;
-
-    }
-
-
-    const exists =
-        accounts.some(
-            account =>
-                account.name
-                .toLowerCase()
-                ===
-                name.toLowerCase()
-        );
-
-
-    if(exists){
-
-        alert(
-            "This account already exists."
-        );
-
-        return;
-
-    }
-
-
-    try{
-
-        const ref =
-            await userAccountsRef()
-                .add({
-
-                    name:name
-
-                });
-
-
-        accounts.push({
-
-            id:ref.id,
-
-            name:name
-
-        });
-
-
-        input.value = "";
-
-
-        updateAll();
-
-
-    }catch(error){
-
-        alert(
-            "Could not add account: "
-            +
-            error.message
-        );
-
-    }
+return;
 
 }
 
+if(accounts.some(a=>a.name.toLowerCase()===name.toLowerCase())){
 
-/* =====================================================
-   DISPLAY ACCOUNTS
-===================================================== */
+alert("Account already exists.");
+
+return;
+
+}
+
+const data={
+
+name,
+
+type:document.getElementById("newAccountType").value,
+
+bank:document.getElementById("newBankName").value.trim(),
+
+accountNumber:document.getElementById("newAccountNumber").value.trim()
+
+};
+
+const ref=await accountsRef().add(data);
+
+accounts.push({id:ref.id,...data});
+
+document.getElementById("newAccountName").value="";
+
+document.getElementById("newBankName").value="";
+
+document.getElementById("newAccountNumber").value="";
+
+updateAll();
+
+}
 
 function displayAccounts(){
 
-    const box =
-        document.getElementById(
-            "accountsList"
-        );
+const box=document.getElementById("accountsList");
 
+box.innerHTML="";
 
-    box.innerHTML = "";
+if(!accounts.length){
 
+box.innerHTML='<div class="empty">No accounts.</div>';
 
-    if(accounts.length === 0){
+return;
 
-        box.innerHTML = `
+}
 
-            <div class="empty">
+accounts.forEach(a=>{
 
-                No accounts added yet.
+const div=document.createElement("div");
 
-            </div>
+div.className="account";
 
-        `;
+div.innerHTML=`
 
-        return;
+<div class="account-info">
 
-    }
+<strong>🏦 ${escapeHTML(a.name)}</strong>
 
+<small>${escapeHTML(a.type||"Account")}</small>
 
-    accounts.forEach(
-        account => {
+<small>${escapeHTML(a.bank||"")}</small>
 
-            const balance =
-                getAccountBalance(
-                    account.id
-                );
+<small>Balance: <b class="blue">${money(getAccountBalance(a.id))}</b></small>
 
+</div>
 
-            const div =
-                document.createElement(
-                    "div"
-                );
+<div class="account-actions">
 
+<button class="edit" onclick="editAccount('${a.id}')">✏️</button>
 
-            div.className =
-                "account";
+<button class="danger" onclick="deleteAccount('${a.id}')">🗑️</button>
 
+</div>
 
-            div.innerHTML = `
+`;
 
-                <div>
+box.appendChild(div);
 
-                    <div class="account-name">
+});
 
-                        🏦
+}
 
-                        ${escapeHTML(
-                            account.name
-                        )}
+function editAccount(id){
 
-                    </div>
+const a=getAccount(id);
 
+if(!a)return;
 
-                    <div
-                        class="account-balance"
-                        style="margin-top:5px;"
-                    >
+document.getElementById("editAccountId").value=id;
 
-                        ${money(balance)}
+document.getElementById("editAccountName").value=a.name||"";
 
-                    </div>
+document.getElementById("editAccountType").value=a.type||"Bank Account";
 
-                </div>
+document.getElementById("editBankName").value=a.bank||"";
 
+document.getElementById("editAccountNumber").value=a.accountNumber||"";
 
-                <button
-                    class="delete-account-btn"
-                    onclick="deleteAccount('${account.id}')"
-                >
+openModal("accountModal");
 
-                    🗑️ Delete
+}
 
-                </button>
+async function updateAccount(){
 
-            `;
+const id=document.getElementById("editAccountId").value;
 
+const data={
 
-            box.appendChild(div);
+name:document.getElementById("editAccountName").value.trim(),
 
-        }
-    );
+type:document.getElementById("editAccountType").value,
+
+bank:document.getElementById("editBankName").value.trim(),
+
+accountNumber:document.getElementById("editAccountNumber").value.trim()
+
+};
+
+if(!data.name){
+
+alert("Account name is required.");
+
+return;
+
+}
+
+await accountsRef().doc(id).update(data);
+
+const a=getAccount(id);
+
+Object.assign(a,data);
+
+closeModal("accountModal");
+
+updateAll();
+
+}
+
+async function deleteAccount(id){
+
+const a=getAccount(id);
+
+if(!a)return;
+
+const related=transactions.filter(t=>
+
+String(t.fromAccount)===String(id)||
+
+String(t.toAccount)===String(id)
+
+);
+
+if(related.length){
+
+alert("Delete this account's transactions first.");
+
+return;
+
+}
+
+if(!confirm(`Delete "${a.name}"?`))return;
+
+await accountsRef().doc(id).delete();
+
+accounts=accounts.filter(x=>String(x.id)!==String(id));
+
+updateAll();
 
 }
 
 
 /* =====================================================
-   DELETE ACCOUNT
+ EDIT TRANSACTIONS
 ===================================================== */
 
-async function deleteAccount(accountId){
+function editTransaction(id){
 
-    const account =
-        getAccount(accountId);
+const t=transactions.find(x=>String(x.id)===String(id));
 
+if(!t)return;
 
-    if(!account){
+updateAccountDropdowns();
 
-        alert(
-            "Account not found."
-        );
+document.getElementById("editId").value=id;
 
-        return;
+document.getElementById("editType").value=t.type;
 
-    }
+document.getElementById("editDate").value=t.date;
 
+document.getElementById("editDescription").value=t.description;
 
-    const relatedTransactions =
-        transactions.filter(
-            transaction =>
+document.getElementById("editAmount").value=t.amount;
 
-                String(
-                    transaction.fromAccount
-                )
-                ===
-                String(accountId)
+document.getElementById("editCategory").value=t.category||"";
 
-                ||
+document.getElementById("editAccount").value=t.fromAccount||t.toAccount||"";
 
-                String(
-                    transaction.toAccount
-                )
-                ===
-                String(accountId)
-        );
+document.getElementById("editToAccount").value=t.toAccount||"";
 
+document.getElementById("editToBox").style.display=
 
-    if(
-        relatedTransactions.length > 0
-    ){
+t.type==="transfer"?"block":"none";
 
-        alert(
+openModal("editModal");
 
-            "This account cannot be deleted because it has "
-            +
-            relatedTransactions.length
-            +
-            " transaction(s).\n\n"
-            +
-            "Please delete its transactions first."
+}
 
-        );
+async function updateTransaction(){
 
-        return;
+const id=document.getElementById("editId").value;
 
-    }
+const t=transactions.find(x=>String(x.id)===String(id));
 
+if(!t)return;
 
-    const confirmed =
-        confirm(
+const type=document.getElementById("editType").value;
 
-            'Delete "' +
-            account.name +
-            '"?\n\n' +
-            'This account has no transactions, so it can be safely deleted.'
+const data={
 
-        );
+type,
 
+date:document.getElementById("editDate").value,
 
-    if(!confirmed){
+description:document.getElementById("editDescription").value.trim(),
 
-        return;
+amount:Number(document.getElementById("editAmount").value),
 
-    }
+category:document.getElementById("editCategory").value.trim(),
 
+fromAccount:null,
 
-    try{
+toAccount:null
 
-        await userAccountsRef()
-            .doc(String(accountId))
-            .delete();
+};
 
+const account=document.getElementById("editAccount").value;
 
-        accounts =
-            accounts.filter(
-                item =>
-                    String(item.id)
-                    !==
-                    String(accountId)
-            );
+const to=document.getElementById("editToAccount").value;
 
+if(!data.description||!data.amount||!data.date){
 
-        updateAll();
+alert("Complete all required fields.");
 
+return;
 
-        alert(
-            '"' +
-            account.name +
-            '" was deleted successfully.'
-        );
+}
 
+if(type==="income")data.toAccount=account;
 
-    }catch(error){
+if(type==="expense")data.fromAccount=account;
 
-        console.error(error);
+if(type==="opening")data.toAccount=account;
 
+if(type==="transfer"){
 
-        alert(
+if(account===to){
 
-            "Could not delete account:\n"
-            +
-            error.message
+alert("Accounts must be different.");
 
-        );
+return;
 
-    }
+}
+
+data.fromAccount=account;
+
+data.toAccount=to;
+
+}
+
+await transactionsRef().doc(id).update(data);
+
+Object.assign(t,data);
+
+closeModal("editModal");
+
+updateAll();
 
 }
 
 
 /* =====================================================
-   TRANSACTION TYPE
-===================================================== */
-
-function changeTransactionType(){
-
-    const type =
-        document.getElementById(
-            "transactionType"
-        ).value;
-
-
-    const categoryBox =
-        document.getElementById(
-            "categoryBox"
-        );
-
-
-    const toBox =
-        document.getElementById(
-            "toAccountBox"
-        );
-
-
-    const label =
-        document.getElementById(
-            "accountLabel"
-        );
-
-
-    categoryBox.style.display =
-        "block";
-
-
-    toBox.style.display =
-        "none";
-
-
-    if(type === "transfer"){
-
-        categoryBox.style.display =
-            "none";
-
-
-        toBox.style.display =
-            "block";
-
-
-        label.textContent =
-            "From Account";
-
-    }
-
-
-    else if(type === "opening"){
-
-        categoryBox.style.display =
-            "none";
-
-
-        label.textContent =
-            "Account";
-
-    }
-
-
-    else if(type === "income"){
-
-        label.textContent =
-            "To Account";
-
-    }
-
-
-    else{
-
-        label.textContent =
-            "Account";
-
-    }
-
-}
-
-
-/* =====================================================
-   SAVE TRANSACTION
-===================================================== */
-
-async function saveTransaction(){
-
-    const type =
-        document.getElementById(
-            "transactionType"
-        ).value;
-
-
-    const description =
-        document.getElementById(
-            "description"
-        ).value.trim();
-
-
-    const amount =
-        Number(
-            document.getElementById(
-                "amount"
-            ).value
-        );
-
-
-    const date =
-        document.getElementById(
-            "transactionDate"
-        ).value;
-
-
-    const category =
-        document.getElementById(
-            "category"
-        ).value;
-
-
-    const account =
-        document.getElementById(
-            "fromAccount"
-        ).value;
-
-
-    const toAccount =
-        document.getElementById(
-            "toAccount"
-        ).value;
-
-
-    if(
-        !description
-        ||
-        !amount
-        ||
-        amount <= 0
-        ||
-        !date
-    ){
-
-        alert(
-            "Please complete the required fields."
-        );
-
-        return;
-
-    }
-
-
-    if(accounts.length === 0){
-
-        alert(
-            "Please add an account first."
-        );
-
-        return;
-
-    }
-
-
-    let transaction = {
-
-        type:type,
-
-        description:description,
-
-        amount:amount,
-
-        date:date,
-
-        category:category,
-
-        fromAccount:null,
-
-        toAccount:null
-
-    };
-
-
-    if(type === "opening"){
-
-        const exists =
-            transactions.some(
-                t =>
-                    t.type === "opening"
-                    &&
-                    String(
-                        t.toAccount
-                    )
-                    ===
-                    String(account)
-            );
-
-
-        if(exists){
-
-            alert(
-                "An opening balance already exists for this account."
-            );
-
-            return;
-
-        }
-
-
-        transaction.category =
-            "Opening Balance";
-
-
-        transaction.toAccount =
-            account;
-
-    }
-
-
-    else if(type === "transfer"){
-
-        if(account === toAccount){
-
-            alert(
-                "From Account and To Account must be different."
-            );
-
-            return;
-
-        }
-
-
-        transaction.category =
-            "Transfer";
-
-
-        transaction.fromAccount =
-            account;
-
-
-        transaction.toAccount =
-            toAccount;
-
-    }
-
-
-    else if(type === "income"){
-
-        transaction.fromAccount =
-            null;
-
-
-        transaction.toAccount =
-            account;
-
-    }
-
-
-    else{
-
-        transaction.fromAccount =
-            account;
-
-
-        transaction.toAccount =
-            null;
-
-    }
-
-
-    try{
-
-        const ref =
-            await userTransactionsRef()
-                .add(transaction);
-
-
-        transactions.push({
-
-            id:ref.id,
-
-            ...transaction
-
-        });
-
-
-        document.getElementById(
-            "description"
-        ).value = "";
-
-
-        document.getElementById(
-            "amount"
-        ).value = "";
-
-
-        updateAll();
-
-
-    }catch(error){
-
-        alert(
-            "Could not save transaction: "
-            +
-            error.message
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   PERIOD
-===================================================== */
-
-function changePeriod(
-    period,
-    button
-){
-
-    selectedPeriod =
-        period;
-
-
-    document
-        .querySelectorAll(
-            ".period-btn"
-        )
-        .forEach(
-            btn =>
-                btn.classList.remove(
-                    "active"
-                )
-        );
-
-
-    button.classList.add(
-        "active"
-    );
-
-
-    updateSummary();
-
-}
-
-
-/* =====================================================
-   PERIOD CHECK
-===================================================== */
-
-function isInSelectedPeriod(
-    dateString
-){
-
-    const date =
-        new Date(
-            dateString +
-            "T00:00:00"
-        );
-
-
-    const now =
-        new Date();
-
-
-    if(
-        selectedPeriod ===
-        "today"
-    ){
-
-        return (
-
-            date.getFullYear()
-            ===
-            now.getFullYear()
-
-            &&
-
-            date.getMonth()
-            ===
-            now.getMonth()
-
-            &&
-
-            date.getDate()
-            ===
-            now.getDate()
-
-        );
-
-    }
-
-
-    if(
-        selectedPeriod ===
-        "month"
-    ){
-
-        return (
-
-            date.getFullYear()
-            ===
-            now.getFullYear()
-
-            &&
-
-            date.getMonth()
-            ===
-            now.getMonth()
-
-        );
-
-    }
-
-
-    if(
-        selectedPeriod ===
-        "year"
-    ){
-
-        return (
-
-            date.getFullYear()
-            ===
-            now.getFullYear()
-
-        );
-
-    }
-
-
-    return true;
-
-}
-
-
-/* =====================================================
-   SUMMARY
-===================================================== */
-
-function updateSummary(){
-
-    let income = 0;
-
-    let expenses = 0;
-
-
-    transactions.forEach(
-        transaction => {
-
-            if(
-                !isInSelectedPeriod(
-                    transaction.date
-                )
-            ){
-
-                return;
-
-            }
-
-
-            if(
-                transaction.type ===
-                "income"
-            ){
-
-                income += Number(
-                    transaction.amount
-                );
-
-            }
-
-
-            if(
-                transaction.type ===
-                "expense"
-            ){
-
-                expenses += Number(
-                    transaction.amount
-                );
-
-            }
-
-        }
-    );
-
-
-    document.getElementById(
-        "periodIncome"
-    ).textContent =
-        money(income);
-
-
-    document.getElementById(
-        "periodExpenses"
-    ).textContent =
-        money(expenses);
-
-
-    document.getElementById(
-        "periodSavings"
-    ).textContent =
-        money(
-            income - expenses
-        );
-
-}
-
-
-/* =====================================================
-   BALANCE PIE
-===================================================== */
-
-function createBalancePie(){
-
-    const labels =
-        accounts.map(
-            account =>
-                account.name
-        );
-
-
-    const values =
-        accounts.map(
-            account =>
-                Math.max(
-                    0,
-                    getAccountBalance(
-                        account.id
-                    )
-                )
-        );
-
-
-    const total =
-        values.reduce(
-            (
-                sum,
-                value
-            ) =>
-                sum + value,
-            0
-        );
-
-
-    const colors = [
-
-        "#2563eb",
-        "#16a34a",
-        "#f59e0b",
-        "#8b5cf6",
-        "#ef4444",
-        "#06b6d4",
-        "#ec4899",
-        "#64748b"
-
-    ];
-
-
-    if(balancePieChart){
-
-        balancePieChart.destroy();
-
-    }
-
-
-    balancePieChart =
-        new Chart(
-
-            document.getElementById(
-                "balancePieChart"
-            ),
-
-            {
-
-                type:"doughnut",
-
-                data:{
-
-                    labels:labels,
-
-                    datasets:[{
-
-                        data:values,
-
-                        backgroundColor:
-                            colors.slice(
-                                0,
-                                values.length
-                            ),
-
-                        borderWidth:2,
-
-                        borderColor:
-                            "#ffffff"
-
-                    }]
-
-                },
-
-                options:{
-
-                    responsive:true,
-
-                    maintainAspectRatio:false,
-
-                    cutout:"58%",
-
-                    plugins:{
-
-                        legend:{
-                            display:false
-                        },
-
-                        tooltip:{
-
-                            callbacks:{
-
-                                label:function(
-                                    context
-                                ){
-
-                                    const value =
-                                        context.raw;
-
-
-                                    const percentage =
-                                        total > 0
-                                        ?
-                                        value /
-                                        total *
-                                        100
-                                        :
-                                        0;
-
-
-                                    return (
-
-                                        " " +
-                                        money(value) +
-                                        " (" +
-                                        percentage.toFixed(1) +
-                                        "%)"
-
-                                    );
-
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        );
-
-
-    const info =
-        document.getElementById(
-            "pieInfo"
-        );
-
-
-    info.innerHTML = "";
-
-
-    accounts.forEach(
-        (
-            account,
-            index
-        ) => {
-
-            const value =
-                Math.max(
-                    0,
-                    getAccountBalance(
-                        account.id
-                    )
-                );
-
-
-            const percentage =
-                total > 0
-                ?
-                value /
-                total *
-                100
-                :
-                0;
-
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-
-            row.className =
-                "pie-row";
-
-
-            row.innerHTML = `
-
-                <div class="pie-left">
-
-                    <span
-                        class="color-dot"
-                        style="
-                        background:${
-                            colors[
-                                index %
-                                colors.length
-                            ]
-                        };
-                        "
-                    ></span>
-
-                    ${escapeHTML(
-                        account.name
-                    )}
-
-                </div>
-
-
-                <strong>
-
-                    ${money(value)}
-
-                    <span
-                        style="
-                        color:#64748b;
-                        font-weight:normal;
-                        "
-                    >
-
-                        ${percentage.toFixed(1)}%
-
-                    </span>
-
-                </strong>
-
-            `;
-
-
-            info.appendChild(row);
-
-        }
-    );
-
-
-    const totalRow =
-        document.createElement(
-            "div"
-        );
-
-
-    totalRow.style = `
-
-        margin-top:5px;
-
-        padding-top:12px;
-
-        border-top:
-            1px solid #cbd5e1;
-
-        display:flex;
-
-        justify-content:space-between;
-
-        font-weight:bold;
-
-    `;
-
-
-    totalRow.innerHTML = `
-
-        <span>
-            Total
-        </span>
-
-        <span>
-            ${money(total)}
-        </span>
-
-    `;
-
-
-    info.appendChild(
-        totalRow
-    );
-
-}
-
-
-/* =====================================================
-   BALANCE AT DATE
-===================================================== */
-
-function getBalanceAtDate(
-    targetDate
-){
-
-    let total = 0;
-
-
-    transactions.forEach(
-        transaction => {
-
-            if(
-                transaction.date >
-                targetDate
-            ){
-
-                return;
-
-            }
-
-
-            const amount =
-                Number(
-                    transaction.amount
-                );
-
-
-            if(
-                transaction.type ===
-                "opening"
-            ){
-
-                total += amount;
-
-            }
-
-
-            else if(
-                transaction.type ===
-                "income"
-            ){
-
-                total += amount;
-
-            }
-
-
-            else if(
-                transaction.type ===
-                "expense"
-            ){
-
-                total -= amount;
-
-            }
-
-        }
-    );
-
-
-    return total;
-
-}
-
-
-/* =====================================================
-   LAST 6 MONTHS
-===================================================== */
-
-function getLastSixMonths(){
-
-    const result = [];
-
-    const now =
-        new Date();
-
-
-    for(
-        let i = 5;
-        i >= 0;
-        i--
-    ){
-
-        const d =
-            new Date(
-                now.getFullYear(),
-                now.getMonth()-i,
-                1
-            );
-
-
-        const year =
-            d.getFullYear();
-
-
-        const month =
-            d.getMonth();
-
-
-        const label =
-            d.toLocaleString(
-                "en-US",
-                {
-                    month:"short"
-                }
-            );
-
-
-        let income = 0;
-
-        let expenses = 0;
-
-
-        transactions.forEach(
-            transaction => {
-
-                const td =
-                    new Date(
-                        transaction.date +
-                        "T00:00:00"
-                    );
-
-
-                if(
-                    td.getFullYear()
-                    ===
-                    year
-                    &&
-                    td.getMonth()
-                    ===
-                    month
-                ){
-
-                    if(
-                        transaction.type
-                        ===
-                        "income"
-                    ){
-
-                        income += Number(
-                            transaction.amount
-                        );
-
-                    }
-
-
-                    if(
-                        transaction.type
-                        ===
-                        "expense"
-                    ){
-
-                        expenses += Number(
-                            transaction.amount
-                        );
-
-                    }
-
-                }
-
-            }
-        );
-
-
-        const lastDay =
-            new Date(
-                year,
-                month+1,
-                0
-            );
-
-
-        const lastDate =
-            `${lastDay.getFullYear()}-` +
-
-            `${String(
-                lastDay.getMonth()+1
-            ).padStart(2,"0")}-` +
-
-            `${String(
-                lastDay.getDate()
-            ).padStart(2,"0")}`;
-
-
-        result.push({
-
-            label:
-                `${label} ${year}`,
-
-            income:
-                income,
-
-            expenses:
-                expenses,
-
-            savings:
-                income -
-                expenses,
-
-            balance:
-                getBalanceAtDate(
-                    lastDate
-                )
-
-        });
-
-    }
-
-
-    return result;
-
-}
-
-
-/* =====================================================
-   TREND
-===================================================== */
-
-function changeTrend(
-    trend,
-    button
-){
-
-    selectedTrend =
-        trend;
-
-
-    document
-        .querySelectorAll(
-            ".chart-switch button"
-        )
-        .forEach(
-            btn =>
-                btn.classList.remove(
-                    "active"
-                )
-        );
-
-
-    button.classList.add(
-        "active"
-    );
-
-
-    createTrendChart();
-
-}
-
-
-/* =====================================================
-   TREND CHART
-===================================================== */
-
-function createTrendChart(){
-
-    const data =
-        getLastSixMonths();
-
-
-    const labels =
-        data.map(
-            item =>
-                item.label
-        );
-
-
-    let datasets = [];
-
-
-    if(
-        selectedTrend ===
-        "incomeExpense"
-    ){
-
-        datasets = [
-
-            {
-
-                label:"Income",
-
-                data:
-                    data.map(
-                        item =>
-                            item.income
-                    ),
-
-                borderColor:
-                    "#16a34a",
-
-                backgroundColor:
-                    "rgba(22,163,74,.10)",
-
-                tension:.3,
-
-                fill:true
-
-            },
-
-
-            {
-
-                label:"Expenses",
-
-                data:
-                    data.map(
-                        item =>
-                            item.expenses
-                    ),
-
-                borderColor:
-                    "#dc2626",
-
-                backgroundColor:
-                    "rgba(220,38,38,.08)",
-
-                tension:.3,
-
-                fill:true
-
-            }
-
-        ];
-
-    }
-
-
-    else if(
-        selectedTrend ===
-        "balance"
-    ){
-
-        datasets = [{
-
-            label:
-                "Total Balance",
-
-            data:
-                data.map(
-                    item =>
-                        item.balance
-                ),
-
-            borderColor:
-                "#2563eb",
-
-            backgroundColor:
-                "rgba(37,99,235,.12)",
-
-            tension:.3,
-
-            fill:true,
-
-            pointRadius:5
-
-        }];
-
-    }
-
-
-    else{
-
-        datasets = [{
-
-            label:
-                "Savings",
-
-            data:
-                data.map(
-                    item =>
-                        item.savings
-                ),
-
-            borderColor:
-                "#8b5cf6",
-
-            backgroundColor:
-                "rgba(139,92,246,.12)",
-
-            tension:.3,
-
-            fill:true,
-
-            pointRadius:5
-
-        }];
-
-    }
-
-
-    if(trendChart){
-
-        trendChart.destroy();
-
-    }
-
-
-    trendChart =
-        new Chart(
-
-            document.getElementById(
-                "trendChart"
-            ),
-
-            {
-
-                type:"line",
-
-                data:{
-
-                    labels:labels,
-
-                    datasets:datasets
-
-                },
-
-                options:{
-
-                    responsive:true,
-
-                    maintainAspectRatio:false,
-
-                    interaction:{
-
-                        intersect:false,
-
-                        mode:"index"
-
-                    },
-
-                    plugins:{
-
-                        tooltip:{
-
-                            callbacks:{
-
-                                label:function(
-                                    context
-                                ){
-
-                                    return (
-
-                                        " " +
-
-                                        context
-                                            .dataset
-                                            .label +
-
-                                        ": " +
-
-                                        money(
-                                            context.raw
-                                        )
-
-                                    );
-
-                                }
-
-                            }
-
-                        }
-
-                    },
-
-                    scales:{
-
-                        y:{
-
-                            beginAtZero:true,
-
-                            ticks:{
-
-                                callback:function(
-                                    value
-                                ){
-
-                                    return (
-
-                                        "Rs. " +
-
-                                        Number(
-                                            value
-                                        )
-                                        .toLocaleString(
-                                            "en-LK"
-                                        )
-
-                                    );
-
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        );
-
-}
-
-
-/* =====================================================
-   HISTORY ACCOUNT
-===================================================== */
-
-function transactionMatchesAccount(
-    transaction,
-    accountId
-){
-
-    if(accountId === "all"){
-
-        return true;
-
-    }
-
-
-    const id =
-        String(accountId);
-
-
-    if(
-        transaction.type ===
-        "transfer"
-    ){
-
-        return (
-
-            String(
-                transaction.fromAccount
-            )
-            ===
-            id
-
-            ||
-
-            String(
-                transaction.toAccount
-            )
-            ===
-            id
-
-        );
-
-    }
-
-
-    if(
-        transaction.type ===
-        "income"
-    ){
-
-        return (
-
-            String(
-                transaction.toAccount
-            )
-            ===
-            id
-
-        );
-
-    }
-
-
-    if(
-        transaction.type ===
-        "expense"
-    ){
-
-        return (
-
-            String(
-                transaction.fromAccount
-            )
-            ===
-            id
-
-        );
-
-    }
-
-
-    if(
-        transaction.type ===
-        "opening"
-    ){
-
-        return (
-
-            String(
-                transaction.toAccount
-            )
-            ===
-            id
-
-        );
-
-    }
-
-
-    return false;
-
-}
-
-
-/* =====================================================
-   HISTORY DATE
-===================================================== */
-
-function historyDateMatches(
-    dateString,
-    period
-){
-
-    if(period === "all"){
-
-        return true;
-
-    }
-
-
-    const date =
-        new Date(
-            dateString +
-            "T00:00:00"
-        );
-
-
-    const now =
-        new Date();
-
-
-    if(period === "today"){
-
-        return (
-
-            date.toDateString()
-            ===
-            now.toDateString()
-
-        );
-
-    }
-
-
-    if(period === "week"){
-
-        const start =
-            new Date(now);
-
-
-        const day =
-            start.getDay();
-
-
-        start.setDate(
-            start.getDate() -
-            day
-        );
-
-
-        start.setHours(
-            0,0,0,0
-        );
-
-
-        const end =
-            new Date(start);
-
-
-        end.setDate(
-            end.getDate()+6
-        );
-
-
-        end.setHours(
-            23,59,59,999
-        );
-
-
-        return (
-
-            date >= start
-            &&
-            date <= end
-
-        );
-
-    }
-
-
-    if(period === "month"){
-
-        return (
-
-            date.getFullYear()
-            ===
-            now.getFullYear()
-
-            &&
-
-            date.getMonth()
-            ===
-            now.getMonth()
-
-        );
-
-    }
-
-
-    if(period === "year"){
-
-        return (
-
-            date.getFullYear()
-            ===
-            now.getFullYear()
-
-        );
-
-    }
-
-
-    return true;
-
-}
-
-
-/* =====================================================
-   FILTER
-===================================================== */
-
-function getFilteredTransactions(){
-
-    const search =
-        document.getElementById(
-            "historySearch"
-        )
-        .value
-        .toLowerCase()
-        .trim();
-
-
-    const account =
-        document.getElementById(
-            "historyAccount"
-        ).value;
-
-
-    const type =
-        document.getElementById(
-            "historyType"
-        ).value;
-
-
-    const period =
-        document.getElementById(
-            "historyPeriod"
-        ).value;
-
-
-    const sort =
-        document.getElementById(
-            "historySort"
-        ).value;
-
-
-    let filtered =
-        transactions.filter(
-            transaction => {
-
-                const searchText =
-
-                    (
-
-                        transaction.description
-
-                        +
-
-                        " "
-
-                        +
-
-                        transaction.category
-
-                    )
-                    .toLowerCase();
-
-
-                return (
-
-                    (
-
-                        !search
-
-                        ||
-
-                        searchText.includes(
-                            search
-                        )
-
-                    )
-
-                    &&
-
-                    transactionMatchesAccount(
-                        transaction,
-                        account
-                    )
-
-                    &&
-
-                    (
-
-                        type === "all"
-
-                        ||
-
-                        transaction.type
-                        ===
-                        type
-
-                    )
-
-                    &&
-
-                    historyDateMatches(
-                        transaction.date,
-                        period
-                    )
-
-                );
-
-            }
-        );
-
-
-    if(sort === "newest"){
-
-        filtered.sort(
-            (
-                a,
-                b
-            ) =>
-                b.date.localeCompare(
-                    a.date
-                )
-        );
-
-    }
-
-
-    else if(sort === "oldest"){
-
-        filtered.sort(
-            (
-                a,
-                b
-            ) =>
-                a.date.localeCompare(
-                    b.date
-                )
-        );
-
-    }
-
-
-    else if(sort === "highest"){
-
-        filtered.sort(
-            (
-                a,
-                b
-            ) =>
-                Number(b.amount)
-                -
-                Number(a.amount)
-        );
-
-    }
-
-
-    else if(sort === "lowest"){
-
-        filtered.sort(
-            (
-                a,
-                b
-            ) =>
-                Number(a.amount)
-                -
-                Number(b.amount)
-        );
-
-    }
-
-
-    return filtered;
-
-}
-
-
-/* =====================================================
-   HISTORY SUMMARY
-===================================================== */
-
-function updateHistorySummary(
-    filtered
-){
-
-    let income = 0;
-
-    let expenses = 0;
-
-    let transfers = 0;
-
-    let opening = 0;
-
-
-    filtered.forEach(
-        transaction => {
-
-            const amount =
-                Number(
-                    transaction.amount
-                );
-
-
-            if(
-                transaction.type ===
-                "income"
-            ){
-
-                income += amount;
-
-            }
-
-
-            else if(
-                transaction.type ===
-                "expense"
-            ){
-
-                expenses += amount;
-
-            }
-
-
-            else if(
-                transaction.type ===
-                "transfer"
-            ){
-
-                transfers += amount;
-
-            }
-
-
-            else if(
-                transaction.type ===
-                "opening"
-            ){
-
-                opening += amount;
-
-            }
-
-        }
-    );
-
-
-    document.getElementById(
-        "filteredIncome"
-    ).textContent =
-        money(income);
-
-
-    document.getElementById(
-        "filteredExpenses"
-    ).textContent =
-        money(expenses);
-
-
-    document.getElementById(
-        "filteredTransfers"
-    ).textContent =
-        money(transfers);
-
-
-    document.getElementById(
-        "filteredOpening"
-    ).textContent =
-        money(opening);
-
-
-    document.getElementById(
-        "filteredCount"
-    ).textContent =
-        filtered.length;
-
-}
-
-
-/* =====================================================
-   DISPLAY TRANSACTIONS
-===================================================== */
-
-function displayTransactions(){
-
-    const list =
-        document.getElementById(
-            "transactionList"
-        );
-
-
-    const filtered =
-        getFilteredTransactions();
-
-
-    updateHistorySummary(
-        filtered
-    );
-
-
-    list.innerHTML = "";
-
-
-    if(filtered.length === 0){
-
-        list.innerHTML = `
-
-            <div class="empty">
-
-                No transactions match your filters.
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    filtered.forEach(
-        transaction => {
-
-            let icon =
-                "💵";
-
-
-            let iconClass =
-                "income-icon";
-
-
-            let sign =
-                "+";
-
-
-            let color =
-                "#16a34a";
-
-
-            let accountText =
-                "";
-
-
-            if(
-                transaction.type ===
-                "opening"
-            ){
-
-                icon =
-                    "🟡";
-
-
-                iconClass =
-                    "opening-icon";
-
-
-                color =
-                    "#d97706";
-
-
-                const account =
-                    getAccount(
-                        transaction.toAccount
-                    );
-
-
-                accountText =
-                    account
-                    ?
-                    account.name
-                    :
-                    "";
-
-            }
-
-
-            else if(
-                transaction.type ===
-                "income"
-            ){
-
-                icon =
-                    "💵";
-
-
-                iconClass =
-                    "income-icon";
-
-
-                const account =
-                    getAccount(
-                        transaction.toAccount
-                    );
-
-
-                accountText =
-                    account
-                    ?
-                    account.name
-                    :
-                    "";
-
-            }
-
-
-            else if(
-                transaction.type ===
-                "expense"
-            ){
-
-                icon =
-                    "💸";
-
-
-                iconClass =
-                    "expense-icon";
-
-
-                sign =
-                    "-";
-
-
-                color =
-                    "#dc2626";
-
-
-                const account =
-                    getAccount(
-                        transaction.fromAccount
-                    );
-
-
-                accountText =
-                    account
-                    ?
-                    account.name
-                    :
-                    "";
-
-            }
-
-
-            else{
-
-                icon =
-                    "🔄";
-
-
-                iconClass =
-                    "transfer-icon";
-
-
-                sign =
-                    "↔";
-
-
-                color =
-                    "#2563eb";
-
-
-                const from =
-                    getAccount(
-                        transaction.fromAccount
-                    );
-
-
-                const to =
-                    getAccount(
-                        transaction.toAccount
-                    );
-
-
-                accountText =
-                    `${
-
-                        from
-                        ?
-                        from.name
-                        :
-                        ""
-
-                    } → ${
-
-                        to
-                        ?
-                        to.name
-                        :
-                        ""
-
-                    }`;
-
-            }
-
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-
-            div.className =
-                "transaction";
-
-
-            div.innerHTML = `
-
-                <div class="transaction-left">
-
-                    <div
-                        class="
-                            transaction-icon
-                            ${iconClass}
-                        "
-                    >
-
-                        ${icon}
-
-                    </div>
-
-
-                    <div>
-
-                        <div
-                            class="transaction-name"
-                        >
-
-                            ${escapeHTML(
-                                transaction.description
-                            )}
-
-                        </div>
-
-
-                        <div
-                            class="transaction-meta"
-                        >
-
-                            ${escapeHTML(
-                                transaction.category
-                                ||
-                                ""
-                            )}
-
-                            •
-
-                            ${escapeHTML(
-                                accountText
-                            )}
-
-                            •
-
-                            ${escapeHTML(
-                                transaction.date
-                            )}
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="transaction-right">
-
-                    <div
-                        class="transaction-amount"
-                        style="color:${color};"
-                    >
-
-                        ${sign}
-
-                        ${money(
-                            transaction.amount
-                        )}
-
-                    </div>
-
-
-                    <button
-                        class="delete-btn"
-                        onclick="deleteTransaction('${transaction.id}')"
-                    >
-
-                        Delete
-
-                    </button>
-
-                </div>
-
-            `;
-
-
-            list.appendChild(
-                div
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   RESET FILTERS
-===================================================== */
-
-function resetHistoryFilters(){
-
-    document.getElementById(
-        "historySearch"
-    ).value = "";
-
-
-    document.getElementById(
-        "historyAccount"
-    ).value =
-        "all";
-
-
-    document.getElementById(
-        "historyType"
-    ).value =
-        "all";
-
-
-    document.getElementById(
-        "historyPeriod"
-    ).value =
-        "all";
-
-
-    document.getElementById(
-        "historySort"
-    ).value =
-        "newest";
-
-
-    displayTransactions();
-
-}
-
-
-/* =====================================================
-   DELETE TRANSACTION
+ DELETE TRANSACTION
 ===================================================== */
 
 async function deleteTransaction(id){
 
-    if(
-        !confirm(
-            "Delete this transaction?"
-        )
-    ){
+if(!confirm("Delete this transaction?"))return;
 
-        return;
+await transactionsRef().doc(id).delete();
 
-    }
+transactions=transactions.filter(t=>String(t.id)!==String(id));
 
-
-    try{
-
-        await userTransactionsRef()
-            .doc(String(id))
-            .delete();
-
-
-        transactions =
-            transactions.filter(
-                item =>
-                    String(item.id)
-                    !==
-                    String(id)
-            );
-
-
-        updateAll();
-
-
-    }catch(error){
-
-        alert(
-            "Could not delete transaction: "
-            +
-            error.message
-        );
-
-    }
+updateAll();
 
 }
 
 
 /* =====================================================
-   UPDATE EVERYTHING
+ HISTORY
+===================================================== */
+
+function dateMatches(date,period){
+
+if(period==="all")return true;
+
+const d=new Date(date+"T00:00:00");
+
+const now=new Date();
+
+if(period==="today")
+return d.toDateString()===now.toDateString();
+
+if(period==="month")
+return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth();
+
+if(period==="year")
+return d.getFullYear()===now.getFullYear();
+
+if(period==="week"){
+
+const start=new Date(now);
+
+start.setDate(now.getDate()-now.getDay());
+
+start.setHours(0,0,0,0);
+
+const end=new Date(start);
+
+end.setDate(start.getDate()+6);
+
+end.setHours(23,59,59,999);
+
+return d>=start&&d<=end;
+
+}
+
+return true;
+
+}
+
+function transactionAccountMatch(t,id){
+
+if(id==="all")return true;
+
+return String(t.fromAccount)===String(id)||
+
+String(t.toAccount)===String(id);
+
+}
+
+function getFiltered(){
+
+const search=document.getElementById("historySearch").value.toLowerCase().trim();
+
+const account=document.getElementById("historyAccount").value;
+
+const type=document.getElementById("historyType").value;
+
+const period=document.getElementById("historyPeriod").value;
+
+const sort=document.getElementById("historySort").value;
+
+let result=transactions.filter(t=>{
+
+const text=(t.description+" "+(t.category||"")).toLowerCase();
+
+return(!search||text.includes(search))&&
+
+transactionAccountMatch(t,account)&&
+
+(type==="all"||t.type===type)&&
+
+dateMatches(t.date,period);
+
+});
+
+if(sort==="newest")result.sort((a,b)=>b.date.localeCompare(a.date));
+
+if(sort==="oldest")result.sort((a,b)=>a.date.localeCompare(b.date));
+
+if(sort==="highest")result.sort((a,b)=>b.amount-a.amount);
+
+if(sort==="lowest")result.sort((a,b)=>a.amount-b.amount);
+
+return result;
+
+}
+
+function displayTransactions(){
+
+const box=document.getElementById("transactionList");
+
+const list=getFiltered();
+
+box.innerHTML="";
+
+if(!list.length){
+
+box.innerHTML='<div class="empty">No transactions found.</div>';
+
+return;
+
+}
+
+list.forEach(t=>{
+
+let icon="💵";
+
+let cls="income-icon";
+
+let sign="+";
+
+let color="#16a34a";
+
+let account="";
+
+if(t.type==="expense"){
+
+icon="💸";
+
+cls="expense-icon";
+
+sign="-";
+
+color="#dc2626";
+
+account=getAccount(t.fromAccount)?.name||"";
+
+}
+
+else if(t.type==="transfer"){
+
+icon="🔄";
+
+cls="transfer-icon";
+
+color="#2563eb";
+
+sign="↔";
+
+account=
+
+(getAccount(t.fromAccount)?.name||"")+" → "+
+
+(getAccount(t.toAccount)?.name||"");
+
+}
+
+else if(t.type==="opening"){
+
+icon="🟡";
+
+cls="opening-icon";
+
+color="#d97706";
+
+account=getAccount(t.toAccount)?.name||"";
+
+}
+
+else{
+
+account=getAccount(t.toAccount)?.name||"";
+
+}
+
+const div=document.createElement("div");
+
+div.className="transaction";
+
+div.innerHTML=`
+
+<div class="tx-left">
+
+<div class="tx-icon ${cls}">${icon}</div>
+
+<div>
+
+<div class="tx-name">${escapeHTML(t.description)}</div>
+
+<div class="tx-meta">
+
+${escapeHTML(t.category||"")}
+
+ • ${escapeHTML(account)}
+
+ • ${escapeHTML(t.date)}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="tx-right">
+
+<div style="font-weight:bold;color:${color}">
+
+${sign} ${money(t.amount)}
+
+</div>
+
+<div class="tx-buttons">
+
+<button class="edit" onclick="editTransaction('${t.id}')">✏️ Edit</button>
+
+<button class="del" onclick="deleteTransaction('${t.id}')">🗑️ Delete</button>
+
+</div>
+
+</div>
+
+`;
+
+box.appendChild(div);
+
+});
+
+}
+
+function resetFilters(){
+
+document.getElementById("historySearch").value="";
+
+document.getElementById("historyAccount").value="all";
+
+document.getElementById("historyType").value="all";
+
+document.getElementById("historyPeriod").value="all";
+
+document.getElementById("historySort").value="newest";
+
+displayTransactions();
+
+}
+
+
+/* =====================================================
+ STATISTICS
+===================================================== */
+
+function monthTotals(){
+
+const now=new Date();
+
+let income=0;
+
+let expense=0;
+
+transactions.forEach(t=>{
+
+const d=new Date(t.date+"T00:00:00");
+
+if(d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()){
+
+if(t.type==="income")income+=Number(t.amount);
+
+if(t.type==="expense")expense+=Number(t.amount);
+
+}
+
+});
+
+return{
+
+income,
+
+expense,
+
+savings:income-expense,
+
+rate:income?((income-expense)/income)*100:0
+
+};
+
+}
+
+
+/* =====================================================
+ CHARTS
+===================================================== */
+
+function destroyChart(name){
+
+if(charts[name]){
+
+charts[name].destroy();
+
+charts[name]=null;
+
+}
+
+}
+
+function createCharts(){
+
+destroyChart("pie");
+
+destroyChart("income");
+
+destroyChart("category");
+
+destroyChart("growth");
+
+const labels=accounts.map(a=>a.name);
+
+const balances=accounts.map(a=>Math.max(0,getAccountBalance(a.id)));
+
+charts.pie=new Chart(
+
+document.getElementById("balancePieChart"),{
+
+type:"doughnut",
+
+data:{
+
+labels,
+
+datasets:[{
+
+data:balances,
+
+backgroundColor:["#2563eb","#16a34a","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#ec4899","#64748b"]
+
+}]
+
+},
+
+options:{responsive:true,maintainAspectRatio:false}
+
+});
+
+const months=[];
+
+const incomes=[];
+
+const expenses=[];
+
+const categoryTotals={};
+
+for(let i=5;i>=0;i--){
+
+const d=new Date();
+
+d.setMonth(d.getMonth()-i);
+
+const year=d.getFullYear();
+
+const month=d.getMonth();
+
+months.push(d.toLocaleString("en-US",{month:"short"}));
+
+let inc=0;
+
+let exp=0;
+
+transactions.forEach(t=>{
+
+const td=new Date(t.date+"T00:00:00");
+
+if(td.getFullYear()===year&&td.getMonth()===month){
+
+if(t.type==="income")inc+=Number(t.amount);
+
+if(t.type==="expense"){
+
+exp+=Number(t.amount);
+
+categoryTotals[t.category||"Other"]=(categoryTotals[t.category||"Other"]||0)+Number(t.amount);
+
+}
+
+}
+
+});
+
+incomes.push(inc);
+
+expenses.push(exp);
+
+}
+
+charts.income=new Chart(
+
+document.getElementById("incomeExpenseChart"),{
+
+type:"line",
+
+data:{
+
+labels:months,
+
+datasets:[
+
+{
+
+label:"Income",
+
+data:incomes,
+
+borderColor:"#16a34a",
+
+backgroundColor:"rgba(22,163,74,.1)",
+
+fill:true,
+
+tension:.3
+
+},
+
+{
+
+label:"Expenses",
+
+data:expenses,
+
+borderColor:"#dc2626",
+
+backgroundColor:"rgba(220,38,38,.1)",
+
+fill:true,
+
+tension:.3
+
+}
+
+]
+
+},
+
+options:{responsive:true,maintainAspectRatio:false}
+
+});
+
+charts.category=new Chart(
+
+document.getElementById("categoryChart"),{
+
+type:"bar",
+
+data:{
+
+labels:Object.keys(categoryTotals),
+
+datasets:[{
+
+label:"Spending",
+
+data:Object.values(categoryTotals),
+
+backgroundColor:"#2563eb"
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+scales:{y:{beginAtZero:true}}
+
+}
+
+});
+
+const growth=[];
+
+for(let i=5;i>=0;i--){
+
+const d=new Date();
+
+d.setMonth(d.getMonth()-i);
+
+const end=new Date(d.getFullYear(),d.getMonth()+1,0);
+
+const date=end.getFullYear()+"-"+
+
+String(end.getMonth()+1).padStart(2,"0")+"-"+
+
+String(end.getDate()).padStart(2,"0");
+
+let balance=0;
+
+transactions.forEach(t=>{
+
+if(t.date<=date){
+
+const a=Number(t.amount);
+
+if(t.type==="opening"||t.type==="income")balance+=a;
+
+if(t.type==="expense")balance-=a;
+
+}
+
+});
+
+growth.push(balance);
+
+}
+
+charts.growth=new Chart(
+
+document.getElementById("growthChart"),{
+
+type:"line",
+
+data:{
+
+labels:months,
+
+datasets:[{
+
+label:"Total Balance",
+
+data:growth,
+
+borderColor:"#2563eb",
+
+backgroundColor:"rgba(37,99,235,.1)",
+
+fill:true,
+
+tension:.3
+
+}]
+
+},
+
+options:{responsive:true,maintainAspectRatio:false}
+
+});
+
+}
+
+
+/* =====================================================
+ REMINDERS
+===================================================== */
+
+async function requestNotifications(){
+
+if(!("Notification" in window)){
+
+alert("Notifications are not supported by this browser.");
+
+return;
+
+}
+
+const permission=await Notification.requestPermission();
+
+if(permission==="granted"){
+
+alert("Notifications enabled.");
+
+}else{
+
+alert("Notification permission was not granted.");
+
+}
+
+}
+
+async function addReminder(){
+
+const title=document.getElementById("reminderTitle").value.trim();
+
+const date=document.getElementById("reminderDate").value;
+
+const time=document.getElementById("reminderTime").value;
+
+const amount=Number(document.getElementById("reminderAmount").value||0);
+
+if(!title||!date||!time){
+
+alert("Enter reminder title, date and time.");
+
+return;
+
+}
+
+const data={
+
+title,
+
+date,
+
+time,
+
+amount,
+
+completed:false,
+
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
+
+};
+
+const ref=await remindersRef().add(data);
+
+reminders.push({id:ref.id,...data});
+
+document.getElementById("reminderTitle").value="";
+
+document.getElementById("reminderAmount").value="";
+
+displayReminders();
+
+}
+
+async function loadReminders(){
+
+reminders=[];
+
+const snap=await remindersRef().get();
+
+snap.forEach(d=>reminders.push({id:d.id,...d.data()}));
+
+displayReminders();
+
+checkReminders();
+
+}
+
+function displayReminders(){
+
+const box=document.getElementById("reminderList");
+
+if(!box)return;
+
+box.innerHTML="";
+
+if(!reminders.length){
+
+box.innerHTML='<div class="empty">No reminders yet.</div>';
+
+return;
+
+}
+
+reminders.sort((a,b)=>(a.date+" "+a.time).localeCompare(b.date+" "+b.time));
+
+reminders.forEach(r=>{
+
+const div=document.createElement("div");
+
+div.className="reminder";
+
+div.innerHTML=`
+
+<div>
+
+<strong>🔔 ${escapeHTML(r.title)}</strong>
+
+<div style="color:var(--muted);font-size:13px;margin-top:5px">
+
+${escapeHTML(r.date)} at ${escapeHTML(r.time)}
+
+${r.amount?" • "+money(r.amount):""}
+
+</div>
+
+</div>
+
+<button class="del" onclick="deleteReminder('${r.id}')">Delete</button>
+
+`;
+
+box.appendChild(div);
+
+});
+
+}
+
+async function deleteReminder(id){
+
+if(!confirm("Delete this reminder?"))return;
+
+await remindersRef().doc(id).delete();
+
+reminders=reminders.filter(r=>r.id!==id);
+
+displayReminders();
+
+}
+
+function checkReminders(){
+
+if(!("Notification" in window)||Notification.permission!=="granted")return;
+
+const now=new Date();
+
+const date=today();
+
+const time=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+
+reminders.forEach(r=>{
+
+if(!r.completed&&r.date===date&&r.time===time){
+
+new Notification("Finance Reminder",{
+
+body:r.title+(r.amount?" - "+money(r.amount):"")
+
+});
+
+}
+
+});
+
+}
+
+setInterval(checkReminders,60000);
+
+
+/* =====================================================
+ EXPORT CSV
+===================================================== */
+
+function exportCSV(){
+
+const rows=[
+
+["Date","Type","Description","Category","Amount","Account","To Account"]
+
+];
+
+transactions.forEach(t=>{
+
+rows.push([
+
+t.date,
+
+t.type,
+
+t.description,
+
+t.category||"",
+
+t.amount,
+
+getAccount(t.fromAccount)?.name||"",
+
+getAccount(t.toAccount)?.name||""
+
+]);
+
+});
+
+const csv=rows.map(r=>
+
+r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")
+
+).join("\n");
+
+const blob=new Blob([csv],{type:"text/csv"});
+
+downloadBlob(blob,"finance-transactions.csv");
+
+}
+
+
+/* =====================================================
+ EXPORT EXCEL
+===================================================== */
+
+function exportExcel(){
+
+const rows=transactions.map(t=>({
+
+Date:t.date,
+
+Type:t.type,
+
+Description:t.description,
+
+Category:t.category||"",
+
+Amount:Number(t.amount),
+
+Account:getAccount(t.fromAccount)?.name||"",
+
+ToAccount:getAccount(t.toAccount)?.name||""
+
+}));
+
+const ws=XLSX.utils.json_to_sheet(rows);
+
+const wb=XLSX.utils.book_new();
+
+XLSX.utils.book_append_sheet(wb,ws,"Transactions");
+
+XLSX.writeFile(wb,"finance-dashboard.xlsx");
+
+}
+
+
+/* =====================================================
+ EXPORT PDF
+===================================================== */
+
+function exportPDF(){
+
+const {jsPDF}=window.jspdf;
+
+const doc=new jsPDF();
+
+doc.setFontSize(18);
+
+doc.text("My Finance Dashboard",15,20);
+
+doc.setFontSize(12);
+
+doc.text("Total Balance: "+money(totalBalance()),15,30);
+
+const m=monthTotals();
+
+doc.text("Monthly Income: "+money(m.income),15,40);
+
+doc.text("Monthly Expenses: "+money(m.expense),15,50);
+
+doc.text("Monthly Savings: "+money(m.savings),15,60);
+
+let y=75;
+
+transactions.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,30).forEach(t=>{
+
+if(y>275){
+
+doc.addPage();
+
+y=20;
+
+}
+
+doc.setFontSize(9);
+
+doc.text(
+
+`${t.date} | ${t.type} | ${t.description} | Rs. ${Number(t.amount).toFixed(2)}`,
+
+15,
+
+y
+
+);
+
+y+=7;
+
+});
+
+doc.save("finance-dashboard.pdf");
+
+}
+
+
+/* =====================================================
+ BACKUP
+===================================================== */
+
+function downloadJSON(){
+
+const backup={
+
+version:2,
+
+exportedAt:new Date().toISOString(),
+
+accounts,
+
+transactions,
+
+reminders
+
+};
+
+const blob=new Blob(
+
+[JSON.stringify(backup,null,2)],
+
+{type:"application/json"}
+
+);
+
+downloadBlob(blob,"finance-backup.json");
+
+}
+
+async function restoreBackup(event){
+
+const file=event.target.files[0];
+
+if(!file)return;
+
+if(!confirm("Restore this backup? Existing records will remain and backup records will be added."))return;
+
+try{
+
+const text=await file.text();
+
+const backup=JSON.parse(text);
+
+if(!backup.accounts&&!backup.transactions){
+
+throw new Error("Invalid backup file.");
+
+}
+
+for(const a of backup.accounts||[]){
+
+const data={...a};
+
+delete data.id;
+
+await accountsRef().add(data);
+
+}
+
+for(const t of backup.transactions||[]){
+
+const data={...t};
+
+delete data.id;
+
+delete data.createdAt;
+
+await transactionsRef().add(data);
+
+}
+
+for(const r of backup.reminders||[]){
+
+const data={...r};
+
+delete data.id;
+
+delete data.createdAt;
+
+await remindersRef().add(data);
+
+}
+
+await loadData();
+
+await loadReminders();
+
+updateAll();
+
+alert("Backup restored successfully.");
+
+}catch(e){
+
+alert("Restore failed: "+e.message);
+
+}
+
+event.target.value="";
+
+}
+
+function downloadBlob(blob,name){
+
+const a=document.createElement("a");
+
+a.href=URL.createObjectURL(blob);
+
+a.download=name;
+
+a.click();
+
+URL.revokeObjectURL(a.href);
+
+}
+
+
+/* =====================================================
+ PROFILE
+===================================================== */
+
+async function saveProfile(){
+
+const name=document.getElementById("displayName").value.trim();
+
+if(!name){
+
+alert("Enter your display name.");
+
+return;
+
+}
+
+await db.collection("users")
+
+.doc(auth.currentUser.uid)
+
+.set({
+
+displayName:name,
+
+email:auth.currentUser.email,
+
+updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+
+},{merge:true});
+
+alert("Profile saved.");
+
+}
+
+async function loadProfile(){
+
+const doc=await db.collection("users")
+
+.doc(auth.currentUser.uid).get();
+
+if(doc.exists){
+
+document.getElementById("displayName").value=
+
+doc.data().displayName||"";
+
+}
+
+}
+
+async function changePassword(){
+
+const user=auth.currentUser;
+
+const newPassword=prompt("Enter your new password:");
+
+if(!newPassword)return;
+
+if(newPassword.length<6){
+
+alert("Password must be at least 6 characters.");
+
+return;
+
+}
+
+try{
+
+await user.updatePassword(newPassword);
+
+alert("Password changed successfully.");
+
+}catch(e){
+
+alert("For security, Firebase may require you to sign in again before changing your password.\n\n"+e.message);
+
+}
+
+}
+
+
+/* =====================================================
+ DARK MODE / THEME
+===================================================== */
+
+function toggleDarkMode(){
+
+const dark=document.body.classList.toggle("dark");
+
+localStorage.setItem("financeDark",dark?"1":"0");
+
+}
+
+function setTheme(primary,secondary,name){
+
+document.documentElement.style.setProperty("--primary",primary);
+
+document.documentElement.style.setProperty("--primary2",secondary);
+
+localStorage.setItem("financeTheme",name);
+
+localStorage.setItem("financePrimary",primary);
+
+localStorage.setItem("financeSecondary",secondary);
+
+}
+
+function loadSettings(){
+
+if(localStorage.getItem("financeDark")==="1"){
+
+document.body.classList.add("dark");
+
+}
+
+const p=localStorage.getItem("financePrimary");
+
+const p2=localStorage.getItem("financeSecondary");
+
+if(p&&p2){
+
+document.documentElement.style.setProperty("--primary",p);
+
+document.documentElement.style.setProperty("--primary2",p2);
+
+}
+
+loadProfile();
+
+}
+
+
+/* =====================================================
+ MODALS
+===================================================== */
+
+function openModal(id){
+
+document.getElementById(id).style.display="flex";
+
+}
+
+function closeModal(id){
+
+document.getElementById(id).style.display="none";
+
+}
+
+
+/* =====================================================
+ UPDATE ALL
 ===================================================== */
 
 function updateAll(){
 
-    document.getElementById(
-        "totalBalance"
-    ).textContent =
-        money(
-            getTotalBalance()
-        );
+document.getElementById("totalBalance").textContent=money(totalBalance());
 
+const m=monthTotals();
 
-    updateDropdowns();
+document.getElementById("monthIncome").textContent=money(m.income);
 
-    changeTransactionType();
+document.getElementById("monthExpense").textContent=money(m.expense);
 
-    displayAccounts();
+document.getElementById("monthSavings").textContent=money(m.savings);
 
-    updateSummary();
+document.getElementById("savingsRate").textContent=m.rate.toFixed(1)+"%";
 
-    createBalancePie();
+document.getElementById("transactionCount").textContent=transactions.length;
 
-    createTrendChart();
+updateAccountDropdowns();
 
-    displayTransactions();
+changeTransactionType();
+
+displayAccounts();
+
+displayTransactions();
+
+createCharts();
 
 }
+
+
+/* =====================================================
+ START
+===================================================== */
+
+document.getElementById("editType").addEventListener("change",function(){
+
+document.getElementById("editToBox").style.display=
+
+this.value==="transfer"?"block":"none";
+
+});
 
 </script>
 
