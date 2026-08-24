@@ -4,10 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#2563eb">
-<meta name="description" content="Personal Finance Dashboard">
+<meta name="description" content="My Finance Dashboard">
 
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%232563eb'/%3E%3Cpath d='M10 19c0-3.3 2.7-6 6-6h32c3.3 0 6 2.7 6 6v26c0 3.3-2.7 6-6 6H16c-3.3 0-6-2.7-6-6V19Z' fill='white'/%3E%3Cpath d='m20 39 7-7 5 4 12-12' stroke='%232563eb' stroke-width='4' fill='none'/%3E%3C/svg%3E">
+<link rel="manifest" href="./manifest.json">
 
 <title>My Finance Dashboard</title>
 
@@ -21,401 +20,382 @@
 
 <style>
 :root{
- --primary:#2563eb;
- --primary2:#4f46e5;
- --bg:#f1f5f9;
- --card:#fff;
- --text:#1e293b;
- --muted:#64748b;
- --border:#e2e8f0;
- --danger:#dc2626;
- --success:#16a34a;
- --warning:#d97706;
+--primary:#2563eb;
+--primary2:#4f46e5;
+--bg:#f1f5f9;
+--card:#fff;
+--text:#1e293b;
+--muted:#64748b;
+--border:#e2e8f0;
+--danger:#dc2626;
+--success:#16a34a;
+--warning:#d97706;
 }
 
 *{
- box-sizing:border-box;
- margin:0;
- padding:0;
- font-family:Arial,Helvetica,sans-serif;
+box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
- background:var(--bg);
- color:var(--text);
- padding:15px;
- transition:.25s;
+background:var(--bg);
+color:var(--text);
+padding:15px;
+transition:.25s;
 }
 
 body.dark{
- --bg:#0f172a;
- --card:#1e293b;
- --text:#f8fafc;
- --muted:#94a3b8;
- --border:#334155;
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
+--border:#334155;
 }
 
 button,input,select,textarea{
- font-size:15px;
+font-size:15px;
 }
 
 button{
- border:0;
- cursor:pointer;
- font-weight:bold;
+border:0;
+cursor:pointer;
+font-weight:bold;
 }
 
 input,select,textarea{
- width:100%;
- padding:11px;
- border:1px solid var(--border);
- border-radius:9px;
- background:var(--card);
- color:var(--text);
+width:100%;
+padding:11px;
+border:1px solid var(--border);
+border-radius:9px;
+background:var(--card);
+color:var(--text);
 }
 
 .container{
- max-width:1150px;
- margin:auto;
+max-width:1150px;
+margin:auto;
 }
 
 .card{
- background:var(--card);
- padding:20px;
- border-radius:16px;
- margin-bottom:18px;
- box-shadow:0 4px 14px rgba(0,0,0,.06);
+background:var(--card);
+padding:20px;
+border-radius:16px;
+margin-bottom:18px;
+box-shadow:0 4px 14px rgba(0,0,0,.06);
 }
 
 .card h2{
- margin-bottom:16px;
- font-size:20px;
+margin-bottom:16px;
+font-size:20px;
 }
 
 .primary{
- background:var(--primary);
- color:white;
- padding:11px 15px;
- border-radius:9px;
-}
-
-.primary:hover{
- background:#1d4ed8;
+background:var(--primary);
+color:#fff;
+padding:11px 15px;
+border-radius:9px;
 }
 
 .gray{
- background:#64748b;
- color:white;
- padding:11px 15px;
- border-radius:9px;
+background:#64748b;
+color:#fff;
+padding:11px 15px;
+border-radius:9px;
 }
 
 .danger{
- background:#fee2e2;
- color:#dc2626;
- padding:8px 12px;
- border-radius:8px;
+background:#fee2e2;
+color:#dc2626;
+padding:8px 12px;
+border-radius:8px;
 }
 
 .success{
- background:#dcfce7;
- color:#166534;
- padding:8px 12px;
- border-radius:8px;
-}
-
-.warning{
- background:#fef3c7;
- color:#92400e;
- padding:8px 12px;
- border-radius:8px;
+background:#dcfce7;
+color:#166534;
+padding:8px 12px;
+border-radius:8px;
 }
 
 label{
- display:block;
- font-size:13px;
- font-weight:bold;
- margin-bottom:6px;
- color:var(--muted);
+display:block;
+font-size:13px;
+font-weight:bold;
+margin-bottom:6px;
+color:var(--muted);
 }
 
 .grid{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:12px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
 }
 
 .full{
- grid-column:1/-1;
+grid-column:1/-1;
 }
 
 .login-wrap{
- min-height:94vh;
- display:flex;
- align-items:center;
- justify-content:center;
+min-height:94vh;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
 .login-card{
- width:100%;
- max-width:430px;
- background:var(--card);
- padding:30px;
- border-radius:20px;
- box-shadow:0 10px 35px rgba(0,0,0,.1);
+width:100%;
+max-width:430px;
+background:var(--card);
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 35px rgba(0,0,0,.1);
 }
 
-.login-logo,.app-logo{
- width:65px;
- height:65px;
- border-radius:18px;
- background:linear-gradient(135deg,var(--primary),var(--primary2));
- color:white;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:34px;
- margin:auto auto 15px;
+.logo{
+width:65px;
+height:65px;
+border-radius:18px;
+background:linear-gradient(135deg,var(--primary),var(--primary2));
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:34px;
+margin:0 auto 15px;
 }
 
 .login-card h1{
- text-align:center;
- margin-bottom:7px;
+text-align:center;
+margin-bottom:7px;
 }
 
 .login-card p{
- text-align:center;
- color:var(--muted);
- margin-bottom:20px;
+text-align:center;
+color:var(--muted);
+margin-bottom:20px;
 }
 
-.login-card .field{
- margin-bottom:12px;
+.field{
+margin-bottom:12px;
 }
 
 .login-btn{
- width:100%;
- padding:13px;
- border-radius:9px;
- background:var(--primary);
- color:white;
- margin-top:7px;
+width:100%;
+padding:13px;
+border-radius:9px;
+background:var(--primary);
+color:#fff;
+margin-top:7px;
 }
 
 .forgot{
- display:block;
- text-align:center;
- color:var(--primary);
- margin-top:14px;
- cursor:pointer;
- font-weight:bold;
+display:block;
+text-align:center;
+color:var(--primary);
+margin-top:14px;
+cursor:pointer;
+font-weight:bold;
 }
 
 .msg{
- display:none;
- padding:10px;
- margin-top:12px;
- border-radius:8px;
- font-size:13px;
+display:none;
+padding:10px;
+margin-top:12px;
+border-radius:8px;
+font-size:13px;
 }
 
 .error{
- background:#fee2e2;
- color:#991b1b;
+background:#fee2e2;
+color:#991b1b;
 }
 
 .ok{
- background:#dcfce7;
- color:#166534;
+background:#dcfce7;
+color:#166534;
 }
 
 #app{
- display:none;
+display:none;
 }
 
 .header{
- text-align:center;
- margin-bottom:18px;
+text-align:center;
+margin-bottom:18px;
 }
 
-.app-logo{
- margin-bottom:10px;
- box-shadow:0 8px 25px rgba(37,99,235,.25);
+.header .logo{
+margin-bottom:10px;
 }
 
 .header h1{
- font-size:29px;
+font-size:29px;
 }
 
 .header p{
- color:var(--muted);
- margin-top:5px;
+color:var(--muted);
+margin-top:5px;
 }
 
 .userbar{
- display:flex;
- justify-content:center;
- align-items:center;
- flex-wrap:wrap;
- gap:8px;
- margin-top:12px;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-wrap:wrap;
+gap:8px;
+margin-top:12px;
 }
 
 .logout{
- background:#ef4444;
- color:white;
- padding:8px 13px;
- border-radius:8px;
+background:#ef4444;
+color:#fff;
+padding:8px 13px;
+border-radius:8px;
 }
 
 .install{
- background:#16a34a;
- color:white;
- padding:8px 13px;
- border-radius:8px;
- display:none;
+background:#16a34a;
+color:#fff;
+padding:8px 13px;
+border-radius:8px;
+display:none;
 }
 
 .nav{
- display:flex;
- gap:7px;
- flex-wrap:wrap;
- justify-content:center;
- margin-bottom:18px;
+display:flex;
+gap:7px;
+flex-wrap:wrap;
+justify-content:center;
+margin-bottom:18px;
 }
 
 .nav button{
- padding:9px 13px;
- border-radius:20px;
- background:var(--card);
- color:var(--text);
- border:1px solid var(--border);
+padding:9px 13px;
+border-radius:20px;
+background:var(--card);
+color:var(--text);
+border:1px solid var(--border);
 }
 
 .nav button.active{
- background:var(--primary);
- color:white;
+background:var(--primary);
+color:#fff;
 }
 
 .total{
- background:linear-gradient(135deg,var(--primary),var(--primary2));
- color:white;
- padding:28px;
- border-radius:20px;
- text-align:center;
- margin-bottom:18px;
+background:linear-gradient(135deg,var(--primary),var(--primary2));
+color:#fff;
+padding:28px;
+border-radius:20px;
+text-align:center;
+margin-bottom:18px;
 }
 
 .total h2{
- font-size:40px;
- margin:8px;
+font-size:40px;
+margin:8px;
 }
 
 .stats{
- display:grid;
- grid-template-columns:repeat(5,1fr);
- gap:10px;
- margin-bottom:18px;
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:10px;
+margin-bottom:18px;
 }
 
 .stat{
- background:var(--card);
- padding:16px;
- border-radius:14px;
- box-shadow:0 3px 10px rgba(0,0,0,.05);
+background:var(--card);
+padding:16px;
+border-radius:14px;
+box-shadow:0 3px 10px rgba(0,0,0,.05);
 }
 
 .stat small{
- color:var(--muted);
+color:var(--muted);
 }
 
 .stat strong{
- display:block;
- font-size:20px;
- margin-top:7px;
+display:block;
+font-size:20px;
+margin-top:7px;
 }
 
 .green{color:var(--success)}
 .red{color:var(--danger)}
 .blue{color:var(--primary)}
-.orange{color:var(--warning)}
 
 .accounts{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:12px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
 }
 
 .account{
- border:1px solid var(--border);
- border-radius:12px;
- padding:15px;
- display:flex;
- justify-content:space-between;
- gap:10px;
- align-items:center;
+border:1px solid var(--border);
+border-radius:12px;
+padding:15px;
+display:flex;
+justify-content:space-between;
+gap:10px;
+align-items:center;
 }
 
 .account-info strong{
- display:block;
+display:block;
 }
 
 .account-info small{
- color:var(--muted);
- display:block;
- margin-top:5px;
+color:var(--muted);
+display:block;
+margin-top:5px;
 }
 
 .account-actions{
- display:flex;
- gap:5px;
- flex-wrap:wrap;
+display:flex;
+gap:5px;
 }
 
 .account-actions button{
- width:auto;
- padding:7px 9px;
- border-radius:7px;
+padding:7px 9px;
+border-radius:7px;
 }
 
 .chart-grid{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:18px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:18px;
 }
 
 .chart-box{
- height:320px;
- position:relative;
+height:320px;
+position:relative;
 }
 
 .transaction{
- display:flex;
- justify-content:space-between;
- gap:10px;
- padding:14px 0;
- border-bottom:1px solid var(--border);
-}
-
-.transaction:last-child{
- border-bottom:0;
+display:flex;
+justify-content:space-between;
+gap:10px;
+padding:14px 0;
+border-bottom:1px solid var(--border);
 }
 
 .tx-left{
- display:flex;
- gap:10px;
- align-items:center;
- min-width:0;
+display:flex;
+gap:10px;
+align-items:center;
+min-width:0;
 }
 
 .tx-icon{
- width:40px;
- height:40px;
- border-radius:50%;
- display:flex;
- align-items:center;
- justify-content:center;
- flex-shrink:0;
+width:40px;
+height:40px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-shrink:0;
 }
 
 .income-icon{background:#dcfce7}
@@ -424,218 +404,156 @@ label{
 .opening-icon{background:#fef3c7}
 
 .tx-name{
- font-weight:bold;
- word-break:break-word;
+font-weight:bold;
+word-break:break-word;
 }
 
 .tx-meta{
- color:var(--muted);
- font-size:12px;
- margin-top:4px;
+color:var(--muted);
+font-size:12px;
+margin-top:4px;
 }
 
 .tx-right{
- text-align:right;
- white-space:nowrap;
+text-align:right;
+white-space:nowrap;
 }
 
 .tx-buttons{
- display:flex;
- gap:5px;
- justify-content:flex-end;
- margin-top:5px;
+display:flex;
+gap:5px;
+justify-content:flex-end;
+margin-top:5px;
 }
 
 .tx-buttons button{
- width:auto;
- padding:5px 8px;
- border-radius:6px;
- font-size:11px;
+padding:5px 8px;
+border-radius:6px;
+font-size:11px;
 }
 
 .edit{
- background:#dbeafe;
- color:#1d4ed8;
+background:#dbeafe;
+color:#1d4ed8;
 }
 
 .del{
- background:#fee2e2;
- color:#dc2626;
+background:#fee2e2;
+color:#dc2626;
 }
 
 .filters{
- display:grid;
- grid-template-columns:2fr repeat(4,1fr);
- gap:9px;
-}
-
-.filter-buttons{
- display:flex;
- gap:7px;
- margin-top:10px;
-}
-
-.filter-buttons button{
- width:auto;
+display:grid;
+grid-template-columns:2fr repeat(4,1fr);
+gap:9px;
 }
 
 .section{
- display:none;
+display:none;
 }
 
 .section.active{
- display:block;
+display:block;
 }
 
 .modal{
- position:fixed;
- inset:0;
- background:rgba(0,0,0,.55);
- display:none;
- align-items:center;
- justify-content:center;
- padding:15px;
- z-index:1000;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.55);
+display:none;
+align-items:center;
+justify-content:center;
+padding:15px;
+z-index:1000;
 }
 
 .modal-card{
- width:100%;
- max-width:550px;
- max-height:90vh;
- overflow:auto;
- background:var(--card);
- color:var(--text);
- border-radius:18px;
- padding:22px;
+width:100%;
+max-width:550px;
+max-height:90vh;
+overflow:auto;
+background:var(--card);
+color:var(--text);
+border-radius:18px;
+padding:22px;
 }
 
 .modal-header{
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin-bottom:18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
 }
 
 .close{
- width:auto;
- background:transparent;
- color:var(--muted);
- font-size:25px;
+background:transparent;
+color:var(--muted);
+font-size:25px;
 }
 
 .form-actions{
- display:flex;
- gap:8px;
- margin-top:15px;
+display:flex;
+gap:8px;
+margin-top:15px;
 }
 
 .form-actions button{
- width:auto;
- flex:1;
+flex:1;
 }
 
 .reminder{
- border:1px solid var(--border);
- padding:14px;
- border-radius:12px;
- margin-bottom:10px;
- display:flex;
- justify-content:space-between;
- gap:10px;
-}
-
-.backup-area{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:10px;
-}
-
-.theme-grid{
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:10px;
-}
-
-.theme{
- height:65px;
- border-radius:12px;
- cursor:pointer;
- border:3px solid transparent;
-}
-
-.theme.selected{
- border-color:var(--text);
+border:1px solid var(--border);
+padding:14px;
+border-radius:12px;
+margin-bottom:10px;
+display:flex;
+justify-content:space-between;
+gap:10px;
 }
 
 .info{
- padding:12px;
- background:rgba(37,99,235,.1);
- border-left:4px solid var(--primary);
- border-radius:7px;
- margin-bottom:14px;
- color:var(--text);
- font-size:13px;
+padding:12px;
+background:rgba(37,99,235,.1);
+border-left:4px solid var(--primary);
+border-radius:7px;
+margin-bottom:14px;
+font-size:13px;
 }
 
 .empty{
- text-align:center;
- color:var(--muted);
- padding:25px;
-}
-
-.mobile-menu{
- display:none;
-}
-
-.daily-reminder-box{
- border:1px solid var(--border);
- border-radius:12px;
- padding:16px;
- margin-top:15px;
-}
-
-.daily-status{
- margin-top:12px;
- padding:10px;
- border-radius:8px;
- background:rgba(37,99,235,.08);
- color:var(--muted);
- font-size:13px;
+text-align:center;
+color:var(--muted);
+padding:25px;
 }
 
 @media(max-width:900px){
- .stats{grid-template-columns:repeat(3,1fr)}
- .filters{grid-template-columns:repeat(2,1fr)}
- .chart-grid{grid-template-columns:1fr}
+.stats{grid-template-columns:repeat(3,1fr)}
+.filters{grid-template-columns:repeat(2,1fr)}
+.chart-grid{grid-template-columns:1fr}
 }
 
 @media(max-width:700px){
- body{padding:9px}
- .grid{grid-template-columns:1fr}
- .full{grid-column:auto}
- .accounts{grid-template-columns:1fr}
- .stats{grid-template-columns:repeat(2,1fr)}
- .theme-grid{grid-template-columns:repeat(2,1fr)}
- .backup-area{grid-template-columns:1fr}
- .transaction{align-items:flex-start}
- .tx-left{max-width:68%}
- .header h1{font-size:24px}
- .total h2{font-size:32px}
+body{padding:9px}
+.grid{grid-template-columns:1fr}
+.full{grid-column:auto}
+.accounts{grid-template-columns:1fr}
+.stats{grid-template-columns:repeat(2,1fr)}
+.transaction{align-items:flex-start}
+.tx-left{max-width:68%}
+.header h1{font-size:24px}
+.total h2{font-size:32px}
 }
 
 @media(max-width:500px){
- .filters{grid-template-columns:1fr}
- .stats{grid-template-columns:1fr 1fr}
- .login-card{padding:22px}
- .nav{
-  overflow-x:auto;
-  justify-content:flex-start;
-  flex-wrap:nowrap;
-  padding-bottom:4px;
- }
- .nav button{
-  white-space:nowrap;
- }
+.filters{grid-template-columns:1fr}
+.nav{
+overflow-x:auto;
+justify-content:flex-start;
+flex-wrap:nowrap;
+}
+.nav button{
+white-space:nowrap;
+}
 }
 </style>
 </head>
@@ -645,13 +563,11 @@ label{
 <!-- LOGIN -->
 
 <div id="loginScreen" class="login-wrap">
-
 <div class="login-card">
 
-<div class="login-logo">💰</div>
+<div class="logo">💰</div>
 
 <h1>My Finance Dashboard</h1>
-
 <p>Sign in to manage your finances</p>
 
 <div class="field">
@@ -684,15 +600,13 @@ Remember my email
 <!-- APP -->
 
 <div id="app">
-
 <div class="container">
 
 <header class="header">
 
-<div class="app-logo">💰</div>
+<div class="logo">💰</div>
 
 <h1>My Finance Dashboard</h1>
-
 <p>Personal money management</p>
 
 <div class="userbar">
@@ -706,22 +620,16 @@ Remember my email
 <button class="logout" onclick="logout()">🚪 Logout</button>
 
 </div>
-
 </header>
 
 
 <nav class="nav">
 
 <button class="active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
-
 <button onclick="showSection('transactions',this)">📋 Transactions</button>
-
 <button onclick="showSection('accounts',this)">🏦 Accounts</button>
-
 <button onclick="showSection('reminders',this)">🔔 Reminders</button>
-
 <button onclick="showSection('backup',this)">💾 Backup</button>
-
 <button onclick="showSection('settings',this)">⚙️ Settings</button>
 
 </nav>
@@ -732,15 +640,10 @@ Remember my email
 <section id="dashboard" class="section active">
 
 <div class="total">
-
 <p>Total Balance</p>
-
 <h2 id="totalBalance">Rs. 0.00</h2>
-
 <small>All accounts combined</small>
-
 </div>
-
 
 <div class="stats">
 
@@ -778,21 +681,18 @@ Remember my email
 
 <div class="info">
 <b>Opening Balance:</b>
-Use this once when adding an account to record the money already held in that account.
+Use this once when adding an account to record money already held in that account.
 </div>
 
 <div class="grid">
 
 <div>
 <label>Transaction Type</label>
-
 <select id="transactionType" onchange="changeTransactionType()">
-
 <option value="income">💵 Income</option>
 <option value="expense">💸 Expense</option>
 <option value="transfer">🔄 Transfer</option>
 <option value="opening">🟡 Opening Balance</option>
-
 </select>
 </div>
 
@@ -813,7 +713,6 @@ Use this once when adding an account to record the money already held in that ac
 
 <div id="categoryBox">
 <label>Category</label>
-
 <select id="category">
 <option>Salary</option>
 <option>Business</option>
@@ -940,12 +839,6 @@ Use this once when adding an account to record the money already held in that ac
 
 </div>
 
-<div class="filter-buttons">
-
-<button class="gray" onclick="resetFilters()">🔄 Reset</button>
-
-</div>
-
 <br>
 
 <div id="transactionList"></div>
@@ -1002,13 +895,9 @@ Use this once when adding an account to record the money already held in that ac
 
 </div>
 
-
 <div class="card">
-
 <h2>My Accounts</h2>
-
 <div id="accountsList" class="accounts"></div>
-
 </div>
 
 </section>
@@ -1023,7 +912,7 @@ Use this once when adding an account to record the money already held in that ac
 <h2>🔔 Payment Reminders</h2>
 
 <div class="info">
-You can allow browser notifications and create reminders for bills, loans and other payments.
+Create reminders for bills, loans and other payments.
 </div>
 
 <button class="primary" onclick="requestNotifications()">
@@ -1062,87 +951,9 @@ You can allow browser notifications and create reminders for bills, loans and ot
 
 </div>
 
-
-<!-- DAILY FINANCE UPDATE -->
-
 <div class="card">
-
-<h2>📅 Daily Finance Update</h2>
-
-<div class="info">
-Get a daily notification reminding you to update your income,
-expenses and transactions.
-</div>
-
-<div class="daily-reminder-box">
-
-<div class="grid">
-
-<div>
-<label>Daily Reminder Time</label>
-
-<input
-id="dailyReminderTime"
-type="time"
-value="20:00"
->
-</div>
-
-<div style="display:flex;align-items:end">
-
-<label style="display:flex;align-items:center;gap:8px;margin:0">
-
-<input
-id="dailyReminderEnabled"
-type="checkbox"
-style="width:auto"
->
-
-Enable Daily Reminder
-
-</label>
-
-</div>
-
-<div class="full">
-
-<button
-class="primary"
-onclick="saveDailyReminder()"
->
-💾 Save Daily Reminder
-</button>
-
-<button
-class="gray"
-onclick="testDailyReminder()"
-style="margin-left:8px"
->
-🔔 Test Notification
-</button>
-
-</div>
-
-</div>
-
-<div
-id="dailyReminderStatus"
-class="daily-status"
->
-Daily reminder is currently OFF.
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
 <h2>Your Reminders</h2>
-
 <div id="reminderList"></div>
-
 </div>
 
 </section>
@@ -1157,35 +968,20 @@ Daily reminder is currently OFF.
 <h2>💾 Backup & Restore</h2>
 
 <div class="info">
-Your backup contains accounts, transactions and reminders. Keep your backup file somewhere safe.
+Your backup contains accounts, transactions and reminders.
 </div>
 
-<div class="backup-area">
+<div class="grid">
 
-<button class="primary" onclick="downloadJSON()">
-💾 Download Backup
-</button>
+<button class="primary" onclick="downloadJSON()">💾 Download Backup</button>
 
 <label class="gray" style="text-align:center;cursor:pointer">
 📥 Restore Backup
 <input type="file" id="restoreFile" accept=".json" onchange="restoreBackup(event)" style="display:none">
 </label>
 
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>📤 Export</h2>
-
-<div class="backup-area">
-
 <button class="primary" onclick="exportCSV()">📄 CSV</button>
-
 <button class="primary" onclick="exportExcel()">📊 Excel</button>
-
 <button class="primary" onclick="exportPDF()">📕 PDF</button>
 
 </div>
@@ -1226,25 +1022,52 @@ Your backup contains accounts, transactions and reminders. Keep your backup file
 
 <div class="card">
 
-<h2>🌙 Appearance</h2>
+<h2>🔔 Daily Finance Reminder</h2>
 
-<label>Theme</label>
+<div class="info">
+This reminds you to open the dashboard and update your finances every day.
+</div>
 
-<div class="theme-grid">
+<label style="display:flex;align-items:center;gap:8px">
+<input id="dailyReminderEnabled" type="checkbox" style="width:auto">
+Enable daily reminder
+</label>
 
-<div class="theme" style="background:#2563eb" onclick="setTheme('#2563eb','#4f46e5','blue')"></div>
+<br>
 
-<div class="theme" style="background:#16a34a" onclick="setTheme('#16a34a','#15803d','green')"></div>
-
-<div class="theme" style="background:#7c3aed" onclick="setTheme('#7c3aed','#4f46e5','purple')"></div>
-
-<div class="theme" style="background:#ea580c" onclick="setTheme('#ea580c','#c2410c','orange')"></div>
-
+<div>
+<label>Reminder Time</label>
+<input id="dailyReminderTime" type="time" value="09:00">
 </div>
 
 <br>
 
-<button class="gray" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+<div>
+<label>Reminder Message</label>
+<input id="dailyReminderMessage"
+value="Don't forget to update your finances today!">
+</div>
+
+<br>
+
+<button class="primary" onclick="saveDailyReminder()">
+💾 Save Daily Reminder
+</button>
+
+<p id="dailyReminderStatus"
+style="color:var(--muted);font-size:13px;margin-top:10px">
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h2>🌙 Appearance</h2>
+
+<button class="gray" onclick="toggleDarkMode()">
+🌙 Toggle Dark Mode
+</button>
 
 </div>
 
@@ -1253,7 +1076,9 @@ Your backup contains accounts, transactions and reminders. Keep your backup file
 
 <h2>🔐 Security</h2>
 
-<button class="primary" onclick="changePassword()">🔑 Change Password</button>
+<button class="primary" onclick="changePassword()">
+🔑 Change Password
+</button>
 
 </div>
 
@@ -1262,13 +1087,8 @@ Your backup contains accounts, transactions and reminders. Keep your backup file
 
 <h2>ℹ️ App Information</h2>
 
-<p style="color:var(--muted)">
-My Finance Dashboard
-</p>
-
-<p style="color:var(--muted);margin-top:7px">
-Version 2.0
-</p>
+<p style="color:var(--muted)">My Finance Dashboard</p>
+<p style="color:var(--muted);margin-top:7px">Version 3.0</p>
 
 </div>
 
@@ -1278,18 +1098,15 @@ Version 2.0
 </div>
 
 
-<!-- EDIT TRANSACTION MODAL -->
+<!-- EDIT TRANSACTION -->
 
 <div id="editModal" class="modal">
 
 <div class="modal-card">
 
 <div class="modal-header">
-
 <h2>✏️ Edit Transaction</h2>
-
 <button class="close" onclick="closeModal('editModal')">×</button>
-
 </div>
 
 <input type="hidden" id="editId">
@@ -1339,30 +1156,23 @@ Version 2.0
 </div>
 
 <div class="form-actions">
-
 <button class="gray" onclick="closeModal('editModal')">Cancel</button>
-
 <button class="primary" onclick="updateTransaction()">Save Changes</button>
-
 </div>
 
 </div>
-
 </div>
 
 
-<!-- EDIT ACCOUNT MODAL -->
+<!-- EDIT ACCOUNT -->
 
 <div id="accountModal" class="modal">
 
 <div class="modal-card">
 
 <div class="modal-header">
-
 <h2>✏️ Edit Account</h2>
-
 <button class="close" onclick="closeModal('accountModal')">×</button>
-
 </div>
 
 <input type="hidden" id="editAccountId">
@@ -1401,139 +1211,132 @@ Version 2.0
 </div>
 
 <div class="form-actions">
-
 <button class="gray" onclick="closeModal('accountModal')">Cancel</button>
-
 <button class="primary" onclick="updateAccount()">Save</button>
-
 </div>
 
 </div>
-
 </div>
 
 
 <script>
 
-/* =====================================================
+/* ================================
  FIREBASE
-===================================================== */
+================================ */
 
 const firebaseConfig={
-
 apiKey:"AIzaSyCWG9Jt_wRn49MiY5qXiU8uK3FS4giMhhw",
-
 authDomain:"my-finance-dashboard-8ede7.firebaseapp.com",
-
 projectId:"my-finance-dashboard-8ede7",
-
 storageBucket:"my-finance-dashboard-8ede7.firebasestorage.app",
-
 messagingSenderId:"669620241200",
-
 appId:"1:669620241200:web:b3456fea26b2ecb7d5fef5"
-
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const auth=firebase.auth();
-
 const db=firebase.firestore();
 
 let accounts=[];
 let transactions=[];
 let reminders=[];
-
 let charts={};
-
 let deferredInstallPrompt=null;
 
-let dailyReminderTimer=null;
 
-
-/* =====================================================
+/* ================================
  PWA INSTALL
-===================================================== */
+================================ */
 
-window.addEventListener("beforeinstallprompt",e=>{
+window.addEventListener("beforeinstallprompt",event=>{
+event.preventDefault();
+deferredInstallPrompt=event;
 
-e.preventDefault();
+const button=document.getElementById("installButton");
 
-deferredInstallPrompt=e;
-
-document.getElementById("installButton").style.display="inline-block";
-
+if(button){
+button.style.display="inline-block";
+}
 });
 
 async function installApp(){
 
 if(!deferredInstallPrompt){
 
-alert(
-"This app is not currently available for installation. " +
-"Make sure you are using HTTPS and a supported browser."
-);
+alert("If the Install App button is unavailable, use your browser menu and choose Install App or Add to Home Screen.");
 
 return;
-
 }
 
 deferredInstallPrompt.prompt();
 
-const result=await deferredInstallPrompt.userChoice;
-
-console.log("Install result:",result.outcome);
+try{
+await deferredInstallPrompt.userChoice;
+}catch(e){
+console.log(e);
+}
 
 deferredInstallPrompt=null;
 
 document.getElementById("installButton").style.display="none";
-
 }
 
-window.addEventListener("appinstalled",()=>{
 
-document.getElementById("installButton").style.display="none";
-
-});
+/*
+ IMPORTANT:
+ The service worker is registered only after the page
+ is fully loaded. It does NOT intercept Firebase requests.
+*/
 
 if("serviceWorker" in navigator){
 
-window.addEventListener("load",()=>{
+window.addEventListener("load",async()=>{
 
-navigator.serviceWorker.register("sw.js")
-.catch(e=>console.log("Service worker:",e));
+try{
+
+const registration=
+await navigator.serviceWorker.register("./sw.js");
+
+console.log(
+"Finance Dashboard service worker registered:",
+registration.scope
+);
+
+}catch(error){
+
+console.error(
+"Service worker registration failed:",
+error
+);
+
+}
 
 });
 
 }
 
 
-/* =====================================================
+/* ================================
  HELPERS
-===================================================== */
+================================ */
 
 function today(){
 
 const d=new Date();
 
 return d.getFullYear()+"-"+
-
 String(d.getMonth()+1).padStart(2,"0")+"-"+
-
 String(d.getDate()).padStart(2,"0");
-
 }
 
 function money(v){
 
 return "Rs. "+Number(v||0).toLocaleString("en-LK",{
-
 minimumFractionDigits:2,
 maximumFractionDigits:2
-
 });
-
 }
 
 function escapeHTML(v){
@@ -1543,13 +1346,11 @@ const d=document.createElement("div");
 d.textContent=v??"";
 
 return d.innerHTML;
-
 }
 
 function getAccount(id){
 
 return accounts.find(a=>String(a.id)===String(id));
-
 }
 
 function accountsRef(){
@@ -1557,7 +1358,6 @@ function accountsRef(){
 return db.collection("users")
 .doc(auth.currentUser.uid)
 .collection("accounts");
-
 }
 
 function transactionsRef(){
@@ -1565,7 +1365,6 @@ function transactionsRef(){
 return db.collection("users")
 .doc(auth.currentUser.uid)
 .collection("transactions");
-
 }
 
 function remindersRef(){
@@ -1573,20 +1372,18 @@ function remindersRef(){
 return db.collection("users")
 .doc(auth.currentUser.uid)
 .collection("reminders");
-
 }
 
 
-/* =====================================================
+/* ================================
  LOGIN
-===================================================== */
+================================ */
 
 const savedEmail=localStorage.getItem("financeEmail");
 
 if(savedEmail){
 
 document.getElementById("loginEmail").value=savedEmail;
-
 document.getElementById("rememberEmail").checked=true;
 
 }
@@ -1594,11 +1391,9 @@ document.getElementById("rememberEmail").checked=true;
 async function login(){
 
 const email=document.getElementById("loginEmail").value.trim();
-
 const password=document.getElementById("loginPassword").value;
 
 const error=document.getElementById("loginError");
-
 const status=document.getElementById("loginStatus");
 
 error.style.display="none";
@@ -1606,11 +1401,8 @@ error.style.display="none";
 if(!email||!password){
 
 error.textContent="Please enter your email and password.";
-
 error.style.display="block";
-
 return;
-
 }
 
 if(document.getElementById("rememberEmail").checked){
@@ -1633,10 +1425,11 @@ status.textContent="";
 
 }catch(e){
 
+console.error("Firebase login error:",e);
+
 status.textContent="";
 
 error.textContent=friendlyError(e);
-
 error.style.display="block";
 
 }
@@ -1648,17 +1441,16 @@ async function forgotPassword(){
 const email=document.getElementById("loginEmail").value.trim();
 
 const error=document.getElementById("loginError");
-
 const success=document.getElementById("loginSuccess");
+
+error.style.display="none";
+success.style.display="none";
 
 if(!email){
 
 error.textContent="Enter your email address first.";
-
 error.style.display="block";
-
 return;
-
 }
 
 try{
@@ -1666,13 +1458,11 @@ try{
 await auth.sendPasswordResetEmail(email);
 
 success.textContent="Password reset email sent. Check your inbox.";
-
 success.style.display="block";
 
 }catch(e){
 
 error.textContent=friendlyError(e);
-
 error.style.display="block";
 
 }
@@ -1682,67 +1472,72 @@ error.style.display="block";
 function friendlyError(e){
 
 const map={
-
 "auth/invalid-credential":"Incorrect email or password.",
 "auth/user-not-found":"No account found with this email.",
 "auth/wrong-password":"Incorrect password.",
 "auth/invalid-email":"Invalid email address.",
 "auth/too-many-requests":"Too many attempts. Try again later.",
-"auth/network-request-failed":"Network error."
-
+"auth/network-request-failed":"Network error. Check your internet connection."
 };
 
 return map[e.code]||e.message||"Login failed.";
-
 }
 
 async function logout(){
 
+try{
 await auth.signOut();
+}catch(e){
+console.error(e);
+}
 
 }
 
 
-/* =====================================================
+/* ================================
  AUTH
-===================================================== */
+================================ */
 
 auth.onAuthStateChanged(async user=>{
 
 if(!user){
 
 document.getElementById("loginScreen").style.display="flex";
-
 document.getElementById("app").style.display="none";
 
 return;
-
 }
 
 document.getElementById("loginScreen").style.display="none";
-
 document.getElementById("app").style.display="block";
 
 document.getElementById("userEmail").textContent=user.email;
-
 document.getElementById("profileEmail").value=user.email;
 
+try{
+
 await loadData();
+await loadReminders();
 
 loadSettings();
-
-loadDailyReminderSettings();
+loadDailyReminder();
 
 updateAll();
 
-loadReminders();
+}catch(e){
+
+console.error("Loading data failed:",e);
+
+alert("Signed in, but some dashboard data could not be loaded: "+e.message);
+
+}
 
 });
 
 
-/* =====================================================
+/* ================================
  LOAD DATA
-===================================================== */
+================================ */
 
 async function loadData(){
 
@@ -1751,24 +1546,23 @@ transactions=[];
 
 const a=await accountsRef().get();
 
-a.forEach(d=>accounts.push({id:d.id,...d.data()}));
+a.forEach(d=>{
+accounts.push({id:d.id,...d.data()});
+});
 
 const t=await transactionsRef().get();
 
-t.forEach(d=>transactions.push({id:d.id,...d.data()}));
+t.forEach(d=>{
+transactions.push({id:d.id,...d.data()});
+});
 
 if(!accounts.length){
 
 const defaults=[
-
 {name:"Sampath Bank",type:"Bank Account",bank:"Sampath Bank"},
-
 {name:"People's Bank",type:"Bank Account",bank:"People's Bank"},
-
 {name:"Cash in Hand",type:"Cash",bank:""},
-
 {name:"CAL",type:"Investment",bank:""}
-
 ];
 
 for(const x of defaults){
@@ -1781,41 +1575,36 @@ accounts.push({id:r.id,...x});
 
 }
 
+}
 
-/* =====================================================
+
+/* ================================
  NAVIGATION
-===================================================== */
+================================ */
 
 function showSection(id,button){
 
-document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+document.querySelectorAll(".section")
+.forEach(s=>s.classList.remove("active"));
 
 document.getElementById(id).classList.add("active");
 
-document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+document.querySelectorAll(".nav button")
+.forEach(b=>b.classList.remove("active"));
 
 button.classList.add("active");
 
 if(id==="dashboard")createCharts();
-
 if(id==="transactions")displayTransactions();
-
 if(id==="accounts")displayAccounts();
-
-if(id==="reminders"){
-
-displayReminders();
-
-loadDailyReminderSettings();
-
-}
+if(id==="reminders")displayReminders();
 
 }
 
 
-/* =====================================================
- TRANSACTION FORM
-===================================================== */
+/* ================================
+ TRANSACTIONS
+================================ */
 
 document.getElementById("transactionDate").value=today();
 
@@ -1824,27 +1613,21 @@ function changeTransactionType(){
 const type=document.getElementById("transactionType").value;
 
 const cat=document.getElementById("categoryBox");
-
 const to=document.getElementById("toAccountBox");
-
 const label=document.getElementById("accountLabel");
 
 cat.style.display="block";
-
 to.style.display="none";
 
 if(type==="transfer"){
 
 cat.style.display="none";
-
 to.style.display="block";
-
 label.textContent="From Account";
 
 }else if(type==="opening"){
 
 cat.style.display="none";
-
 label.textContent="Account";
 
 }else if(type==="income"){
@@ -1863,7 +1646,13 @@ updateAccountDropdowns();
 
 function updateAccountDropdowns(){
 
-const ids=["fromAccount","toAccount","historyAccount","editAccount","editToAccount"];
+const ids=[
+"fromAccount",
+"toAccount",
+"historyAccount",
+"editAccount",
+"editToAccount"
+];
 
 ids.forEach(id=>{
 
@@ -1877,25 +1666,23 @@ el.innerHTML="";
 
 if(id==="historyAccount"){
 
-const o=document.createElement("option");
+const option=document.createElement("option");
 
-o.value="all";
+option.value="all";
+option.textContent="All Accounts";
 
-o.textContent="All Accounts";
-
-el.appendChild(o);
+el.appendChild(option);
 
 }
 
 accounts.forEach(a=>{
 
-const o=document.createElement("option");
+const option=document.createElement("option");
 
-o.value=a.id;
+option.value=a.id;
+option.textContent=a.name;
 
-o.textContent=a.name;
-
-el.appendChild(o);
+el.appendChild(option);
 
 });
 
@@ -1908,23 +1695,16 @@ if(old)el.value=old;
 async function saveTransaction(){
 
 const type=document.getElementById("transactionType").value;
-
 const description=document.getElementById("description").value.trim();
-
 const amount=Number(document.getElementById("amount").value);
-
 const date=document.getElementById("transactionDate").value;
-
 const category=document.getElementById("category").value;
-
 const account=document.getElementById("fromAccount").value;
-
 const to=document.getElementById("toAccount").value;
 
 if(!description||!amount||amount<=0||!date){
 
 alert("Please complete the required fields.");
-
 return;
 
 }
@@ -1932,7 +1712,6 @@ return;
 if(!account){
 
 alert("Please select an account.");
-
 return;
 
 }
@@ -1940,13 +1719,11 @@ return;
 if(type==="transfer"&&account===to){
 
 alert("From and To accounts must be different.");
-
 return;
 
 }
 
 const data={
-
 type,
 description,
 amount,
@@ -1955,33 +1732,26 @@ category,
 fromAccount:null,
 toAccount:null,
 createdAt:firebase.firestore.FieldValue.serverTimestamp()
-
 };
 
 if(type==="income")data.toAccount=account;
-
 if(type==="expense")data.fromAccount=account;
 
 if(type==="opening"){
 
 const exists=transactions.some(t=>
-
 t.type==="opening"&&
-
 String(t.toAccount)===String(account)
-
 );
 
 if(exists){
 
 alert("An opening balance already exists for this account.");
-
 return;
 
 }
 
 data.toAccount=account;
-
 data.category="Opening Balance";
 
 }
@@ -1989,9 +1759,7 @@ data.category="Opening Balance";
 if(type==="transfer"){
 
 data.fromAccount=account;
-
 data.toAccount=to;
-
 data.category="Transfer";
 
 }
@@ -2003,7 +1771,6 @@ const ref=await transactionsRef().add(data);
 transactions.push({id:ref.id,...data});
 
 document.getElementById("description").value="";
-
 document.getElementById("amount").value="";
 
 updateAll();
@@ -2012,6 +1779,8 @@ alert("Transaction added successfully.");
 
 }catch(e){
 
+console.error(e);
+
 alert("Could not save transaction: "+e.message);
 
 }
@@ -2019,9 +1788,9 @@ alert("Could not save transaction: "+e.message);
 }
 
 
-/* =====================================================
+/* ================================
  BALANCES
-===================================================== */
+================================ */
 
 function getAccountBalance(id){
 
@@ -2043,7 +1812,6 @@ balance-=amount;
 if(t.type==="transfer"){
 
 if(String(t.fromAccount)===String(id))balance-=amount;
-
 if(String(t.toAccount)===String(id))balance+=amount;
 
 }
@@ -2056,14 +1824,16 @@ return balance;
 
 function totalBalance(){
 
-return accounts.reduce((sum,a)=>sum+getAccountBalance(a.id),0);
+return accounts.reduce(
+(sum,a)=>sum+getAccountBalance(a.id),0
+);
 
 }
 
 
-/* =====================================================
+/* ================================
  ACCOUNTS
-===================================================== */
+================================ */
 
 async function addAccount(){
 
@@ -2072,29 +1842,24 @@ const name=document.getElementById("newAccountName").value.trim();
 if(!name){
 
 alert("Enter account name.");
-
 return;
 
 }
 
-if(accounts.some(a=>a.name.toLowerCase()===name.toLowerCase())){
+if(accounts.some(a=>
+a.name.toLowerCase()===name.toLowerCase()
+)){
 
 alert("Account already exists.");
-
 return;
 
 }
 
 const data={
-
 name,
-
 type:document.getElementById("newAccountType").value,
-
 bank:document.getElementById("newBankName").value.trim(),
-
 accountNumber:document.getElementById("newAccountNumber").value.trim()
-
 };
 
 const ref=await accountsRef().add(data);
@@ -2102,9 +1867,7 @@ const ref=await accountsRef().add(data);
 accounts.push({id:ref.id,...data});
 
 document.getElementById("newAccountName").value="";
-
 document.getElementById("newBankName").value="";
-
 document.getElementById("newAccountNumber").value="";
 
 updateAll();
@@ -2120,7 +1883,6 @@ box.innerHTML="";
 if(!accounts.length){
 
 box.innerHTML='<div class="empty">No accounts.</div>';
-
 return;
 
 }
@@ -2141,18 +1903,22 @@ div.innerHTML=`
 
 <small>${escapeHTML(a.bank||"")}</small>
 
-<small>Balance: <b class="blue">${money(getAccountBalance(a.id))}</b></small>
+<small>
+Balance:
+<b class="blue">${money(getAccountBalance(a.id))}</b>
+</small>
 
 </div>
 
 <div class="account-actions">
 
-<button class="edit" onclick="editAccount('${a.id}')">✏️</button>
+<button class="edit"
+onclick="editAccount('${a.id}')">✏️</button>
 
-<button class="danger" onclick="deleteAccount('${a.id}')">🗑️</button>
+<button class="danger"
+onclick="deleteAccount('${a.id}')">🗑️</button>
 
 </div>
-
 `;
 
 box.appendChild(div);
@@ -2168,13 +1934,9 @@ const a=getAccount(id);
 if(!a)return;
 
 document.getElementById("editAccountId").value=id;
-
 document.getElementById("editAccountName").value=a.name||"";
-
 document.getElementById("editAccountType").value=a.type||"Bank Account";
-
 document.getElementById("editBankName").value=a.bank||"";
-
 document.getElementById("editAccountNumber").value=a.accountNumber||"";
 
 openModal("accountModal");
@@ -2186,21 +1948,15 @@ async function updateAccount(){
 const id=document.getElementById("editAccountId").value;
 
 const data={
-
 name:document.getElementById("editAccountName").value.trim(),
-
 type:document.getElementById("editAccountType").value,
-
 bank:document.getElementById("editBankName").value.trim(),
-
 accountNumber:document.getElementById("editAccountNumber").value.trim()
-
 };
 
 if(!data.name){
 
 alert("Account name is required.");
-
 return;
 
 }
@@ -2224,17 +1980,13 @@ const a=getAccount(id);
 if(!a)return;
 
 const related=transactions.filter(t=>
-
 String(t.fromAccount)===String(id)||
-
 String(t.toAccount)===String(id)
-
 );
 
 if(related.length){
 
 alert("Delete this account's transactions first.");
-
 return;
 
 }
@@ -2243,43 +1995,41 @@ if(!confirm(`Delete "${a.name}"?`))return;
 
 await accountsRef().doc(id).delete();
 
-accounts=accounts.filter(x=>String(x.id)!==String(id));
+accounts=accounts.filter(x=>
+String(x.id)!==String(id)
+);
 
 updateAll();
 
 }
 
 
-/* =====================================================
- EDIT TRANSACTIONS
-===================================================== */
+/* ================================
+ EDIT TRANSACTION
+================================ */
 
 function editTransaction(id){
 
-const t=transactions.find(x=>String(x.id)===String(id));
+const t=transactions.find(x=>
+String(x.id)===String(id)
+);
 
 if(!t)return;
 
 updateAccountDropdowns();
 
 document.getElementById("editId").value=id;
-
 document.getElementById("editType").value=t.type;
-
 document.getElementById("editDate").value=t.date;
-
 document.getElementById("editDescription").value=t.description;
-
 document.getElementById("editAmount").value=t.amount;
-
 document.getElementById("editCategory").value=t.category||"";
-
-document.getElementById("editAccount").value=t.fromAccount||t.toAccount||"";
-
-document.getElementById("editToAccount").value=t.toAccount||"";
+document.getElementById("editAccount").value=
+t.fromAccount||t.toAccount||"";
+document.getElementById("editToAccount").value=
+t.toAccount||"";
 
 document.getElementById("editToBox").style.display=
-
 t.type==="transfer"?"block":"none";
 
 openModal("editModal");
@@ -2290,46 +2040,36 @@ async function updateTransaction(){
 
 const id=document.getElementById("editId").value;
 
-const t=transactions.find(x=>String(x.id)===String(id));
+const t=transactions.find(x=>
+String(x.id)===String(id)
+);
 
 if(!t)return;
 
 const type=document.getElementById("editType").value;
 
 const data={
-
 type,
-
 date:document.getElementById("editDate").value,
-
 description:document.getElementById("editDescription").value.trim(),
-
 amount:Number(document.getElementById("editAmount").value),
-
 category:document.getElementById("editCategory").value.trim(),
-
 fromAccount:null,
-
 toAccount:null
-
 };
 
 const account=document.getElementById("editAccount").value;
-
 const to=document.getElementById("editToAccount").value;
 
 if(!data.description||!data.amount||!data.date){
 
 alert("Complete all required fields.");
-
 return;
 
 }
 
 if(type==="income")data.toAccount=account;
-
 if(type==="expense")data.fromAccount=account;
-
 if(type==="opening")data.toAccount=account;
 
 if(type==="transfer"){
@@ -2337,13 +2077,11 @@ if(type==="transfer"){
 if(account===to){
 
 alert("Accounts must be different.");
-
 return;
 
 }
 
 data.fromAccount=account;
-
 data.toAccount=to;
 
 }
@@ -2358,41 +2096,38 @@ updateAll();
 
 }
 
-
-/* =====================================================
- DELETE TRANSACTION
-===================================================== */
-
 async function deleteTransaction(id){
 
 if(!confirm("Delete this transaction?"))return;
 
 await transactionsRef().doc(id).delete();
 
-transactions=transactions.filter(t=>String(t.id)!==String(id));
+transactions=transactions.filter(t=>
+String(t.id)!==String(id)
+);
 
 updateAll();
 
 }
 
 
-/* =====================================================
+/* ================================
  HISTORY
-===================================================== */
+================================ */
 
 function dateMatches(date,period){
 
 if(period==="all")return true;
 
 const d=new Date(date+"T00:00:00");
-
 const now=new Date();
 
 if(period==="today")
 return d.toDateString()===now.toDateString();
 
 if(period==="month")
-return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth();
+return d.getFullYear()===now.getFullYear()&&
+d.getMonth()===now.getMonth();
 
 if(period==="year")
 return d.getFullYear()===now.getFullYear();
@@ -2402,13 +2137,11 @@ if(period==="week"){
 const start=new Date(now);
 
 start.setDate(now.getDate()-now.getDay());
-
 start.setHours(0,0,0,0);
 
 const end=new Date(start);
 
 end.setDate(start.getDate()+6);
-
 end.setHours(23,59,59,999);
 
 return d>=start&&d<=end;
@@ -2424,44 +2157,43 @@ function transactionAccountMatch(t,id){
 if(id==="all")return true;
 
 return String(t.fromAccount)===String(id)||
-
 String(t.toAccount)===String(id);
 
 }
 
 function getFiltered(){
 
-const search=document.getElementById("historySearch").value.toLowerCase().trim();
+const search=document.getElementById("historySearch")
+.value.toLowerCase().trim();
 
 const account=document.getElementById("historyAccount").value;
-
 const type=document.getElementById("historyType").value;
-
 const period=document.getElementById("historyPeriod").value;
-
 const sort=document.getElementById("historySort").value;
 
 let result=transactions.filter(t=>{
 
-const text=(t.description+" "+(t.category||"")).toLowerCase();
+const text=(t.description+" "+(t.category||""))
+.toLowerCase();
 
 return(!search||text.includes(search))&&
-
 transactionAccountMatch(t,account)&&
-
 (type==="all"||t.type===type)&&
-
 dateMatches(t.date,period);
 
 });
 
-if(sort==="newest")result.sort((a,b)=>b.date.localeCompare(a.date));
+if(sort==="newest")
+result.sort((a,b)=>b.date.localeCompare(a.date));
 
-if(sort==="oldest")result.sort((a,b)=>a.date.localeCompare(b.date));
+if(sort==="oldest")
+result.sort((a,b)=>a.date.localeCompare(b.date));
 
-if(sort==="highest")result.sort((a,b)=>b.amount-a.amount);
+if(sort==="highest")
+result.sort((a,b)=>b.amount-a.amount);
 
-if(sort==="lowest")result.sort((a,b)=>a.amount-b.amount);
+if(sort==="lowest")
+result.sort((a,b)=>a.amount-b.amount);
 
 return result;
 
@@ -2477,7 +2209,8 @@ box.innerHTML="";
 
 if(!list.length){
 
-box.innerHTML='<div class="empty">No transactions found.</div>';
+box.innerHTML=
+'<div class="empty">No transactions found.</div>';
 
 return;
 
@@ -2486,60 +2219,41 @@ return;
 list.forEach(t=>{
 
 let icon="💵";
-
 let cls="income-icon";
-
 let sign="+";
-
 let color="#16a34a";
-
 let account="";
 
 if(t.type==="expense"){
 
 icon="💸";
-
 cls="expense-icon";
-
 sign="-";
-
 color="#dc2626";
 
 account=getAccount(t.fromAccount)?.name||"";
 
-}
-
-else if(t.type==="transfer"){
+}else if(t.type==="transfer"){
 
 icon="🔄";
-
 cls="transfer-icon";
-
 color="#2563eb";
-
 sign="↔";
 
 account=
-
-(getAccount(t.fromAccount)?.name||"")+" → "+
-
+(getAccount(t.fromAccount)?.name||"")+
+" → "+
 (getAccount(t.toAccount)?.name||"");
 
-}
-
-else if(t.type==="opening"){
+}else if(t.type==="opening"){
 
 icon="🟡";
-
 cls="opening-icon";
-
 color="#d97706";
 
 account=getAccount(t.toAccount)?.name||"";
 
-}
-
-else{
+}else{
 
 account=getAccount(t.toAccount)?.name||"";
 
@@ -2557,16 +2271,14 @@ div.innerHTML=`
 
 <div>
 
-<div class="tx-name">${escapeHTML(t.description)}</div>
+<div class="tx-name">
+${escapeHTML(t.description)}
+</div>
 
 <div class="tx-meta">
-
 ${escapeHTML(t.category||"")}
-
  • ${escapeHTML(account)}
-
  • ${escapeHTML(t.date)}
-
 </div>
 
 </div>
@@ -2576,21 +2288,24 @@ ${escapeHTML(t.category||"")}
 <div class="tx-right">
 
 <div style="font-weight:bold;color:${color}">
-
 ${sign} ${money(t.amount)}
-
 </div>
 
 <div class="tx-buttons">
 
-<button class="edit" onclick="editTransaction('${t.id}')">✏️ Edit</button>
+<button class="edit"
+onclick="editTransaction('${t.id}')">
+✏️ Edit
+</button>
 
-<button class="del" onclick="deleteTransaction('${t.id}')">🗑️ Delete</button>
+<button class="del"
+onclick="deleteTransaction('${t.id}')">
+🗑️ Delete
+</button>
 
 </div>
 
 </div>
-
 `;
 
 box.appendChild(div);
@@ -2599,74 +2314,56 @@ box.appendChild(div);
 
 }
 
-function resetFilters(){
 
-document.getElementById("historySearch").value="";
-
-document.getElementById("historyAccount").value="all";
-
-document.getElementById("historyType").value="all";
-
-document.getElementById("historyPeriod").value="all";
-
-document.getElementById("historySort").value="newest";
-
-displayTransactions();
-
-}
-
-
-/* =====================================================
+/* ================================
  STATISTICS
-===================================================== */
+================================ */
 
 function monthTotals(){
 
 const now=new Date();
 
 let income=0;
-
 let expense=0;
 
 transactions.forEach(t=>{
 
 const d=new Date(t.date+"T00:00:00");
 
-if(d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()){
+if(
+d.getFullYear()===now.getFullYear()&&
+d.getMonth()===now.getMonth()
+){
 
-if(t.type==="income")income+=Number(t.amount);
+if(t.type==="income")
+income+=Number(t.amount);
 
-if(t.type==="expense")expense+=Number(t.amount);
+if(t.type==="expense")
+expense+=Number(t.amount);
 
 }
 
 });
 
 return{
-
 income,
-
 expense,
-
 savings:income-expense,
-
 rate:income?((income-expense)/income)*100:0
-
 };
 
 }
 
 
-/* =====================================================
+/* ================================
  CHARTS
-===================================================== */
+================================ */
 
 function destroyChart(name){
 
 if(charts[name]){
 
 charts[name].destroy();
-
 charts[name]=null;
 
 }
@@ -2675,6 +2372,8 @@ charts[name]=null;
 
 function createCharts(){
 
+if(typeof Chart==="undefined")return;
+
 destroyChart("pie");
 destroyChart("income");
 destroyChart("category");
@@ -2682,38 +2381,34 @@ destroyChart("growth");
 
 const labels=accounts.map(a=>a.name);
 
-const balances=accounts.map(a=>Math.max(0,getAccountBalance(a.id)));
+const balances=accounts.map(a=>
+Math.max(0,getAccountBalance(a.id))
+);
 
 charts.pie=new Chart(
-
-document.getElementById("balancePieChart"),{
-
+document.getElementById("balancePieChart"),
+{
 type:"doughnut",
-
 data:{
-
 labels,
-
 datasets:[{
-
 data:balances,
-
-backgroundColor:["#2563eb","#16a34a","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#ec4899","#64748b"]
-
+backgroundColor:[
+"#2563eb","#16a34a","#f59e0b",
+"#8b5cf6","#ef4444","#06b6d4"
+]
 }]
-
 },
-
-options:{responsive:true,maintainAspectRatio:false}
-
-});
+options:{
+responsive:true,
+maintainAspectRatio:false
+}
+}
+);
 
 const months=[];
-
 const incomes=[];
-
 const expenses=[];
-
 const categoryTotals={};
 
 for(let i=5;i>=0;i--){
@@ -2723,28 +2418,34 @@ const d=new Date();
 d.setMonth(d.getMonth()-i);
 
 const year=d.getFullYear();
-
 const month=d.getMonth();
 
-months.push(d.toLocaleString("en-US",{month:"short"}));
+months.push(
+d.toLocaleString("en-US",{month:"short"})
+);
 
 let inc=0;
-
 let exp=0;
 
 transactions.forEach(t=>{
 
 const td=new Date(t.date+"T00:00:00");
 
-if(td.getFullYear()===year&&td.getMonth()===month){
+if(
+td.getFullYear()===year&&
+td.getMonth()===month
+){
 
-if(t.type==="income")inc+=Number(t.amount);
+if(t.type==="income")
+inc+=Number(t.amount);
 
 if(t.type==="expense"){
 
 exp+=Number(t.amount);
 
-categoryTotals[t.category||"Other"]=(categoryTotals[t.category||"Other"]||0)+Number(t.amount);
+categoryTotals[t.category||"Other"]=
+(categoryTotals[t.category||"Other"]||0)+
+Number(t.amount);
 
 }
 
@@ -2753,183 +2454,80 @@ categoryTotals[t.category||"Other"]=(categoryTotals[t.category||"Other"]||0)+Num
 });
 
 incomes.push(inc);
-
 expenses.push(exp);
 
 }
 
 charts.income=new Chart(
-
-document.getElementById("incomeExpenseChart"),{
-
+document.getElementById("incomeExpenseChart"),
+{
 type:"line",
-
 data:{
-
 labels:months,
-
 datasets:[
-
 {
-
 label:"Income",
-
 data:incomes,
-
 borderColor:"#16a34a",
-
 backgroundColor:"rgba(22,163,74,.1)",
-
 fill:true,
-
 tension:.3
-
 },
-
 {
-
 label:"Expenses",
-
 data:expenses,
-
 borderColor:"#dc2626",
-
 backgroundColor:"rgba(220,38,38,.1)",
-
 fill:true,
-
 tension:.3
-
 }
-
 ]
-
 },
-
-options:{responsive:true,maintainAspectRatio:false}
-
-});
+options:{
+responsive:true,
+maintainAspectRatio:false
+}
+}
+);
 
 charts.category=new Chart(
-
-document.getElementById("categoryChart"),{
-
+document.getElementById("categoryChart"),
+{
 type:"bar",
-
 data:{
-
 labels:Object.keys(categoryTotals),
-
 datasets:[{
-
 label:"Spending",
-
 data:Object.values(categoryTotals),
-
 backgroundColor:"#2563eb"
-
 }]
-
 },
-
 options:{
-
 responsive:true,
-
 maintainAspectRatio:false,
-
 scales:{y:{beginAtZero:true}}
-
 }
-
-});
-
-const growth=[];
-
-for(let i=5;i>=0;i--){
-
-const d=new Date();
-
-d.setMonth(d.getMonth()-i);
-
-const end=new Date(d.getFullYear(),d.getMonth()+1,0);
-
-const date=end.getFullYear()+"-"+
-
-String(end.getMonth()+1).padStart(2,"0")+"-"+
-
-String(end.getDate()).padStart(2,"0");
-
-let balance=0;
-
-transactions.forEach(t=>{
-
-if(t.date<=date){
-
-const a=Number(t.amount);
-
-if(t.type==="opening"||t.type==="income")balance+=a;
-
-if(t.type==="expense")balance-=a;
-
 }
-
-});
-
-growth.push(balance);
-
-}
-
-charts.growth=new Chart(
-
-document.getElementById("growthChart"),{
-
-type:"line",
-
-data:{
-
-labels:months,
-
-datasets:[{
-
-label:"Total Balance",
-
-data:growth,
-
-borderColor:"#2563eb",
-
-backgroundColor:"rgba(37,99,235,.1)",
-
-fill:true,
-
-tension:.3
-
-}]
-
-},
-
-options:{responsive:true,maintainAspectRatio:false}
-
-});
+);
 
 }
 
 
-/* =====================================================
- PAYMENT REMINDERS
-===================================================== */
+/* ================================
+ REMINDERS
+================================ */
 
 async function requestNotifications(){
 
 if(!("Notification" in window)){
 
 alert("Notifications are not supported by this browser.");
-
 return;
 
 }
 
-const permission=await Notification.requestPermission();
+const permission=
+await Notification.requestPermission();
 
 if(permission==="granted"){
 
@@ -2946,35 +2544,26 @@ alert("Notification permission was not granted.");
 async function addReminder(){
 
 const title=document.getElementById("reminderTitle").value.trim();
-
 const date=document.getElementById("reminderDate").value;
-
 const time=document.getElementById("reminderTime").value;
-
-const amount=Number(document.getElementById("reminderAmount").value||0);
+const amount=Number(
+document.getElementById("reminderAmount").value||0
+);
 
 if(!title||!date||!time){
 
 alert("Enter reminder title, date and time.");
-
 return;
 
 }
 
 const data={
-
 title,
-
 date,
-
 time,
-
 amount,
-
 completed:false,
-
 createdAt:firebase.firestore.FieldValue.serverTimestamp()
-
 };
 
 const ref=await remindersRef().add(data);
@@ -2982,7 +2571,6 @@ const ref=await remindersRef().add(data);
 reminders.push({id:ref.id,...data});
 
 document.getElementById("reminderTitle").value="";
-
 document.getElementById("reminderAmount").value="";
 
 displayReminders();
@@ -2995,11 +2583,11 @@ reminders=[];
 
 const snap=await remindersRef().get();
 
-snap.forEach(d=>reminders.push({id:d.id,...d.data()}));
+snap.forEach(d=>{
+reminders.push({id:d.id,...d.data()});
+});
 
 displayReminders();
-
-checkReminders();
 
 }
 
@@ -3013,15 +2601,19 @@ box.innerHTML="";
 
 if(!reminders.length){
 
-box.innerHTML='<div class="empty">No reminders yet.</div>';
+box.innerHTML=
+'<div class="empty">No reminders yet.</div>';
 
 return;
 
 }
 
-reminders.sort((a,b)=>(a.date+" "+a.time).localeCompare(b.date+" "+b.time));
-
-reminders.forEach(r=>{
+reminders
+.slice()
+.sort((a,b)=>
+(a.date+" "+a.time).localeCompare(b.date+" "+b.time)
+)
+.forEach(r=>{
 
 const div=document.createElement("div");
 
@@ -3035,7 +2627,9 @@ div.innerHTML=`
 
 <div style="color:var(--muted);font-size:13px;margin-top:5px">
 
-${escapeHTML(r.date)} at ${escapeHTML(r.time)}
+${escapeHTML(r.date)}
+at
+${escapeHTML(r.time)}
 
 ${r.amount?" • "+money(r.amount):""}
 
@@ -3043,7 +2637,10 @@ ${r.amount?" • "+money(r.amount):""}
 
 </div>
 
-<button class="del" onclick="deleteReminder('${r.id}')">Delete</button>
+<button class="del"
+onclick="deleteReminder('${r.id}')">
+Delete
+</button>
 
 `;
 
@@ -3065,375 +2662,193 @@ displayReminders();
 
 }
 
-function checkReminders(){
 
-if(!("Notification" in window)||Notification.permission!=="granted")return;
+/* ================================
+ DAILY REMINDER
+================================ */
 
-const now=new Date();
+function saveDailyReminder(){
 
-const date=today();
+const enabled=
+document.getElementById("dailyReminderEnabled").checked;
 
-const time=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+const time=
+document.getElementById("dailyReminderTime").value||"09:00";
 
-reminders.forEach(r=>{
-
-if(!r.completed&&r.date===date&&r.time===time){
-
-new Notification("Finance Reminder",{
-
-body:r.title+(r.amount?" - "+money(r.amount):""),
-
-icon:"icon-192.png"
-
-});
-
-}
-
-});
-
-}
-
-
-/* =====================================================
- DAILY FINANCE UPDATE REMINDER
-===================================================== */
-
-function getDailyReminderSettings(){
-
-return {
-
-enabled:
-localStorage.getItem("dailyReminderEnabled")==="1",
-
-time:
-localStorage.getItem("dailyReminderTime")||"20:00"
-
-};
-
-}
-
-
-function loadDailyReminderSettings(){
-
-const settings=getDailyReminderSettings();
-
-const enabled=document.getElementById("dailyReminderEnabled");
-
-const time=document.getElementById("dailyReminderTime");
-
-if(enabled){
-
-enabled.checked=settings.enabled;
-
-}
-
-if(time){
-
-time.value=settings.time;
-
-}
-
-updateDailyReminderStatus();
-
-startDailyReminder();
-
-}
-
-
-async function saveDailyReminder(){
-
-const enabled=document.getElementById("dailyReminderEnabled").checked;
-
-const time=document.getElementById("dailyReminderTime").value;
-
-if(!time){
-
-alert("Please select a reminder time.");
-
-return;
-
-}
-
-if(enabled){
-
-if(!("Notification" in window)){
-
-alert("Your browser does not support notifications.");
-
-document.getElementById("dailyReminderEnabled").checked=false;
-
-return;
-
-}
-
-const permission=await Notification.requestPermission();
-
-if(permission!=="granted"){
-
-alert("Notification permission was not granted.");
-
-document.getElementById("dailyReminderEnabled").checked=false;
-
-localStorage.setItem("dailyReminderEnabled","0");
-
-updateDailyReminderStatus();
-
-return;
-
-}
-
-}
+const message=
+document.getElementById("dailyReminderMessage").value.trim()||
+"Don't forget to update your finances today!";
 
 localStorage.setItem(
-"dailyReminderEnabled",
+"financeDailyReminderEnabled",
 enabled?"1":"0"
 );
 
 localStorage.setItem(
-"dailyReminderTime",
+"financeDailyReminderTime",
 time
 );
 
-updateDailyReminderStatus();
-
-startDailyReminder();
-
-alert(
-enabled
-?"Daily finance reminder enabled."
-:"Daily finance reminder disabled."
+localStorage.setItem(
+"financeDailyReminderMessage",
+message
 );
 
-}
+document.getElementById("dailyReminderStatus").textContent=
+"Daily reminder settings saved.";
 
+if(enabled){
 
-async function testDailyReminder(){
-
-if(!("Notification" in window)){
-
-alert("Your browser does not support notifications.");
-
-return;
+requestNotifications();
 
 }
 
-let permission=Notification.permission;
-
-if(permission!=="granted"){
-
-permission=await Notification.requestPermission();
-
 }
 
-if(permission!=="granted"){
+function loadDailyReminder(){
 
-alert("Please allow notifications in your browser first.");
+const enabled=
+localStorage.getItem("financeDailyReminderEnabled")==="1";
 
-return;
+const time=
+localStorage.getItem("financeDailyReminderTime")||"09:00";
 
-}
+const message=
+localStorage.getItem("financeDailyReminderMessage")||
+"Don't forget to update your finances today!";
 
-new Notification(
-
-"My Finance Dashboard 💰",
-
-{
-
-body:
-"Time to update your finances! Record today's income and expenses.",
-
-icon:"icon-192.png",
-
-badge:"icon-192.png"
+document.getElementById("dailyReminderEnabled").checked=enabled;
+document.getElementById("dailyReminderTime").value=time;
+document.getElementById("dailyReminderMessage").value=message;
 
 }
-
-);
-
-}
-
-
-function updateDailyReminderStatus(){
-
-const status=document.getElementById("dailyReminderStatus");
-
-if(!status)return;
-
-const settings=getDailyReminderSettings();
-
-if(!settings.enabled){
-
-status.textContent=
-"🔕 Daily reminder is currently OFF.";
-
-return;
-
-}
-
-status.textContent=
-"🔔 Daily reminder is ON. You will be reminded every day at "+
-settings.time+
-" to update your finances.";
-
-}
-
-
-function startDailyReminder(){
-
-if(dailyReminderTimer){
-
-clearInterval(dailyReminderTimer);
-
-}
-
-dailyReminderTimer=setInterval(
-
-checkDailyReminder,
-
-30000
-
-);
-
-checkDailyReminder();
-
-}
-
 
 function checkDailyReminder(){
 
-const settings=getDailyReminderSettings();
+if(
+localStorage.getItem("financeDailyReminderEnabled")!=="1"
+)return;
 
-if(!settings.enabled)return;
+if(
+!("Notification" in window)||
+Notification.permission!=="granted"
+)return;
 
-if(!("Notification" in window))return;
-
-if(Notification.permission!=="granted")return;
+const time=
+localStorage.getItem("financeDailyReminderTime")||"09:00";
 
 const now=new Date();
 
-const currentTime=
-
-String(now.getHours()).padStart(2,"0")+
-":"+
+const current=
+String(now.getHours()).padStart(2,"0")+":"+
 String(now.getMinutes()).padStart(2,"0");
+
+const last=
+localStorage.getItem("financeDailyReminderLast");
 
 const todayDate=today();
 
-const lastReminder=
+if(current===time&&last!==todayDate){
 
-localStorage.getItem(
-"lastDailyFinanceReminder"
-);
+const message=
+localStorage.getItem("financeDailyReminderMessage")||
+"Don't forget to update your finances today!";
 
-if(
-
-currentTime===settings.time&&
-lastReminder!==todayDate
-
-){
-
-new Notification(
-
-"My Finance Dashboard 💰",
-
-{
-
-body:
-"Time to update your finances! Don't forget to record today's transactions.",
-
-icon:"icon-192.png",
-
-badge:"icon-192.png"
-
-}
-
-);
+new Notification("💰 Finance Dashboard",{
+body:message
+});
 
 localStorage.setItem(
-
-"lastDailyFinanceReminder",
-
+"financeDailyReminderLast",
 todayDate
-
 );
 
 }
 
 }
 
-
-/* Check normal reminders every minute */
-
-setInterval(checkReminders,60000);
+setInterval(checkDailyReminder,60000);
 
 
-/* =====================================================
- EXPORT CSV
-===================================================== */
+/* ================================
+ EXPORT
+================================ */
+
+function downloadBlob(blob,name){
+
+const a=document.createElement("a");
+
+a.href=URL.createObjectURL(blob);
+a.download=name;
+
+document.body.appendChild(a);
+a.click();
+a.remove();
+
+setTimeout(()=>{
+URL.revokeObjectURL(a.href);
+},1000);
+
+}
 
 function exportCSV(){
 
 const rows=[
-
-["Date","Type","Description","Category","Amount","Account","To Account"]
-
+[
+"Date",
+"Type",
+"Description",
+"Category",
+"Amount",
+"Account",
+"To Account"
+]
 ];
 
 transactions.forEach(t=>{
 
 rows.push([
-
 t.date,
-
 t.type,
-
 t.description,
-
 t.category||"",
-
 t.amount,
-
 getAccount(t.fromAccount)?.name||"",
-
 getAccount(t.toAccount)?.name||""
-
 ]);
 
 });
 
 const csv=rows.map(r=>
-
-r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")
-
+r.map(v=>
+`"${String(v??"").replace(/"/g,'""')}"`
+).join(",")
 ).join("\n");
 
-const blob=new Blob([csv],{type:"text/csv"});
-
-downloadBlob(blob,"finance-transactions.csv");
+downloadBlob(
+new Blob([csv],{type:"text/csv"}),
+"finance-transactions.csv"
+);
 
 }
 
-
-/* =====================================================
- EXPORT EXCEL
-===================================================== */
-
 function exportExcel(){
+
+if(typeof XLSX==="undefined"){
+
+alert("Excel library is not available.");
+return;
+
+}
 
 const rows=transactions.map(t=>({
 
 Date:t.date,
-
 Type:t.type,
-
 Description:t.description,
-
 Category:t.category||"",
-
 Amount:Number(t.amount),
-
 Account:getAccount(t.fromAccount)?.name||"",
-
 ToAccount:getAccount(t.toAccount)?.name||""
 
 }));
@@ -3442,18 +2857,25 @@ const ws=XLSX.utils.json_to_sheet(rows);
 
 const wb=XLSX.utils.book_new();
 
-XLSX.utils.book_append_sheet(wb,ws,"Transactions");
+XLSX.utils.book_append_sheet(
+wb,ws,"Transactions"
+);
 
-XLSX.writeFile(wb,"finance-dashboard.xlsx");
+XLSX.writeFile(
+wb,
+"finance-dashboard.xlsx"
+);
 
 }
 
-
-/* =====================================================
- EXPORT PDF
-===================================================== */
-
 function exportPDF(){
+
+if(!window.jspdf){
+
+alert("PDF library is not available.");
+return;
+
+}
 
 const {jsPDF}=window.jspdf;
 
@@ -3461,28 +2883,46 @@ const doc=new jsPDF();
 
 doc.setFontSize(18);
 
-doc.text("My Finance Dashboard",15,20);
+doc.text(
+"My Finance Dashboard",
+15,20
+);
 
 doc.setFontSize(12);
 
-doc.text("Total Balance: "+money(totalBalance()),15,30);
+doc.text(
+"Total Balance: "+money(totalBalance()),
+15,30
+);
 
 const m=monthTotals();
 
-doc.text("Monthly Income: "+money(m.income),15,40);
+doc.text(
+"Monthly Income: "+money(m.income),
+15,40
+);
 
-doc.text("Monthly Expenses: "+money(m.expense),15,50);
+doc.text(
+"Monthly Expenses: "+money(m.expense),
+15,50
+);
 
-doc.text("Monthly Savings: "+money(m.savings),15,60);
+doc.text(
+"Monthly Savings: "+money(m.savings),
+15,60
+);
 
 let y=75;
 
-transactions.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,30).forEach(t=>{
+transactions
+.slice()
+.sort((a,b)=>b.date.localeCompare(a.date))
+.slice(0,30)
+.forEach(t=>{
 
 if(y>275){
 
 doc.addPage();
-
 y=20;
 
 }
@@ -3490,13 +2930,8 @@ y=20;
 doc.setFontSize(9);
 
 doc.text(
-
 `${t.date} | ${t.type} | ${t.description} | Rs. ${Number(t.amount).toFixed(2)}`,
-
-15,
-
-y
-
+15,y
 );
 
 y+=7;
@@ -3508,35 +2943,27 @@ doc.save("finance-dashboard.pdf");
 }
 
 
-/* =====================================================
+/* ================================
  BACKUP
-===================================================== */
+================================ */
 
 function downloadJSON(){
 
 const backup={
-
-version:2,
-
+version:3,
 exportedAt:new Date().toISOString(),
-
 accounts,
-
 transactions,
-
 reminders
-
 };
 
-const blob=new Blob(
-
+downloadBlob(
+new Blob(
 [JSON.stringify(backup,null,2)],
-
 {type:"application/json"}
-
+),
+"finance-backup.json"
 );
-
-downloadBlob(blob,"finance-backup.json");
 
 }
 
@@ -3546,7 +2973,9 @@ const file=event.target.files[0];
 
 if(!file)return;
 
-if(!confirm("Restore this backup? Existing records will remain and backup records will be added."))return;
+if(!confirm(
+"Restore this backup? Existing records will remain."
+))return;
 
 try{
 
@@ -3575,7 +3004,6 @@ for(const t of backup.transactions||[]){
 const data={...t};
 
 delete data.id;
-
 delete data.createdAt;
 
 await transactionsRef().add(data);
@@ -3587,7 +3015,6 @@ for(const r of backup.reminders||[]){
 const data={...r};
 
 delete data.id;
-
 delete data.createdAt;
 
 await remindersRef().add(data);
@@ -3595,7 +3022,6 @@ await remindersRef().add(data);
 }
 
 await loadData();
-
 await loadReminders();
 
 updateAll();
@@ -3612,50 +3038,33 @@ event.target.value="";
 
 }
 
-function downloadBlob(blob,name){
 
-const a=document.createElement("a");
-
-a.href=URL.createObjectURL(blob);
-
-a.download=name;
-
-a.click();
-
-URL.revokeObjectURL(a.href);
-
-}
-
-
-/* =====================================================
+/* ================================
  PROFILE
-===================================================== */
+================================ */
 
 async function saveProfile(){
 
-const name=document.getElementById("displayName").value.trim();
+const name=
+document.getElementById("displayName").value.trim();
 
 if(!name){
 
 alert("Enter your display name.");
-
 return;
 
 }
 
 await db.collection("users")
-
 .doc(auth.currentUser.uid)
-
 .set({
-
 displayName:name,
-
 email:auth.currentUser.email,
-
-updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-
-},{merge:true});
+updatedAt:
+firebase.firestore.FieldValue.serverTimestamp()
+},{
+merge:true
+});
 
 alert("Profile saved.");
 
@@ -3663,74 +3072,41 @@ alert("Profile saved.");
 
 async function loadProfile(){
 
-const doc=await db.collection("users")
+try{
 
-.doc(auth.currentUser.uid).get();
+const doc=await db.collection("users")
+.doc(auth.currentUser.uid)
+.get();
 
 if(doc.exists){
 
 document.getElementById("displayName").value=
-
 doc.data().displayName||"";
 
 }
 
-}
-
-async function changePassword(){
-
-const user=auth.currentUser;
-
-const newPassword=prompt("Enter your new password:");
-
-if(!newPassword)return;
-
-if(newPassword.length<6){
-
-alert("Password must be at least 6 characters.");
-
-return;
-
-}
-
-try{
-
-await user.updatePassword(newPassword);
-
-alert("Password changed successfully.");
-
 }catch(e){
 
-alert("For security, Firebase may require you to sign in again before changing your password.\n\n"+e.message);
+console.error("Profile loading:",e);
 
 }
 
 }
 
 
-/* =====================================================
- DARK MODE / THEME
-===================================================== */
+/* ================================
+ SETTINGS
+================================ */
 
 function toggleDarkMode(){
 
-const dark=document.body.classList.toggle("dark");
+const dark=
+document.body.classList.toggle("dark");
 
-localStorage.setItem("financeDark",dark?"1":"0");
-
-}
-
-function setTheme(primary,secondary,name){
-
-document.documentElement.style.setProperty("--primary",primary);
-
-document.documentElement.style.setProperty("--primary2",secondary);
-
-localStorage.setItem("financeTheme",name);
-
-localStorage.setItem("financePrimary",primary);
-
-localStorage.setItem("financeSecondary",secondary);
+localStorage.setItem(
+"financeDark",
+dark?"1":"0"
+);
 
 }
 
@@ -3742,26 +3118,9 @@ document.body.classList.add("dark");
 
 }
 
-const p=localStorage.getItem("financePrimary");
-
-const p2=localStorage.getItem("financeSecondary");
-
-if(p&&p2){
-
-document.documentElement.style.setProperty("--primary",p);
-
-document.documentElement.style.setProperty("--primary2",p2);
-
-}
-
 loadProfile();
 
 }
-
-
-/* =====================================================
- MODALS
-===================================================== */
 
 function openModal(id){
 
@@ -3776,25 +3135,31 @@ document.getElementById(id).style.display="none";
 }
 
 
-/* =====================================================
- UPDATE ALL
-===================================================== */
+/* ================================
+ UPDATE
+================================ */
 
 function updateAll(){
 
-document.getElementById("totalBalance").textContent=money(totalBalance());
+document.getElementById("totalBalance").textContent=
+money(totalBalance());
 
 const m=monthTotals();
 
-document.getElementById("monthIncome").textContent=money(m.income);
+document.getElementById("monthIncome").textContent=
+money(m.income);
 
-document.getElementById("monthExpense").textContent=money(m.expense);
+document.getElementById("monthExpense").textContent=
+money(m.expense);
 
-document.getElementById("monthSavings").textContent=money(m.savings);
+document.getElementById("monthSavings").textContent=
+money(m.savings);
 
-document.getElementById("savingsRate").textContent=m.rate.toFixed(1)+"%";
+document.getElementById("savingsRate").textContent=
+m.rate.toFixed(1)+"%";
 
-document.getElementById("transactionCount").textContent=transactions.length;
+document.getElementById("transactionCount").textContent=
+transactions.length;
 
 updateAccountDropdowns();
 
@@ -3809,15 +3174,32 @@ createCharts();
 }
 
 
-/* =====================================================
- START
-===================================================== */
+/* ================================
+ EDIT TYPE
+================================ */
 
-document.getElementById("editType").addEventListener("change",function(){
+document.getElementById("editType")
+.addEventListener("change",function(){
 
 document.getElementById("editToBox").style.display=
-
 this.value==="transfer"?"block":"none";
+
+});
+
+
+/* ================================
+ CLOSE MODAL ON BACKDROP
+================================ */
+
+document.querySelectorAll(".modal").forEach(modal=>{
+
+modal.addEventListener("click",e=>{
+
+if(e.target===modal){
+modal.style.display="none";
+}
+
+});
 
 });
 
