@@ -14,12 +14,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <style>
-
 :root{
 --primary:#2563eb;
 --primary2:#4f46e5;
@@ -44,7 +39,6 @@ body{
 background:var(--bg);
 color:var(--text);
 padding:15px;
-transition:.25s;
 }
 
 body.dark{
@@ -106,26 +100,26 @@ padding:11px 15px;
 border-radius:9px;
 }
 
+.logout{
+background:#ef4444;
+color:#fff;
+padding:8px 13px;
+border-radius:8px;
+}
+
+.install{
+background:#16a34a;
+color:#fff;
+padding:8px 13px;
+border-radius:8px;
+display:inline-block !important;
+}
+
 .danger{
 background:#fee2e2;
 color:#dc2626;
 padding:8px 12px;
 border-radius:8px;
-}
-
-.success{
-background:#dcfce7;
-color:#166534;
-padding:8px 12px;
-border-radius:8px;
-}
-
-label{
-display:block;
-font-size:13px;
-font-weight:bold;
-margin-bottom:6px;
-color:var(--muted);
 }
 
 .grid{
@@ -180,6 +174,14 @@ margin-bottom:20px;
 
 .field{
 margin-bottom:12px;
+}
+
+label{
+display:block;
+font-size:13px;
+font-weight:bold;
+margin-bottom:6px;
+color:var(--muted);
 }
 
 .login-btn{
@@ -247,22 +249,6 @@ align-items:center;
 flex-wrap:wrap;
 gap:8px;
 margin-top:12px;
-}
-
-.logout{
-background:#ef4444;
-color:#fff;
-padding:8px 13px;
-border-radius:8px;
-}
-
-/* INSTALL BUTTON */
-.install{
-background:#16a34a;
-color:#fff;
-padding:8px 13px;
-border-radius:8px;
-display:inline-block !important;
 }
 
 .nav{
@@ -364,17 +350,6 @@ padding:7px 9px;
 border-radius:7px;
 }
 
-.chart-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:18px;
-}
-
-.chart-box{
-height:320px;
-position:relative;
-}
-
 .transaction{
 display:flex;
 justify-content:space-between;
@@ -458,61 +433,6 @@ display:none;
 display:block;
 }
 
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.55);
-display:none;
-align-items:center;
-justify-content:center;
-padding:15px;
-z-index:1000;
-}
-
-.modal-card{
-width:100%;
-max-width:550px;
-max-height:90vh;
-overflow:auto;
-background:var(--card);
-color:var(--text);
-border-radius:18px;
-padding:22px;
-}
-
-.modal-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:18px;
-}
-
-.close{
-background:transparent;
-color:var(--muted);
-font-size:25px;
-}
-
-.form-actions{
-display:flex;
-gap:8px;
-margin-top:15px;
-}
-
-.form-actions button{
-flex:1;
-}
-
-.reminder{
-border:1px solid var(--border);
-padding:14px;
-border-radius:12px;
-margin-bottom:10px;
-display:flex;
-justify-content:space-between;
-gap:10px;
-}
-
 .info{
 padding:12px;
 background:rgba(37,99,235,.1);
@@ -528,87 +448,48 @@ color:var(--muted);
 padding:25px;
 }
 
+.reminder{
+border:1px solid var(--border);
+padding:14px;
+border-radius:12px;
+margin-bottom:10px;
+display:flex;
+justify-content:space-between;
+gap:10px;
+}
+
 @media(max-width:900px){
-
-.stats{
-grid-template-columns:repeat(3,1fr);
-}
-
-.filters{
-grid-template-columns:repeat(2,1fr);
-}
-
-.chart-grid{
-grid-template-columns:1fr;
-}
-
+.stats{grid-template-columns:repeat(3,1fr)}
+.filters{grid-template-columns:repeat(2,1fr)}
 }
 
 @media(max-width:700px){
-
-body{
-padding:9px;
-}
-
-.grid{
-grid-template-columns:1fr;
-}
-
-.full{
-grid-column:auto;
-}
-
-.accounts{
-grid-template-columns:1fr;
-}
-
-.stats{
-grid-template-columns:repeat(2,1fr);
-}
-
-.transaction{
-align-items:flex-start;
-}
-
-.tx-left{
-max-width:68%;
-}
-
-.header h1{
-font-size:24px;
-}
-
-.total h2{
-font-size:32px;
-}
-
+body{padding:9px}
+.grid{grid-template-columns:1fr}
+.full{grid-column:auto}
+.accounts{grid-template-columns:1fr}
+.stats{grid-template-columns:repeat(2,1fr)}
+.header h1{font-size:24px}
+.total h2{font-size:32px}
 }
 
 @media(max-width:500px){
-
-.filters{
-grid-template-columns:1fr;
-}
-
+.filters{grid-template-columns:1fr}
 .nav{
 overflow-x:auto;
 justify-content:flex-start;
 flex-wrap:nowrap;
 }
-
 .nav button{
 white-space:nowrap;
 }
-
 }
-
 </style>
 </head>
 
 <body>
 
 <!-- LOGIN -->
-
 <div id="loginScreen" class="login-wrap">
 
 <div class="login-card">
@@ -616,42 +497,29 @@ white-space:nowrap;
 <div class="logo">💰</div>
 
 <h1>My Finance Dashboard</h1>
-
 <p>Sign in to manage your finances</p>
 
 <div class="field">
-
 <label>Email</label>
-
-<input
-id="loginEmail"
+<input id="loginEmail"
 type="email"
 autocomplete="email"
 placeholder="Enter your email">
-
 </div>
 
 <div class="field">
-
 <label>Password</label>
-
-<input
-id="loginPassword"
+<input id="loginPassword"
 type="password"
 autocomplete="current-password"
 placeholder="Enter your password">
-
 </div>
 
 <label style="display:flex;gap:7px;align-items:center;font-weight:normal">
-
-<input
-id="rememberEmail"
+<input id="rememberEmail"
 type="checkbox"
 style="width:auto">
-
 Remember my email
-
 </label>
 
 <button class="login-btn" onclick="login()">
@@ -663,11 +531,9 @@ Remember my email
 </span>
 
 <div id="loginError" class="msg error"></div>
-
 <div id="loginSuccess" class="msg ok"></div>
 
-<div
-id="loginStatus"
+<div id="loginStatus"
 style="text-align:center;color:var(--muted);margin-top:10px;font-size:13px">
 </div>
 
@@ -676,7 +542,6 @@ style="text-align:center;color:var(--muted);margin-top:10px;font-size:13px">
 
 
 <!-- APP -->
-
 <div id="app">
 
 <div class="container">
@@ -691,13 +556,11 @@ style="text-align:center;color:var(--muted);margin-top:10px;font-size:13px">
 
 <div class="userbar">
 
-<span
-id="userEmail"
+<span id="userEmail"
 style="color:var(--muted);font-size:13px">
 </span>
 
 <!-- INSTALL BUTTON -->
-
 <button
 id="installButton"
 class="install"
@@ -705,9 +568,7 @@ onclick="installApp()">
 📱 Install App
 </button>
 
-<button
-class="logout"
-onclick="logout()">
+<button class="logout" onclick="logout()">
 🚪 Logout
 </button>
 
@@ -718,8 +579,7 @@ onclick="logout()">
 
 <nav class="nav">
 
-<button
-class="active"
+<button class="active"
 onclick="showSection('dashboard',this)">
 📊 Dashboard
 </button>
@@ -748,18 +608,20 @@ onclick="showSection('dashboard',this)">
 
 
 <!-- DASHBOARD -->
-
 <section id="dashboard" class="section active">
 
 <div class="total">
 
 <p>Total Balance</p>
 
-<h2 id="totalBalance">Rs. 0.00</h2>
+<h2 id="totalBalance">
+Rs. 0.00
+</h2>
 
 <small>All accounts combined</small>
 
 </div>
+
 
 <div class="stats">
 
@@ -806,21 +668,16 @@ Rs. 0.00
 <h2>➕ Add Transaction</h2>
 
 <div class="info">
-
 <b>Opening Balance:</b>
-
 Use this once when adding an account to record money already held in that account.
-
 </div>
 
 <div class="grid">
 
 <div>
-
 <label>Transaction Type</label>
 
-<select
-id="transactionType"
+<select id="transactionType"
 onchange="changeTransactionType()">
 
 <option value="income">💵 Income</option>
@@ -829,40 +686,26 @@ onchange="changeTransactionType()">
 <option value="opening">🟡 Opening Balance</option>
 
 </select>
-
 </div>
 
 <div>
-
 <label>Date</label>
-
-<input
-id="transactionDate"
-type="date">
-
+<input id="transactionDate" type="date">
 </div>
 
 <div>
-
 <label>Description</label>
-
-<input
-id="description"
+<input id="description"
 placeholder="Salary, food, investment...">
-
 </div>
 
 <div>
-
 <label>Amount</label>
-
-<input
-id="amount"
+<input id="amount"
 type="number"
 min="0"
 step=".01"
 placeholder="Enter amount">
-
 </div>
 
 <div id="categoryBox">
@@ -899,9 +742,7 @@ Account
 
 </div>
 
-<div
-id="toAccountBox"
-style="display:none">
+<div id="toAccountBox" style="display:none">
 
 <label>To Account</label>
 
@@ -911,8 +752,7 @@ style="display:none">
 
 <div class="full">
 
-<button
-class="primary"
+<button class="primary"
 onclick="saveTransaction()">
 ➕ Add Transaction
 </button>
@@ -920,62 +760,14 @@ onclick="saveTransaction()">
 </div>
 
 </div>
-
-</div>
-
-
-<div class="chart-grid">
-
-<div class="card">
-
-<h2>🥧 Balance Distribution</h2>
-
-<div class="chart-box">
-
-<canvas id="balancePieChart"></canvas>
-
-</div>
-
 </div>
 
 
 <div class="card">
 
-<h2>📈 Income vs Expenses</h2>
+<h2>📋 Recent Transactions</h2>
 
-<div class="chart-box">
-
-<canvas id="incomeExpenseChart"></canvas>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>🛒 Spending by Category</h2>
-
-<div class="chart-box">
-
-<canvas id="categoryChart"></canvas>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>🏦 Account Growth</h2>
-
-<div class="chart-box">
-
-<canvas id="growthChart"></canvas>
-
-</div>
-
-</div>
+<div id="dashboardTransactions"></div>
 
 </div>
 
@@ -983,7 +775,6 @@ onclick="saveTransaction()">
 
 
 <!-- TRANSACTIONS -->
-
 <section id="transactions" class="section">
 
 <div class="card">
@@ -993,22 +784,16 @@ onclick="saveTransaction()">
 <div class="filters">
 
 <div>
-
 <label>Search</label>
-
-<input
-id="historySearch"
+<input id="historySearch"
 oninput="displayTransactions()"
-placeholder="Search description/category">
-
+placeholder="Search">
 </div>
 
 <div>
-
 <label>Account</label>
 
-<select
-id="historyAccount"
+<select id="historyAccount"
 onchange="displayTransactions()">
 
 <option value="all">
@@ -1016,15 +801,12 @@ All Accounts
 </option>
 
 </select>
-
 </div>
 
 <div>
-
 <label>Type</label>
 
-<select
-id="historyType"
+<select id="historyType"
 onchange="displayTransactions()">
 
 <option value="all">All Types</option>
@@ -1034,15 +816,12 @@ onchange="displayTransactions()">
 <option value="opening">Opening</option>
 
 </select>
-
 </div>
 
 <div>
-
 <label>Period</label>
 
-<select
-id="historyPeriod"
+<select id="historyPeriod"
 onchange="displayTransactions()">
 
 <option value="all">All Time</option>
@@ -1052,15 +831,12 @@ onchange="displayTransactions()">
 <option value="year">This Year</option>
 
 </select>
-
 </div>
 
 <div>
-
 <label>Sort</label>
 
-<select
-id="historySort"
+<select id="historySort"
 onchange="displayTransactions()">
 
 <option value="newest">Newest</option>
@@ -1069,7 +845,6 @@ onchange="displayTransactions()">
 <option value="lowest">Lowest Amount</option>
 
 </select>
-
 </div>
 
 </div>
@@ -1084,7 +859,6 @@ onchange="displayTransactions()">
 
 
 <!-- ACCOUNTS -->
-
 <section id="accounts" class="section">
 
 <div class="card">
@@ -1094,17 +868,12 @@ onchange="displayTransactions()">
 <div class="grid">
 
 <div>
-
 <label>Account Name</label>
-
-<input
-id="newAccountName"
+<input id="newAccountName"
 placeholder="e.g. Sampath Bank">
-
 </div>
 
 <div>
-
 <label>Account Type</label>
 
 <select id="newAccountType">
@@ -1119,33 +888,23 @@ placeholder="e.g. Sampath Bank">
 <option>Other</option>
 
 </select>
-
 </div>
 
 <div>
-
 <label>Bank / Institution</label>
-
-<input
-id="newBankName"
+<input id="newBankName"
 placeholder="Bank name">
-
 </div>
 
 <div>
-
 <label>Account Number</label>
-
-<input
-id="newAccountNumber"
+<input id="newAccountNumber"
 placeholder="Optional">
-
 </div>
 
 <div class="full">
 
-<button
-class="primary"
+<button class="primary"
 onclick="addAccount()">
 ➕ Add Account
 </button>
@@ -1156,14 +915,12 @@ onclick="addAccount()">
 
 </div>
 
+
 <div class="card">
 
 <h2>My Accounts</h2>
 
-<div
-id="accountsList"
-class="accounts">
-</div>
+<div id="accountsList" class="accounts"></div>
 
 </div>
 
@@ -1171,7 +928,6 @@ class="accounts">
 
 
 <!-- REMINDERS -->
-
 <section id="reminders" class="section">
 
 <div class="card">
@@ -1179,13 +935,10 @@ class="accounts">
 <h2>🔔 Payment Reminders</h2>
 
 <div class="info">
-
 Create reminders for bills, loans and other payments.
-
 </div>
 
-<button
-class="primary"
+<button class="primary"
 onclick="requestNotifications()">
 🔔 Enable Notifications
 </button>
@@ -1195,53 +948,35 @@ onclick="requestNotifications()">
 <div class="grid">
 
 <div>
-
 <label>Reminder</label>
-
-<input
-id="reminderTitle"
+<input id="reminderTitle"
 placeholder="Electricity Bill">
-
 </div>
 
 <div>
-
 <label>Date</label>
-
-<input
-id="reminderDate"
-type="date">
-
+<input id="reminderDate" type="date">
 </div>
 
 <div>
-
 <label>Time</label>
-
-<input
-id="reminderTime"
+<input id="reminderTime"
 type="time"
 value="09:00">
-
 </div>
 
 <div>
-
 <label>Amount</label>
-
-<input
-id="reminderAmount"
+<input id="reminderAmount"
 type="number"
 min="0"
 step=".01"
 placeholder="Optional">
-
 </div>
 
 <div class="full">
 
-<button
-class="primary"
+<button class="primary"
 onclick="addReminder()">
 ➕ Add Reminder
 </button>
@@ -1251,6 +986,7 @@ onclick="addReminder()">
 </div>
 
 </div>
+
 
 <div class="card">
 
@@ -1264,7 +1000,6 @@ onclick="addReminder()">
 
 
 <!-- BACKUP -->
-
 <section id="backup" class="section">
 
 <div class="card">
@@ -1272,27 +1007,22 @@ onclick="addReminder()">
 <h2>💾 Backup & Restore</h2>
 
 <div class="info">
-
 Your backup contains accounts, transactions and reminders.
-
 </div>
 
 <div class="grid">
 
-<button
-class="primary"
+<button class="primary"
 onclick="downloadJSON()">
 💾 Download Backup
 </button>
 
-<label
-class="gray"
+<label class="gray"
 style="text-align:center;cursor:pointer">
 
 📥 Restore Backup
 
-<input
-type="file"
+<input type="file"
 id="restoreFile"
 accept=".json"
 onchange="restoreBackup(event)"
@@ -1300,22 +1030,9 @@ style="display:none">
 
 </label>
 
-<button
-class="primary"
+<button class="primary"
 onclick="exportCSV()">
 📄 CSV
-</button>
-
-<button
-class="primary"
-onclick="exportExcel()">
-📊 Excel
-</button>
-
-<button
-class="primary"
-onclick="exportPDF()">
-📕 PDF
 </button>
 
 </div>
@@ -1326,7 +1043,6 @@ onclick="exportPDF()">
 
 
 <!-- SETTINGS -->
-
 <section id="settings" class="section">
 
 <div class="card">
@@ -1336,29 +1052,19 @@ onclick="exportPDF()">
 <div class="grid">
 
 <div>
-
 <label>Email</label>
-
-<input
-id="profileEmail"
-readonly>
-
+<input id="profileEmail" readonly>
 </div>
 
 <div>
-
 <label>Display Name</label>
-
-<input
-id="displayName"
+<input id="displayName"
 placeholder="Your name">
-
 </div>
 
 <div class="full">
 
-<button
-class="primary"
+<button class="primary"
 onclick="saveProfile()">
 💾 Save Profile
 </button>
@@ -1374,8 +1080,7 @@ onclick="saveProfile()">
 
 <h2>🌙 Appearance</h2>
 
-<button
-class="gray"
+<button class="gray"
 onclick="toggleDarkMode()">
 🌙 Toggle Dark Mode
 </button>
@@ -1387,26 +1092,10 @@ onclick="toggleDarkMode()">
 
 <h2>🔐 Security</h2>
 
-<button
-class="primary"
+<button class="primary"
 onclick="changePassword()">
 🔑 Change Password
 </button>
-
-</div>
-
-
-<div class="card">
-
-<h2>ℹ️ App Information</h2>
-
-<p style="color:var(--muted)">
-My Finance Dashboard
-</p>
-
-<p style="color:var(--muted);margin-top:7px">
-Version 3.0
-</p>
 
 </div>
 
@@ -1416,221 +1105,13 @@ Version 3.0
 </div>
 
 
-<!-- EDIT TRANSACTION -->
-
-<div
-id="editModal"
-class="modal">
-
-<div class="modal-card">
-
-<div class="modal-header">
-
-<h2>✏️ Edit Transaction</h2>
-
-<button
-class="close"
-onclick="closeModal('editModal')">
-×
-</button>
-
-</div>
-
-<input
-type="hidden"
-id="editId">
-
-<div class="grid">
-
-<div>
-
-<label>Type</label>
-
-<select id="editType">
-
-<option value="income">Income</option>
-<option value="expense">Expense</option>
-<option value="transfer">Transfer</option>
-<option value="opening">Opening</option>
-
-</select>
-
-</div>
-
-<div>
-
-<label>Date</label>
-
-<input
-id="editDate"
-type="date">
-
-</div>
-
-<div>
-
-<label>Description</label>
-
-<input id="editDescription">
-
-</div>
-
-<div>
-
-<label>Amount</label>
-
-<input
-id="editAmount"
-type="number"
-min="0"
-step=".01">
-
-</div>
-
-<div>
-
-<label>Category</label>
-
-<input id="editCategory">
-
-</div>
-
-<div>
-
-<label>Account</label>
-
-<select id="editAccount"></select>
-
-</div>
-
-<div id="editToBox">
-
-<label>To Account</label>
-
-<select id="editToAccount"></select>
-
-</div>
-
-</div>
-
-<div class="form-actions">
-
-<button
-class="gray"
-onclick="closeModal('editModal')">
-Cancel
-</button>
-
-<button
-class="primary"
-onclick="updateTransaction()">
-Save Changes
-</button>
-
-</div>
-
-</div>
-</div>
-
-
-<!-- EDIT ACCOUNT -->
-
-<div
-id="accountModal"
-class="modal">
-
-<div class="modal-card">
-
-<div class="modal-header">
-
-<h2>✏️ Edit Account</h2>
-
-<button
-class="close"
-onclick="closeModal('accountModal')">
-×
-</button>
-
-</div>
-
-<input
-type="hidden"
-id="editAccountId">
-
-<div class="grid">
-
-<div>
-
-<label>Account Name</label>
-
-<input id="editAccountName">
-
-</div>
-
-<div>
-
-<label>Account Type</label>
-
-<select id="editAccountType">
-
-<option>Bank Account</option>
-<option>Savings Account</option>
-<option>Current Account</option>
-<option>Fixed Deposit</option>
-<option>Cash</option>
-<option>Investment</option>
-<option>Credit Card</option>
-<option>Other</option>
-
-</select>
-
-</div>
-
-<div>
-
-<label>Bank / Institution</label>
-
-<input id="editBankName">
-
-</div>
-
-<div>
-
-<label>Account Number</label>
-
-<input id="editAccountNumber">
-
-</div>
-
-</div>
-
-<div class="form-actions">
-
-<button
-class="gray"
-onclick="closeModal('accountModal')">
-Cancel
-</button>
-
-<button
-class="primary"
-onclick="updateAccount()">
-Save
-</button>
-
-</div>
-
-</div>
-</div>
-
-
 <script>
 
 /* =========================================
- FIREBASE
+   FIREBASE
 ========================================= */
 
-const firebaseConfig={
+const firebaseConfig = {
 apiKey:"AIzaSyCWG9Jt_wRn49MiY5qXiU8uK3FS4giMhhw",
 authDomain:"my-finance-dashboard-8ede7.firebaseapp.com",
 projectId:"my-finance-dashboard-8ede7",
@@ -1641,41 +1122,40 @@ appId:"1:669620241200:web:b3456fea26b2ecb7d5fef5"
 
 firebase.initializeApp(firebaseConfig);
 
-const auth=firebase.auth();
-const db=firebase.firestore();
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-let accounts=[];
-let transactions=[];
-let reminders=[];
-let charts={};
+let accounts = [];
+let transactions = [];
+let reminders = [];
+
+let deferredInstallPrompt = null;
 
 
 /* =========================================
- PWA INSTALL
+   PWA INSTALL
 ========================================= */
 
-let deferredInstallPrompt=null;
-
-
 /*
- Chrome/Edge fires this when the website
- is eligible for installation.
+ IMPORTANT:
+ This listens for the browser's PWA installation
+ event and saves it so our Install button can use it.
 */
 
-window.addEventListener(
-"beforeinstallprompt",
-event=>{
+window.addEventListener("beforeinstallprompt", event => {
 
 event.preventDefault();
 
-deferredInstallPrompt=event;
+deferredInstallPrompt = event;
 
-const button=
+const button =
 document.getElementById("installButton");
 
 if(button){
-button.style.display="inline-block";
+button.style.display = "inline-block";
 }
+
+console.log("PWA install prompt available.");
 
 });
 
@@ -1683,107 +1163,82 @@ button.style.display="inline-block";
 async function installApp(){
 
 /*
- If the browser has provided the installation
- prompt, show it.
+ If browser has supplied the installation prompt,
+ show it.
 */
 
 if(deferredInstallPrompt){
 
 deferredInstallPrompt.prompt();
 
-try{
-
-const result=
+const result =
 await deferredInstallPrompt.userChoice;
 
 console.log(
-"Install result:",
+"Installation result:",
 result.outcome
 );
 
-}catch(error){
-
-console.error(error);
-
-}
-
-deferredInstallPrompt=null;
+deferredInstallPrompt = null;
 
 return;
-
 }
 
 
 /*
- If beforeinstallprompt is unavailable,
- give the user instructions.
+ If the browser hasn't supplied a prompt,
+ give instructions.
 */
 
 alert(
-"Installation is not currently available through the button.\n\n"+
-"On Chrome use:\n"+
-"⋮ → Install app\n\n"+
-"On Android Chrome you can also use:\n"+
-"⋮ → Add to Home screen"
+"To install My Finance Dashboard, open your browser menu and choose 'Install App' or 'Add to Home Screen'."
 );
 
 }
 
 
-window.addEventListener(
-"appinstalled",
-()=>{
+window.addEventListener("appinstalled", () => {
 
 console.log(
 "My Finance Dashboard was installed."
 );
 
-const button=
+const button =
 document.getElementById("installButton");
 
 if(button){
-
-button.style.display="inline-block";
-
-button.textContent="✅ App Installed";
-
-button.disabled=true;
-
+button.style.display = "none";
 }
 
 });
 
 
 /* =========================================
- SERVICE WORKER
+   SERVICE WORKER
 ========================================= */
 
 if("serviceWorker" in navigator){
 
-window.addEventListener(
-"load",
-async()=>{
+window.addEventListener("load", () => {
 
-try{
-
-const registration=
-await navigator.serviceWorker.register(
-"./sw.js"
-);
+navigator.serviceWorker
+.register("./sw.js")
+.then(registration => {
 
 console.log(
 "Service Worker registered:",
 registration.scope
 );
 
-}catch(error){
+})
+.catch(error => {
 
 console.error(
 "Service Worker registration failed:",
 error
 );
 
-}
+});
 
 });
 
@@ -1791,41 +1246,45 @@ error
 
 
 /* =========================================
- HELPERS
+   HELPERS
 ========================================= */
 
 function today(){
 
-const d=new Date();
+const d = new Date();
 
 return d.getFullYear()+"-"+
-String(d.getMonth()+1).padStart(2,"0")+"-"+
-String(d.getDate()).padStart(2,"0");
+
+String(d.getMonth()+1)
+.padStart(2,"0")+"-"+
+
+String(d.getDate())
+.padStart(2,"0");
 
 }
 
 
-function money(v){
+function money(value){
 
 return "Rs. "+
-Number(v||0).toLocaleString(
-"en-LK",
-{
+Number(value || 0)
+.toLocaleString("en-LK",{
 minimumFractionDigits:2,
 maximumFractionDigits:2
-}
-);
+});
 
 }
 
 
-function escapeHTML(v){
+function escapeHTML(value){
 
-const d=document.createElement("div");
+const div =
+document.createElement("div");
 
-d.textContent=v??"";
+div.textContent =
+value ?? "";
 
-return d.innerHTML;
+return div.innerHTML;
 
 }
 
@@ -1833,7 +1292,7 @@ return d.innerHTML;
 function getAccount(id){
 
 return accounts.find(
-a=>String(a.id)===String(id)
+a => String(a.id) === String(id)
 );
 
 }
@@ -1841,7 +1300,8 @@ a=>String(a.id)===String(id)
 
 function accountsRef(){
 
-return db.collection("users")
+return db
+.collection("users")
 .doc(auth.currentUser.uid)
 .collection("accounts");
 
@@ -1850,7 +1310,8 @@ return db.collection("users")
 
 function transactionsRef(){
 
-return db.collection("users")
+return db
+.collection("users")
 .doc(auth.currentUser.uid)
 .collection("transactions");
 
@@ -1859,7 +1320,8 @@ return db.collection("users")
 
 function remindersRef(){
 
-return db.collection("users")
+return db
+.collection("users")
 .doc(auth.currentUser.uid)
 .collection("reminders");
 
@@ -1867,55 +1329,55 @@ return db.collection("users")
 
 
 /* =========================================
- LOGIN
+   LOGIN
 ========================================= */
 
-const savedEmail=
+const savedEmail =
 localStorage.getItem("financeEmail");
 
 if(savedEmail){
 
 document.getElementById(
 "loginEmail"
-).value=savedEmail;
+).value = savedEmail;
 
 document.getElementById(
 "rememberEmail"
-).checked=true;
+).checked = true;
 
 }
 
 
 async function login(){
 
-const email=
+const email =
 document.getElementById(
 "loginEmail"
 ).value.trim();
 
-const password=
+const password =
 document.getElementById(
 "loginPassword"
 ).value;
 
-const error=
+const error =
 document.getElementById(
 "loginError"
 );
 
-const status=
+const status =
 document.getElementById(
 "loginStatus"
 );
 
-error.style.display="none";
+error.style.display = "none";
 
-if(!email||!password){
+if(!email || !password){
 
-error.textContent=
+error.textContent =
 "Please enter your email and password.";
 
-error.style.display="block";
+error.style.display = "block";
 
 return;
 
@@ -1940,7 +1402,8 @@ localStorage.removeItem(
 
 }
 
-status.textContent="Signing in...";
+status.textContent =
+"Signing in...";
 
 try{
 
@@ -1949,17 +1412,16 @@ email,
 password
 );
 
-status.textContent="";
+status.textContent = "";
 
-}catch(e){
+}catch(errorObject){
 
-console.error(e);
+status.textContent = "";
 
-status.textContent="";
+error.textContent =
+friendlyError(errorObject);
 
-error.textContent=friendlyError(e);
-
-error.style.display="block";
+error.style.display = "block";
 
 }
 
@@ -1968,30 +1430,30 @@ error.style.display="block";
 
 async function forgotPassword(){
 
-const email=
+const email =
 document.getElementById(
 "loginEmail"
 ).value.trim();
 
-const error=
+const error =
 document.getElementById(
 "loginError"
 );
 
-const success=
+const success =
 document.getElementById(
 "loginSuccess"
 );
 
-error.style.display="none";
-success.style.display="none";
+error.style.display = "none";
+success.style.display = "none";
 
 if(!email){
 
-error.textContent=
+error.textContent =
 "Enter your email address first.";
 
-error.style.display="block";
+error.style.display = "block";
 
 return;
 
@@ -2001,17 +1463,17 @@ try{
 
 await auth.sendPasswordResetEmail(email);
 
-success.textContent=
-"Password reset email sent. Check your inbox.";
+success.textContent =
+"Password reset email sent.";
 
-success.style.display="block";
+success.style.display = "block";
 
 }catch(e){
 
-error.textContent=
+error.textContent =
 friendlyError(e);
 
-error.style.display="block";
+error.style.display = "block";
 
 }
 
@@ -2020,23 +1482,30 @@ error.style.display="block";
 
 function friendlyError(e){
 
-const map={
+const map = {
+
 "auth/invalid-credential":
 "Incorrect email or password.",
+
 "auth/user-not-found":
 "No account found with this email.",
+
 "auth/wrong-password":
 "Incorrect password.",
+
 "auth/invalid-email":
 "Invalid email address.",
+
 "auth/too-many-requests":
 "Too many attempts. Try again later.",
+
 "auth/network-request-failed":
 "Network error. Check your internet connection."
+
 };
 
-return map[e.code]||
-e.message||
+return map[e.code] ||
+e.message ||
 "Login failed.";
 
 }
@@ -2044,35 +1513,26 @@ e.message||
 
 async function logout(){
 
-try{
-
 await auth.signOut();
-
-}catch(e){
-
-console.error(e);
-
-}
 
 }
 
 
 /* =========================================
- AUTH
+   AUTH STATE
 ========================================= */
 
-auth.onAuthStateChanged(
-async user=>{
+auth.onAuthStateChanged(async user => {
 
 if(!user){
 
 document.getElementById(
 "loginScreen"
-).style.display="flex";
+).style.display = "flex";
 
 document.getElementById(
 "app"
-).style.display="none";
+).style.display = "none";
 
 return;
 
@@ -2080,19 +1540,19 @@ return;
 
 document.getElementById(
 "loginScreen"
-).style.display="none";
+).style.display = "none";
 
 document.getElementById(
 "app"
-).style.display="block";
+).style.display = "block";
 
 document.getElementById(
 "userEmail"
-).textContent=user.email;
+).textContent = user.email;
 
 document.getElementById(
 "profileEmail"
-).value=user.email;
+).value = user.email;
 
 try{
 
@@ -2109,7 +1569,7 @@ updateAll();
 console.error(e);
 
 alert(
-"Signed in, but some dashboard data could not be loaded: "+
+"Could not load dashboard data: "+
 e.message
 );
 
@@ -2119,34 +1579,35 @@ e.message
 
 
 /* =========================================
- LOAD DATA
+   LOAD DATA
 ========================================= */
 
 async function loadData(){
 
-accounts=[];
-transactions=[];
+accounts = [];
+transactions = [];
 
-const a=
+const accountSnapshot =
 await accountsRef().get();
 
-a.forEach(d=>{
+accountSnapshot.forEach(doc => {
 
 accounts.push({
-id:d.id,
-...d.data()
+id:doc.id,
+...doc.data()
 });
 
 });
 
-const t=
+
+const transactionSnapshot =
 await transactionsRef().get();
 
-t.forEach(d=>{
+transactionSnapshot.forEach(doc => {
 
 transactions.push({
-id:d.id,
-...d.data()
+id:doc.id,
+...doc.data()
 });
 
 });
@@ -2154,7 +1615,7 @@ id:d.id,
 
 if(!accounts.length){
 
-const defaults=[
+const defaults = [
 
 {
 name:"Sampath Bank",
@@ -2182,17 +1643,16 @@ bank:""
 
 ];
 
-for(const x of defaults){
 
-const r=
-await accountsRef().add(x);
+for(const account of defaults){
+
+const ref =
+await accountsRef().add(account);
 
 accounts.push({
-id:r.id,
-...x
+id:ref.id,
+...account
 });
-
-}
 
 }
 
@@ -2200,15 +1660,15 @@ id:r.id,
 
 
 /* =========================================
- NAVIGATION
+   NAVIGATION
 ========================================= */
 
-function showSection(id,button){
+function showSection(id, button){
 
 document
 .querySelectorAll(".section")
-.forEach(s=>
-s.classList.remove("active")
+.forEach(section =>
+section.classList.remove("active")
 );
 
 document
@@ -2217,85 +1677,82 @@ document
 
 document
 .querySelectorAll(".nav button")
-.forEach(b=>
-b.classList.remove("active")
+.forEach(btn =>
+btn.classList.remove("active")
 );
 
 button.classList.add("active");
 
-if(id==="dashboard")
-createCharts();
-
-if(id==="transactions")
+if(id === "transactions")
 displayTransactions();
 
-if(id==="accounts")
+if(id === "accounts")
 displayAccounts();
 
-if(id==="reminders")
+if(id === "reminders")
 displayReminders();
 
 }
 
 
 /* =========================================
- TRANSACTIONS
+   TRANSACTIONS
 ========================================= */
 
 document.getElementById(
 "transactionDate"
-).value=today();
+).value = today();
 
 
 function changeTransactionType(){
 
-const type=
+const type =
 document.getElementById(
 "transactionType"
 ).value;
 
-const cat=
+const category =
 document.getElementById(
 "categoryBox"
 );
 
-const to=
+const toBox =
 document.getElementById(
 "toAccountBox"
 );
 
-const label=
+const label =
 document.getElementById(
 "accountLabel"
 );
 
-cat.style.display="block";
-to.style.display="none";
+category.style.display = "block";
+toBox.style.display = "none";
 
-if(type==="transfer"){
+if(type === "transfer"){
 
-cat.style.display="none";
-to.style.display="block";
+category.style.display = "none";
+toBox.style.display = "block";
+label.textContent = "From Account";
 
-label.textContent=
-"From Account";
+}
 
-}else if(type==="opening"){
+else if(type === "opening"){
 
-cat.style.display="none";
+category.style.display = "none";
+label.textContent = "Account";
 
-label.textContent=
-"Account";
+}
 
-}else if(type==="income"){
+else if(type === "income"){
 
-label.textContent=
-"To Account";
+label.textContent = "To Account";
 
-}else{
+}
 
-label.textContent=
-"Account";
+else{
+
+label.textContent = "Account";
 
 }
 
@@ -2306,52 +1763,50 @@ updateAccountDropdowns();
 
 function updateAccountDropdowns(){
 
-const ids=[
+const ids = [
 "fromAccount",
 "toAccount",
-"historyAccount",
-"editAccount",
-"editToAccount"
+"historyAccount"
 ];
 
-ids.forEach(id=>{
+ids.forEach(id => {
 
-const el=
+const select =
 document.getElementById(id);
 
-if(!el)return;
+if(!select)return;
 
-const old=el.value;
+const old =
+select.value;
 
-el.innerHTML="";
+select.innerHTML = "";
 
-if(id==="historyAccount"){
+if(id === "historyAccount"){
 
-const option=
+const option =
 document.createElement("option");
 
-option.value="all";
-option.textContent=
-"All Accounts";
+option.value = "all";
+option.textContent = "All Accounts";
 
-el.appendChild(option);
+select.appendChild(option);
 
 }
 
-accounts.forEach(a=>{
+accounts.forEach(account => {
 
-const option=
+const option =
 document.createElement("option");
 
-option.value=a.id;
-option.textContent=a.name;
+option.value = account.id;
+option.textContent = account.name;
 
-el.appendChild(option);
+select.appendChild(option);
 
 });
 
 if(old)
-el.value=old;
+select.value = old;
 
 });
 
@@ -2360,49 +1815,44 @@ el.value=old;
 
 async function saveTransaction(){
 
-const type=
+const type =
 document.getElementById(
 "transactionType"
 ).value;
 
-const description=
+const description =
 document.getElementById(
 "description"
 ).value.trim();
 
-const amount=
+const amount =
 Number(
 document.getElementById(
 "amount"
 ).value
 );
 
-const date=
+const date =
 document.getElementById(
 "transactionDate"
 ).value;
 
-const category=
+const category =
 document.getElementById(
 "category"
 ).value;
 
-const account=
+const account =
 document.getElementById(
 "fromAccount"
 ).value;
 
-const to=
+const to =
 document.getElementById(
 "toAccount"
 ).value;
 
-if(
-!description||
-!amount||
-amount<=0||
-!date
-){
+if(!description || !amount || !date){
 
 alert(
 "Please complete the required fields."
@@ -2414,18 +1864,14 @@ return;
 
 if(!account){
 
-alert(
-"Please select an account."
-);
+alert("Please select an account.");
 
 return;
 
 }
 
-if(
-type==="transfer"&&
-account===to
-){
+if(type === "transfer" &&
+account === to){
 
 alert(
 "From and To accounts must be different."
@@ -2435,62 +1881,52 @@ return;
 
 }
 
-const data={
+const data = {
 
-type,
-description,
-amount,
-date,
-category,
+type:type,
+
+description:description,
+
+amount:amount,
+
+date:date,
+
+category:category,
+
 fromAccount:null,
+
 toAccount:null,
+
 createdAt:
 firebase.firestore.FieldValue
 .serverTimestamp()
 
 };
 
-if(type==="income")
-data.toAccount=account;
 
-if(type==="expense")
-data.fromAccount=account;
+if(type === "income")
+data.toAccount = account;
 
-if(type==="opening"){
+if(type === "expense")
+data.fromAccount = account;
 
-const exists=
-transactions.some(t=>
-t.type==="opening"&&
-String(t.toAccount)===
-String(account)
-);
+if(type === "opening")
+data.toAccount = account;
 
-if(exists){
+if(type === "opening")
+data.category = "Opening Balance";
 
-alert(
-"An opening balance already exists for this account."
-);
+if(type === "transfer"){
 
-return;
-
-}
-
-data.toAccount=account;
-data.category="Opening Balance";
-
-}
-
-if(type==="transfer"){
-
-data.fromAccount=account;
-data.toAccount=to;
-data.category="Transfer";
+data.fromAccount = account;
+data.toAccount = to;
+data.category = "Transfer";
 
 }
 
 try{
 
-const ref=
+const ref =
 await transactionsRef().add(data);
 
 transactions.push({
@@ -2500,11 +1936,11 @@ id:ref.id,
 
 document.getElementById(
 "description"
-).value="";
+).value = "";
 
 document.getElementById(
 "amount"
-).value="";
+).value = "";
 
 updateAll();
 
@@ -2513,8 +1949,6 @@ alert(
 );
 
 }catch(e){
-
-console.error(e);
 
 alert(
 "Could not save transaction: "+
@@ -2527,47 +1961,47 @@ e.message
 
 
 /* =========================================
- BALANCES
+   BALANCES
 ========================================= */
 
 function getAccountBalance(id){
 
-let balance=0;
+let balance = 0;
 
-transactions.forEach(t=>{
+transactions.forEach(t => {
 
-const amount=
-Number(t.amount||0);
-
-if(
-t.type==="opening"&&
-String(t.toAccount)===String(id)
-)
-balance+=amount;
+const amount =
+Number(t.amount || 0);
 
 if(
-t.type==="income"&&
-String(t.toAccount)===String(id)
+t.type === "opening" &&
+String(t.toAccount) === String(id)
 )
-balance+=amount;
+balance += amount;
 
 if(
-t.type==="expense"&&
-String(t.fromAccount)===String(id)
+t.type === "income" &&
+String(t.toAccount) === String(id)
 )
-balance-=amount;
-
-if(t.type==="transfer"){
+balance += amount;
 
 if(
-String(t.fromAccount)===String(id)
+t.type === "expense" &&
+String(t.fromAccount) === String(id)
 )
-balance-=amount;
+balance -= amount;
+
+if(t.type === "transfer"){
 
 if(
-String(t.toAccount)===String(id)
+String(t.fromAccount) === String(id)
 )
-balance+=amount;
+balance -= amount;
+
+if(
+String(t.toAccount) === String(id)
+)
+balance += amount;
 
 }
 
@@ -2581,8 +2015,8 @@ return balance;
 function totalBalance(){
 
 return accounts.reduce(
-(sum,a)=>
-sum+getAccountBalance(a.id),
+(sum, account) =>
+sum + getAccountBalance(account.id),
 0
 );
 
@@ -2590,44 +2024,27 @@ sum+getAccountBalance(a.id),
 
 
 /* =========================================
- ACCOUNTS
+   ACCOUNTS
 ========================================= */
 
 async function addAccount(){
 
-const name=
+const name =
 document.getElementById(
 "newAccountName"
 ).value.trim();
 
 if(!name){
 
-alert(
-"Enter account name."
-);
+alert("Enter account name.");
 
 return;
 
 }
 
-if(
-accounts.some(a=>
-a.name.toLowerCase()===
-name.toLowerCase()
-)
-){
+const data = {
 
-alert(
-"Account already exists."
-);
-
-return;
-
-}
-
-const data={
-
-name,
+name:name,
 
 type:
 document.getElementById(
@@ -2646,7 +2063,7 @@ document.getElementById(
 
 };
 
-const ref=
+const ref =
 await accountsRef().add(data);
 
 accounts.push({
@@ -2656,15 +2073,15 @@ id:ref.id,
 
 document.getElementById(
 "newAccountName"
-).value="";
+).value = "";
 
 document.getElementById(
 "newBankName"
-).value="";
+).value = "";
 
 document.getElementById(
 "newAccountNumber"
-).value="";
+).value = "";
 
 updateAll();
 
@@ -2673,49 +2090,49 @@ updateAll();
 
 function displayAccounts(){
 
-const box=
+const box =
 document.getElementById(
 "accountsList"
 );
 
-box.innerHTML="";
+box.innerHTML = "";
 
 if(!accounts.length){
 
-box.innerHTML=
+box.innerHTML =
 '<div class="empty">No accounts.</div>';
 
 return;
 
 }
 
-accounts.forEach(a=>{
+accounts.forEach(account => {
 
-const div=
+const div =
 document.createElement("div");
 
-div.className="account";
+div.className = "account";
 
-div.innerHTML=`
+div.innerHTML = `
 
 <div class="account-info">
 
 <strong>
-🏦 ${escapeHTML(a.name)}
+🏦 ${escapeHTML(account.name)}
 </strong>
 
 <small>
-${escapeHTML(a.type||"Account")}
+${escapeHTML(account.type || "Account")}
 </small>
 
 <small>
-${escapeHTML(a.bank||"")}
+${escapeHTML(account.bank || "")}
 </small>
 
 <small>
 Balance:
 <b class="blue">
-${money(getAccountBalance(a.id))}
+${money(getAccountBalance(account.id))}
 </b>
 </small>
 
@@ -2724,14 +2141,8 @@ ${money(getAccountBalance(a.id))}
 <div class="account-actions">
 
 <button
-class="edit"
-onclick="editAccount('${a.id}')">
-✏️
-</button>
-
-<button
 class="danger"
-onclick="deleteAccount('${a.id}')">
+onclick="deleteAccount('${account.id}')">
 🗑️
 </button>
 
@@ -2745,107 +2156,17 @@ box.appendChild(div);
 }
 
 
-function editAccount(id){
-
-const a=getAccount(id);
-
-if(!a)return;
-
-document.getElementById(
-"editAccountId"
-).value=id;
-
-document.getElementById(
-"editAccountName"
-).value=a.name||"";
-
-document.getElementById(
-"editAccountType"
-).value=a.type||
-"Bank Account";
-
-document.getElementById(
-"editBankName"
-).value=a.bank||"";
-
-document.getElementById(
-"editAccountNumber"
-).value=
-a.accountNumber||"";
-
-openModal("accountModal");
-
-}
-
-
-async function updateAccount(){
-
-const id=
-document.getElementById(
-"editAccountId"
-).value;
-
-const data={
-
-name:
-document.getElementById(
-"editAccountName"
-).value.trim(),
-
-type:
-document.getElementById(
-"editAccountType"
-).value,
-
-bank:
-document.getElementById(
-"editBankName"
-).value.trim(),
-
-accountNumber:
-document.getElementById(
-"editAccountNumber"
-).value.trim()
-
-};
-
-if(!data.name){
-
-alert(
-"Account name is required."
-);
-
-return;
-
-}
-
-await accountsRef()
-.doc(id)
-.update(data);
-
-const a=getAccount(id);
-
-Object.assign(a,data);
-
-closeModal("accountModal");
-
-updateAll();
-
-}
-
-
 async function deleteAccount(id){
 
-const a=getAccount(id);
+const account =
+getAccount(id);
 
-if(!a)return;
+if(!account)return;
 
-const related=
-transactions.filter(t=>
-String(t.fromAccount)===
-String(id)||
-String(t.toAccount)===
-String(id)
+const related =
+transactions.filter(t =>
+String(t.fromAccount) === String(id) ||
+String(t.toAccount) === String(id)
 );
 
 if(related.length){
@@ -2858,20 +2179,18 @@ return;
 
 }
 
-if(
-!confirm(
-`Delete "${a.name}"?`
-)
-)
+if(!confirm(
+`Delete "${account.name}"?`
+))
 return;
 
 await accountsRef()
 .doc(id)
 .delete();
 
-accounts=
-accounts.filter(x=>
-String(x.id)!==String(id)
+accounts =
+accounts.filter(
+x => String(x.id) !== String(id)
 );
 
 updateAll();
@@ -2880,155 +2199,130 @@ updateAll();
 
 
 /* =========================================
- TRANSACTION HISTORY
+   HISTORY
 ========================================= */
 
-function dateMatches(date,period){
+function dateMatches(date, period){
 
-if(period==="all")
+if(period === "all")
 return true;
 
-const d=
-new Date(
-date+"T00:00:00"
-);
+const d =
+new Date(date+"T00:00:00");
 
-const now=new Date();
+const now = new Date();
 
-if(period==="today")
-return d.toDateString()===
+if(period === "today")
+return d.toDateString() ===
 now.toDateString();
 
-if(period==="month")
-return d.getFullYear()===
-now.getFullYear()&&
-d.getMonth()===
+if(period === "month")
+return d.getFullYear() ===
+now.getFullYear() &&
+d.getMonth() ===
 now.getMonth();
 
-if(period==="year")
-return d.getFullYear()===
+if(period === "year")
+return d.getFullYear() ===
 now.getFullYear();
 
-if(period==="week"){
+if(period === "week"){
 
-const start=new Date(now);
+const start = new Date(now);
 
 start.setDate(
-now.getDate()-now.getDay()
+now.getDate() - now.getDay()
 );
 
 start.setHours(0,0,0,0);
 
-const end=new Date(start);
+const end =
+new Date(start);
 
 end.setDate(
 start.getDate()+6
 );
 
-end.setHours(
-23,59,59,999
-);
+end.setHours(23,59,59,999);
 
-return d>=start&&d<=end;
+return d >= start && d <= end;
 
 }
 
 return true;
-
-}
-
-
-function transactionAccountMatch(t,id){
-
-if(id==="all")
-return true;
-
-return String(t.fromAccount)===
-String(id)||
-String(t.toAccount)===
-String(id);
 
 }
 
 
 function getFiltered(){
 
-const search=
+const search =
 document.getElementById(
 "historySearch"
-).value
-.toLowerCase()
-.trim();
+).value.toLowerCase().trim();
 
-const account=
+const account =
 document.getElementById(
 "historyAccount"
 ).value;
 
-const type=
+const type =
 document.getElementById(
 "historyType"
 ).value;
 
-const period=
+const period =
 document.getElementById(
 "historyPeriod"
 ).value;
 
-const sort=
+const sort =
 document.getElementById(
 "historySort"
 ).value;
 
-let result=
-transactions.filter(t=>{
+let result =
+transactions.filter(t => {
 
-const text=
+const text =
 (
-t.description+
-" "+
-(t.category||"")
-)
-.toLowerCase();
+t.description +
+" " +
+(t.category || "")
+).toLowerCase();
+
+const accountMatch =
+account === "all" ||
+String(t.fromAccount) === String(account) ||
+String(t.toAccount) === String(account);
 
 return
-(!search||
-text.includes(search))&&
-transactionAccountMatch(
-t,
-account
-)&&
-(type==="all"||
-t.type===type)&&
-dateMatches(
-t.date,
-period
-);
+(!search || text.includes(search)) &&
+accountMatch &&
+(type === "all" || t.type === type) &&
+dateMatches(t.date,period);
 
 });
 
-if(sort==="newest")
-result.sort(
-(a,b)=>
+
+if(sort === "newest")
+result.sort((a,b) =>
 b.date.localeCompare(a.date)
 );
 
-if(sort==="oldest")
-result.sort(
-(a,b)=>
+if(sort === "oldest")
+result.sort((a,b) =>
 a.date.localeCompare(b.date)
 );
 
-if(sort==="highest")
-result.sort(
-(a,b)=>
-b.amount-a.amount
+if(sort === "highest")
+result.sort((a,b) =>
+Number(b.amount)-Number(a.amount)
 );
 
-if(sort==="lowest")
-result.sort(
-(a,b)=>
-a.amount-b.amount
+if(sort === "lowest")
+result.sort((a,b) =>
+Number(a.amount)-Number(b.amount)
 );
 
 return result;
@@ -3036,82 +2330,62 @@ return result;
 }
 
 
-function displayTransactions(){
+function transactionHTML(t){
 
-const box=
-document.getElementById(
-"transactionList"
-);
+let icon = "💵";
+let cls = "income-icon";
+let sign = "+";
+let color = "#16a34a";
+let account = "";
 
-const list=
-getFiltered();
+if(t.type === "expense"){
 
-box.innerHTML="";
+icon = "💸";
+cls = "expense-icon";
+sign = "-";
+color = "#dc2626";
 
-if(!list.length){
-
-box.innerHTML=
-'<div class="empty">No transactions found.</div>';
-
-return;
+account =
+getAccount(t.fromAccount)?.name || "";
 
 }
 
-list.forEach(t=>{
+else if(t.type === "transfer"){
 
-let icon="💵";
-let cls="income-icon";
-let sign="+";
-let color="#16a34a";
-let account="";
+icon = "🔄";
+cls = "transfer-icon";
+sign = "↔";
+color = "#2563eb";
 
-if(t.type==="expense"){
-
-icon="💸";
-cls="expense-icon";
-sign="-";
-color="#dc2626";
-
-account=
-getAccount(t.fromAccount)?.name||
-"";
-
-}else if(t.type==="transfer"){
-
-icon="🔄";
-cls="transfer-icon";
-color="#2563eb";
-sign="↔";
-
-account=
-(getAccount(t.fromAccount)?.name||"")+
+account =
+(getAccount(t.fromAccount)?.name || "")+
 " → "+
-(getAccount(t.toAccount)?.name||"");
-
-}else if(t.type==="opening"){
-
-icon="🟡";
-cls="opening-icon";
-color="#d97706";
-
-account=
-getAccount(t.toAccount)?.name||
-"";
-
-}else{
-
-account=
-getAccount(t.toAccount)?.name||
-"";
+(getAccount(t.toAccount)?.name || "");
 
 }
 
-const div=
-document.createElement("div");
+else if(t.type === "opening"){
 
-div.className="transaction";
+icon = "🟡";
+cls = "opening-icon";
+sign = "+";
+color = "#d97706";
 
-div.innerHTML=`
+account =
+getAccount(t.toAccount)?.name || "";
+
+}
+
+else{
+
+account =
+getAccount(t.toAccount)?.name || "";
+
+}
+
+return `
+
+<div class="transaction">
 
 <div class="tx-left">
 
@@ -3126,9 +2400,11 @@ ${escapeHTML(t.description)}
 </div>
 
 <div class="tx-meta">
-${escapeHTML(t.category||"")}
- • ${escapeHTML(account)}
- • ${escapeHTML(t.date)}
+${escapeHTML(t.category || "")}
+•
+${escapeHTML(account)}
+•
+${escapeHTML(t.date)}
 </div>
 
 </div>
@@ -3137,20 +2413,11 @@ ${escapeHTML(t.category||"")}
 
 <div class="tx-right">
 
-<div
-style="font-weight:bold;color:${color}">
-
+<div style="font-weight:bold;color:${color}">
 ${sign} ${money(t.amount)}
-
 </div>
 
 <div class="tx-buttons">
-
-<button
-class="edit"
-onclick="editTransaction('${t.id}')">
-✏️ Edit
-</button>
 
 <button
 class="del"
@@ -3161,299 +2428,77 @@ onclick="deleteTransaction('${t.id}')">
 </div>
 
 </div>
+
+</div>
 `;
 
-box.appendChild(div);
-
-});
-
 }
 
 
-/* =========================================
- STATISTICS
-========================================= */
+function displayTransactions(){
 
-function monthTotals(){
-
-const now=new Date();
-
-let income=0;
-let expense=0;
-
-transactions.forEach(t=>{
-
-const d=
-new Date(
-t.date+"T00:00:00"
+const box =
+document.getElementById(
+"transactionList"
 );
 
-if(
-d.getFullYear()===
-now.getFullYear()&&
-d.getMonth()===
-now.getMonth()
-){
+if(!box)return;
 
-if(t.type==="income")
-income+=Number(t.amount);
+const list =
+getFiltered();
 
-if(t.type==="expense")
-expense+=Number(t.amount);
+box.innerHTML = "";
 
-}
+if(!list.length){
 
-});
+box.innerHTML =
+'<div class="empty">No transactions found.</div>';
 
-return{
-
-income,
-
-expense,
-
-savings:
-income-expense,
-
-rate:
-income?
-((income-expense)/income)*100:
-0
-
-};
-
-}
-
-
-/* =========================================
- CHARTS
-========================================= */
-
-function destroyChart(name){
-
-if(charts[name]){
-
-charts[name].destroy();
-
-charts[name]=null;
-
-}
-
-}
-
-
-function createCharts(){
-
-if(typeof Chart==="undefined")
 return;
 
-destroyChart("pie");
-destroyChart("income");
-destroyChart("category");
-
-const labels=
-accounts.map(a=>a.name);
-
-const balances=
-accounts.map(a=>
-Math.max(
-0,
-getAccountBalance(a.id)
-)
-);
-
-charts.pie=
-new Chart(
-document.getElementById(
-"balancePieChart"
-),
-{
-type:"doughnut",
-
-data:{
-labels,
-
-datasets:[{
-
-data:balances,
-
-backgroundColor:[
-"#2563eb",
-"#16a34a",
-"#f59e0b",
-"#8b5cf6",
-"#ef4444",
-"#06b6d4"
-]
-
-}]
-
-},
-
-options:{
-responsive:true,
-maintainAspectRatio:false
 }
 
-}
+list.forEach(t => {
+
+box.insertAdjacentHTML(
+"beforeend",
+transactionHTML(t)
 );
-
-
-const months=[];
-const incomes=[];
-const expenses=[];
-const categoryTotals={};
-
-for(let i=5;i>=0;i--){
-
-const d=new Date();
-
-d.setMonth(
-d.getMonth()-i
-);
-
-const year=d.getFullYear();
-const month=d.getMonth();
-
-months.push(
-d.toLocaleString(
-"en-US",
-{month:"short"}
-)
-);
-
-let inc=0;
-let exp=0;
-
-transactions.forEach(t=>{
-
-const td=
-new Date(
-t.date+"T00:00:00"
-);
-
-if(
-td.getFullYear()===year&&
-td.getMonth()===month
-){
-
-if(t.type==="income")
-inc+=Number(t.amount);
-
-if(t.type==="expense"){
-
-exp+=Number(t.amount);
-
-categoryTotals[
-t.category||"Other"
-]=
-(
-categoryTotals[
-t.category||"Other"
-]||0
-)+
-Number(t.amount);
-
-}
-
-}
 
 });
 
-incomes.push(inc);
-expenses.push(exp);
 
-}
-
-
-charts.income=
-new Chart(
+const dashboardBox =
 document.getElementById(
-"incomeExpenseChart"
-),
-{
-type:"line",
-
-data:{
-labels:months,
-
-datasets:[
-
-{
-label:"Income",
-data:incomes,
-borderColor:"#16a34a",
-backgroundColor:
-"rgba(22,163,74,.1)",
-fill:true,
-tension:.3
-},
-
-{
-label:"Expenses",
-data:expenses,
-borderColor:"#dc2626",
-backgroundColor:
-"rgba(220,38,38,.1)",
-fill:true,
-tension:.3
-}
-
-]
-
-},
-
-options:{
-responsive:true,
-maintainAspectRatio:false
-}
-
-}
+"dashboardTransactions"
 );
 
+if(dashboardBox){
 
-charts.category=
-new Chart(
-document.getElementById(
-"categoryChart"
-),
-{
-type:"bar",
+dashboardBox.innerHTML = "";
 
-data:{
-labels:
-Object.keys(categoryTotals),
+transactions
+.slice()
+.sort((a,b) =>
+b.date.localeCompare(a.date)
+)
+.slice(0,10)
+.forEach(t => {
 
-datasets:[{
-
-label:"Spending",
-
-data:
-Object.values(categoryTotals),
-
-backgroundColor:"#2563eb"
-
-}]
-
-},
-
-options:{
-responsive:true,
-maintainAspectRatio:false,
-scales:{
-y:{
-beginAtZero:true
-}
-}
-}
-
-}
+dashboardBox.insertAdjacentHTML(
+"beforeend",
+transactionHTML(t)
 );
+
+});
+
+}
 
 }
 
 
 /* =========================================
- REMINDERS
+   REMINDERS
 ========================================= */
 
 async function requestNotifications(){
@@ -3461,21 +2506,19 @@ async function requestNotifications(){
 if(!("Notification" in window)){
 
 alert(
-"Notifications are not supported by this browser."
+"Notifications are not supported."
 );
 
 return;
 
 }
 
-const permission=
+const permission =
 await Notification.requestPermission();
 
-if(permission==="granted"){
+if(permission === "granted"){
 
-alert(
-"Notifications enabled."
-);
+alert("Notifications enabled.");
 
 }else{
 
@@ -3490,29 +2533,29 @@ alert(
 
 async function addReminder(){
 
-const title=
+const title =
 document.getElementById(
 "reminderTitle"
 ).value.trim();
 
-const date=
+const date =
 document.getElementById(
 "reminderDate"
 ).value;
 
-const time=
+const time =
 document.getElementById(
 "reminderTime"
 ).value;
 
-const amount=
+const amount =
 Number(
 document.getElementById(
 "reminderAmount"
-).value||0
+).value || 0
 );
 
-if(!title||!date||!time){
+if(!title || !date || !time){
 
 alert(
 "Enter reminder title, date and time."
@@ -3522,12 +2565,12 @@ return;
 
 }
 
-const data={
+const data = {
 
-title,
-date,
-time,
-amount,
+title:title,
+date:date,
+time:time,
+amount:amount,
 completed:false,
 
 createdAt:
@@ -3536,7 +2579,7 @@ firebase.firestore.FieldValue
 
 };
 
-const ref=
+const ref =
 await remindersRef().add(data);
 
 reminders.push({
@@ -3546,11 +2589,11 @@ id:ref.id,
 
 document.getElementById(
 "reminderTitle"
-).value="";
+).value = "";
 
 document.getElementById(
 "reminderAmount"
-).value="";
+).value = "";
 
 displayReminders();
 
@@ -3559,16 +2602,16 @@ displayReminders();
 
 async function loadReminders(){
 
-reminders=[];
+reminders = [];
 
-const snap=
+const snapshot =
 await remindersRef().get();
 
-snap.forEach(d=>{
+snapshot.forEach(doc => {
 
 reminders.push({
-id:d.id,
-...d.data()
+id:doc.id,
+...doc.data()
 });
 
 });
@@ -3580,18 +2623,18 @@ displayReminders();
 
 function displayReminders(){
 
-const box=
+const box =
 document.getElementById(
 "reminderList"
 );
 
 if(!box)return;
 
-box.innerHTML="";
+box.innerHTML = "";
 
 if(!reminders.length){
 
-box.innerHTML=
+box.innerHTML =
 '<div class="empty">No reminders yet.</div>';
 
 return;
@@ -3600,21 +2643,20 @@ return;
 
 reminders
 .slice()
-.sort(
-(a,b)=>
+.sort((a,b) =>
 (a.date+" "+a.time)
 .localeCompare(
-(b.date+" "+b.time
+b.date+" "+b.time
 )
 )
-.forEach(r=>{
+.forEach(r => {
 
-const div=
+const div =
 document.createElement("div");
 
-div.className="reminder";
+div.className = "reminder";
 
-div.innerHTML=`
+div.innerHTML = `
 
 <div>
 
@@ -3622,15 +2664,14 @@ div.innerHTML=`
 🔔 ${escapeHTML(r.title)}
 </strong>
 
-<div
-style="color:var(--muted);font-size:13px;margin-top:5px">
+<div style="color:var(--muted);font-size:13px;margin-top:5px">
 
 ${escapeHTML(r.date)}
 at
 ${escapeHTML(r.time)}
 
-${r.amount?
-" • "+money(r.amount):
+${r.amount ?
+" • "+money(r.amount) :
 ""}
 
 </div>
@@ -3654,20 +2695,18 @@ box.appendChild(div);
 
 async function deleteReminder(id){
 
-if(
-!confirm(
+if(!confirm(
 "Delete this reminder?"
-)
-)
+))
 return;
 
 await remindersRef()
 .doc(id)
 .delete();
 
-reminders=
+reminders =
 reminders.filter(
-r=>r.id!==id
+r => r.id !== id
 );
 
 displayReminders();
@@ -3676,18 +2715,19 @@ displayReminders();
 
 
 /* =========================================
- EXPORT
+   BACKUP
 ========================================= */
 
 function downloadBlob(blob,name){
 
-const a=
-document.createElement("a");
-
-a.href=
+const url =
 URL.createObjectURL(blob);
 
-a.download=name;
+const a =
+document.createElement("a");
+
+a.href = url;
+a.download = name;
 
 document.body.appendChild(a);
 
@@ -3695,255 +2735,35 @@ a.click();
 
 a.remove();
 
-setTimeout(
-()=>{
-URL.revokeObjectURL(a.href);
-},
+setTimeout(() =>
+URL.revokeObjectURL(url),
 1000
 );
 
 }
 
 
-function exportCSV(){
-
-const rows=[
-
-[
-"Date",
-"Type",
-"Description",
-"Category",
-"Amount",
-"Account",
-"To Account"
-]
-
-];
-
-transactions.forEach(t=>{
-
-rows.push([
-
-t.date,
-t.type,
-t.description,
-t.category||"",
-t.amount,
-getAccount(
-t.fromAccount
-)?.name||"",
-getAccount(
-t.toAccount
-)?.name||""
-
-]);
-
-});
-
-const csv=
-rows.map(r=>
-r.map(v=>
-`"${String(v??"")
-.replace(/"/g,'""')}"`
-).join(",")
-).join("\n");
-
-downloadBlob(
-
-new Blob(
-[csv],
-{type:"text/csv"}
-),
-
-"finance-transactions.csv"
-
-);
-
-}
-
-
-function exportExcel(){
-
-if(typeof XLSX==="undefined"){
-
-alert(
-"Excel library is not available."
-);
-
-return;
-
-}
-
-const rows=
-transactions.map(t=>({
-
-Date:t.date,
-
-Type:t.type,
-
-Description:t.description,
-
-Category:t.category||"",
-
-Amount:Number(t.amount),
-
-Account:
-getAccount(
-t.fromAccount
-)?.name||"",
-
-ToAccount:
-getAccount(
-t.toAccount
-)?.name||""
-
-}));
-
-const ws=
-XLSX.utils.json_to_sheet(rows);
-
-const wb=
-XLSX.utils.book_new();
-
-XLSX.utils.book_append_sheet(
-wb,
-ws,
-"Transactions"
-);
-
-XLSX.writeFile(
-wb,
-"finance-dashboard.xlsx"
-);
-
-}
-
-
-function exportPDF(){
-
-if(!window.jspdf){
-
-alert(
-"PDF library is not available."
-);
-
-return;
-
-}
-
-const {jsPDF}=
-window.jspdf;
-
-const doc=new jsPDF();
-
-doc.setFontSize(18);
-
-doc.text(
-"My Finance Dashboard",
-15,
-20
-);
-
-doc.setFontSize(12);
-
-doc.text(
-"Total Balance: "+
-money(totalBalance()),
-15,
-30
-);
-
-const m=monthTotals();
-
-doc.text(
-"Monthly Income: "+
-money(m.income),
-15,
-40
-);
-
-doc.text(
-"Monthly Expenses: "+
-money(m.expense),
-15,
-50
-);
-
-doc.text(
-"Monthly Savings: "+
-money(m.savings),
-15,
-60
-);
-
-let y=75;
-
-transactions
-.slice()
-.sort(
-(a,b)=>
-b.date.localeCompare(a.date)
-)
-.slice(0,30)
-.forEach(t=>{
-
-if(y>275){
-
-doc.addPage();
-
-y=20;
-
-}
-
-doc.setFontSize(9);
-
-doc.text(
-`${t.date} | ${t.type} | ${t.description} | Rs. ${Number(t.amount).toFixed(2)}`,
-15,
-y
-);
-
-y+=7;
-
-});
-
-doc.save(
-"finance-dashboard.pdf"
-);
-
-}
-
-
-/* =========================================
- BACKUP
-========================================= */
-
 function downloadJSON(){
 
-const backup={
+const backup = {
 
 version:3,
 
 exportedAt:
 new Date().toISOString(),
 
-accounts,
-transactions,
-reminders
+accounts:accounts,
+
+transactions:transactions,
+
+reminders:reminders
 
 };
 
 downloadBlob(
 
 new Blob(
-[
-JSON.stringify(
-backup,
-null,
-2
-)
-],
+[JSON.stringify(backup,null,2)],
 {
 type:"application/json"
 }
@@ -3958,30 +2778,20 @@ type:"application/json"
 
 async function restoreBackup(event){
 
-const file=
+const file =
 event.target.files[0];
 
 if(!file)return;
 
-if(
-!confirm(
-"Restore this backup? Existing records will remain."
-)
-)
-return;
-
 try{
 
-const text=
-await file.text();
+const backup =
+JSON.parse(
+await file.text()
+);
 
-const backup=
-JSON.parse(text);
-
-if(
-!backup.accounts&&
-!backup.transactions
-){
+if(!backup.accounts &&
+!backup.transactions){
 
 throw new Error(
 "Invalid backup file."
@@ -3989,11 +2799,10 @@ throw new Error(
 
 }
 
-for(
-const a of backup.accounts||[]
-){
+for(const account
+of backup.accounts || []){
 
-const data={...a};
+const data = {...account};
 
 delete data.id;
 
@@ -4002,11 +2811,11 @@ await accountsRef()
 
 }
 
-for(
-const t of backup.transactions||[]
-){
+for(const transaction
+of backup.transactions || []){
 
-const data={...t};
+const data =
+{...transaction};
 
 delete data.id;
 delete data.createdAt;
@@ -4016,11 +2825,11 @@ await transactionsRef()
 
 }
 
-for(
-const r of backup.reminders||[]
-){
+for(const reminder
+of backup.reminders || []){
 
-const data={...r};
+const data =
+{...reminder};
 
 delete data.id;
 delete data.createdAt;
@@ -4031,7 +2840,6 @@ await remindersRef()
 }
 
 await loadData();
-
 await loadReminders();
 
 updateAll();
@@ -4049,18 +2857,18 @@ e.message
 
 }
 
-event.target.value="";
+event.target.value = "";
 
 }
 
 
 /* =========================================
- PROFILE
+   PROFILE
 ========================================= */
 
 async function saveProfile(){
 
-const name=
+const name =
 document.getElementById(
 "displayName"
 ).value.trim();
@@ -4075,7 +2883,8 @@ return;
 
 }
 
-await db.collection("users")
+await db
+.collection("users")
 .doc(auth.currentUser.uid)
 .set({
 
@@ -4092,9 +2901,7 @@ firebase.firestore.FieldValue
 merge:true
 });
 
-alert(
-"Profile saved."
-);
+alert("Profile saved.");
 
 }
 
@@ -4103,8 +2910,9 @@ async function loadProfile(){
 
 try{
 
-const doc=
-await db.collection("users")
+const doc =
+await db
+.collection("users")
 .doc(auth.currentUser.uid)
 .get();
 
@@ -4112,17 +2920,14 @@ if(doc.exists){
 
 document.getElementById(
 "displayName"
-).value=
-doc.data().displayName||"";
+).value =
+doc.data().displayName || "";
 
 }
 
 }catch(e){
 
-console.error(
-"Profile loading:",
-e
-);
+console.error(e);
 
 }
 
@@ -4130,19 +2935,19 @@ e
 
 
 /* =========================================
- SETTINGS
+   SETTINGS
 ========================================= */
 
 function toggleDarkMode(){
 
-const dark=
-document.body.classList.toggle(
-"dark"
-);
+const dark =
+document.body
+.classList
+.toggle("dark");
 
 localStorage.setItem(
 "financeDark",
-dark?"1":"0"
+dark ? "1" : "0"
 );
 
 }
@@ -4153,7 +2958,7 @@ function loadSettings(){
 if(
 localStorage.getItem(
 "financeDark"
-)==="1"
+) === "1"
 ){
 
 document.body.classList.add(
@@ -4167,318 +2972,168 @@ loadProfile();
 }
 
 
-function openModal(id){
+/* =========================================
+   CHANGE PASSWORD
+========================================= */
 
-document.getElementById(
-id
-).style.display="flex";
+async function changePassword(){
+
+const user =
+auth.currentUser;
+
+if(!user)return;
+
+const password =
+prompt(
+"Enter your new password:"
+);
+
+if(!password)return;
+
+if(password.length < 6){
+
+alert(
+"Password must be at least 6 characters."
+);
+
+return;
 
 }
 
+try{
 
-function closeModal(id){
+await user.updatePassword(password);
 
-document.getElementById(
-id
-).style.display="none";
+alert(
+"Password changed successfully."
+);
+
+}catch(e){
+
+alert(
+"Could not change password. "+
+"You may need to sign in again first."
+);
+
+}
 
 }
 
 
 /* =========================================
- EDIT TRANSACTION
+   STATISTICS
 ========================================= */
 
-function editTransaction(id){
+function monthTotals(){
 
-const t=
-transactions.find(
-x=>String(x.id)===
-String(id)
+const now = new Date();
+
+let income = 0;
+let expense = 0;
+
+transactions.forEach(t => {
+
+const d =
+new Date(
+t.date+"T00:00:00"
 );
 
-if(!t)return;
+if(
+d.getFullYear() ===
+now.getFullYear() &&
 
-updateAccountDropdowns();
+d.getMonth() ===
+now.getMonth()
+){
 
-document.getElementById(
-"editId"
-).value=id;
+if(t.type === "income")
+income += Number(t.amount);
 
-document.getElementById(
-"editType"
-).value=t.type;
-
-document.getElementById(
-"editDate"
-).value=t.date;
-
-document.getElementById(
-"editDescription"
-).value=t.description;
-
-document.getElementById(
-"editAmount"
-).value=t.amount;
-
-document.getElementById(
-"editCategory"
-).value=
-t.category||"";
-
-document.getElementById(
-"editAccount"
-).value=
-t.fromAccount||
-t.toAccount||
-"";
-
-document.getElementById(
-"editToAccount"
-).value=
-t.toAccount||
-"";
-
-document.getElementById(
-"editToBox"
-).style.display=
-t.type==="transfer"?
-"block":
-"none";
-
-openModal(
-"editModal"
-);
+if(t.type === "expense")
+expense += Number(t.amount);
 
 }
 
+});
 
-async function updateTransaction(){
+const savings =
+income - expense;
 
-const id=
-document.getElementById(
-"editId"
-).value;
+return {
 
-const t=
-transactions.find(
-x=>String(x.id)===
-String(id)
-);
+income,
 
-if(!t)return;
+expense,
 
-const type=
-document.getElementById(
-"editType"
-).value;
+savings,
 
-const data={
-
-type,
-
-date:
-document.getElementById(
-"editDate"
-).value,
-
-description:
-document.getElementById(
-"editDescription"
-).value.trim(),
-
-amount:
-Number(
-document.getElementById(
-"editAmount"
-).value
-),
-
-category:
-document.getElementById(
-"editCategory"
-).value.trim(),
-
-fromAccount:null,
-
-toAccount:null
+rate:
+income ?
+(savings/income)*100 :
+0
 
 };
 
-const account=
-document.getElementById(
-"editAccount"
-).value;
-
-const to=
-document.getElementById(
-"editToAccount"
-).value;
-
-if(
-!data.description||
-!data.amount||
-!data.date
-){
-
-alert(
-"Complete all required fields."
-);
-
-return;
-
-}
-
-if(type==="income")
-data.toAccount=account;
-
-if(type==="expense")
-data.fromAccount=account;
-
-if(type==="opening")
-data.toAccount=account;
-
-if(type==="transfer"){
-
-if(account===to){
-
-alert(
-"Accounts must be different."
-);
-
-return;
-
-}
-
-data.fromAccount=account;
-data.toAccount=to;
-
-}
-
-await transactionsRef()
-.doc(id)
-.update(data);
-
-Object.assign(t,data);
-
-closeModal(
-"editModal"
-);
-
-updateAll();
-
-}
-
-
-async function deleteTransaction(id){
-
-if(
-!confirm(
-"Delete this transaction?"
-)
-)
-return;
-
-await transactionsRef()
-.doc(id)
-.delete();
-
-transactions=
-transactions.filter(
-t=>String(t.id)!==
-String(id)
-);
-
-updateAll();
-
 }
 
 
 /* =========================================
- UPDATE
+   UPDATE
 ========================================= */
 
 function updateAll(){
 
 document.getElementById(
 "totalBalance"
-).textContent=
+).textContent =
 money(totalBalance());
 
-const m=monthTotals();
+const m =
+monthTotals();
 
 document.getElementById(
 "monthIncome"
-).textContent=
+).textContent =
 money(m.income);
 
 document.getElementById(
 "monthExpense"
-).textContent=
+).textContent =
 money(m.expense);
 
 document.getElementById(
 "monthSavings"
-).textContent=
+).textContent =
 money(m.savings);
 
 document.getElementById(
 "savingsRate"
-).textContent=
+).textContent =
 m.rate.toFixed(1)+"%";
 
 document.getElementById(
 "transactionCount"
-).textContent=
+).textContent =
 transactions.length;
 
 updateAccountDropdowns();
-
-changeTransactionType();
 
 displayAccounts();
 
 displayTransactions();
 
-createCharts();
-
 }
 
 
 /* =========================================
- MODALS
+   START
 ========================================= */
 
-document
-.querySelectorAll(".modal")
-.forEach(modal=>{
-
-modal.addEventListener(
-"click",
-e=>{
-
-if(e.target===modal){
-
-modal.style.display="none";
-
-}
-
-});
-
-});
-
-
 document.getElementById(
-"editType"
-).addEventListener(
-"change",
-function(){
+"transactionDate"
+).value = today();
 
-document.getElementById(
-"editToBox"
-).style.display=
-this.value==="transfer"?
-"block":
-"none";
+</script>
 
-});
+</body>
+</html>
