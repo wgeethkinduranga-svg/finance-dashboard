@@ -1,45 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#2563eb">
-
-<meta name="description"
-content="My Finance Dashboard - Personal money management">
+<meta name="description" content="My Finance Dashboard">
 
 <link rel="manifest" href="./manifest.json">
 
-<link rel="icon"
-type="image/png"
-sizes="192x192"
-href="./icon-192.png">
-
 <title>My Finance Dashboard</title>
 
-
-<!-- Firebase -->
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-
-<!-- Libraries -->
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 
 <style>
 
@@ -78,10 +55,7 @@ body.dark{
 --border:#334155;
 }
 
-button,
-input,
-select,
-textarea{
+button,input,select,textarea{
 font-size:15px;
 }
 
@@ -91,9 +65,7 @@ cursor:pointer;
 font-weight:bold;
 }
 
-input,
-select,
-textarea{
+input,select,textarea{
 width:100%;
 padding:11px;
 border:1px solid var(--border);
@@ -284,12 +256,13 @@ padding:8px 13px;
 border-radius:8px;
 }
 
+/* INSTALL BUTTON */
 .install{
 background:#16a34a;
 color:#fff;
 padding:8px 13px;
 border-radius:8px;
-display:none;
+display:inline-block !important;
 }
 
 .nav{
@@ -558,15 +531,15 @@ padding:25px;
 @media(max-width:900px){
 
 .stats{
-grid-template-columns:repeat(3,1fr)
+grid-template-columns:repeat(3,1fr);
 }
 
 .filters{
-grid-template-columns:repeat(2,1fr)
+grid-template-columns:repeat(2,1fr);
 }
 
 .chart-grid{
-grid-template-columns:1fr
+grid-template-columns:1fr;
 }
 
 }
@@ -574,39 +547,39 @@ grid-template-columns:1fr
 @media(max-width:700px){
 
 body{
-padding:9px
+padding:9px;
 }
 
 .grid{
-grid-template-columns:1fr
+grid-template-columns:1fr;
 }
 
 .full{
-grid-column:auto
+grid-column:auto;
 }
 
 .accounts{
-grid-template-columns:1fr
+grid-template-columns:1fr;
 }
 
 .stats{
-grid-template-columns:repeat(2,1fr)
+grid-template-columns:repeat(2,1fr);
 }
 
 .transaction{
-align-items:flex-start
+align-items:flex-start;
 }
 
 .tx-left{
-max-width:68%
+max-width:68%;
 }
 
 .header h1{
-font-size:24px
+font-size:24px;
 }
 
 .total h2{
-font-size:32px
+font-size:32px;
 }
 
 }
@@ -614,7 +587,7 @@ font-size:32px
 @media(max-width:500px){
 
 .filters{
-grid-template-columns:1fr
+grid-template-columns:1fr;
 }
 
 .nav{
@@ -630,15 +603,11 @@ white-space:nowrap;
 }
 
 </style>
-
 </head>
 
 <body>
 
-
-<!-- ================================
-LOGIN
-================================ -->
+<!-- LOGIN -->
 
 <div id="loginScreen" class="login-wrap">
 
@@ -685,20 +654,12 @@ Remember my email
 
 </label>
 
-<button
-class="login-btn"
-onclick="login()">
-
+<button class="login-btn" onclick="login()">
 🔐 Sign In
-
 </button>
 
-<span
-class="forgot"
-onclick="forgotPassword()">
-
+<span class="forgot" onclick="forgotPassword()">
 🔑 Forgot Password?
-
 </span>
 
 <div id="loginError" class="msg error"></div>
@@ -711,18 +672,14 @@ style="text-align:center;color:var(--muted);margin-top:10px;font-size:13px">
 </div>
 
 </div>
-
 </div>
 
 
-<!-- ================================
-APP
-================================ -->
+<!-- APP -->
 
 <div id="app">
 
 <div class="container">
-
 
 <header class="header">
 
@@ -739,21 +696,19 @@ id="userEmail"
 style="color:var(--muted);font-size:13px">
 </span>
 
+<!-- INSTALL BUTTON -->
+
 <button
 id="installButton"
 class="install"
 onclick="installApp()">
-
 📱 Install App
-
 </button>
 
 <button
 class="logout"
 onclick="logout()">
-
 🚪 Logout
-
 </button>
 
 </div>
@@ -769,113 +724,78 @@ onclick="showSection('dashboard',this)">
 📊 Dashboard
 </button>
 
-<button
-onclick="showSection('transactions',this)">
+<button onclick="showSection('transactions',this)">
 📋 Transactions
 </button>
 
-<button
-onclick="showSection('accounts',this)">
+<button onclick="showSection('accounts',this)">
 🏦 Accounts
 </button>
 
-<button
-onclick="showSection('reminders',this)">
+<button onclick="showSection('reminders',this)">
 🔔 Reminders
 </button>
 
-<button
-onclick="showSection('backup',this)">
+<button onclick="showSection('backup',this)">
 💾 Backup
 </button>
 
-<button
-onclick="showSection('settings',this)">
+<button onclick="showSection('settings',this)">
 ⚙️ Settings
 </button>
 
 </nav>
 
 
-<!-- ================================
-DASHBOARD
-================================ -->
+<!-- DASHBOARD -->
 
-<section
-id="dashboard"
-class="section active">
+<section id="dashboard" class="section active">
 
 <div class="total">
 
 <p>Total Balance</p>
 
-<h2 id="totalBalance">
-Rs. 0.00
-</h2>
+<h2 id="totalBalance">Rs. 0.00</h2>
 
 <small>All accounts combined</small>
 
 </div>
 
-
 <div class="stats">
 
 <div class="stat">
-
 <small>Income This Month</small>
-
-<strong
-class="green"
-id="monthIncome">
+<strong class="green" id="monthIncome">
 Rs. 0.00
 </strong>
-
 </div>
 
 <div class="stat">
-
 <small>Expenses This Month</small>
-
-<strong
-class="red"
-id="monthExpense">
+<strong class="red" id="monthExpense">
 Rs. 0.00
 </strong>
-
 </div>
 
 <div class="stat">
-
 <small>Monthly Savings</small>
-
-<strong
-class="blue"
-id="monthSavings">
+<strong class="blue" id="monthSavings">
 Rs. 0.00
 </strong>
-
 </div>
 
 <div class="stat">
-
 <small>Savings Rate</small>
-
-<strong
-class="blue"
-id="savingsRate">
+<strong class="blue" id="savingsRate">
 0%
 </strong>
-
 </div>
 
 <div class="stat">
-
 <small>Transactions</small>
-
 <strong id="transactionCount">
 0
 </strong>
-
 </div>
 
 </div>
@@ -904,17 +824,13 @@ id="transactionType"
 onchange="changeTransactionType()">
 
 <option value="income">💵 Income</option>
-
 <option value="expense">💸 Expense</option>
-
 <option value="transfer">🔄 Transfer</option>
-
 <option value="opening">🟡 Opening Balance</option>
 
 </select>
 
 </div>
-
 
 <div>
 
@@ -926,7 +842,6 @@ type="date">
 
 </div>
 
-
 <div>
 
 <label>Description</label>
@@ -936,7 +851,6 @@ id="description"
 placeholder="Salary, food, investment...">
 
 </div>
-
 
 <div>
 
@@ -950,7 +864,6 @@ step=".01"
 placeholder="Enter amount">
 
 </div>
-
 
 <div id="categoryBox">
 
@@ -976,7 +889,6 @@ placeholder="Enter amount">
 
 </div>
 
-
 <div>
 
 <label id="accountLabel">
@@ -986,7 +898,6 @@ Account
 <select id="fromAccount"></select>
 
 </div>
-
 
 <div
 id="toAccountBox"
@@ -998,15 +909,12 @@ style="display:none">
 
 </div>
 
-
 <div class="full">
 
 <button
 class="primary"
 onclick="saveTransaction()">
-
 ➕ Add Transaction
-
 </button>
 
 </div>
@@ -1076,9 +984,7 @@ onclick="saveTransaction()">
 
 <!-- TRANSACTIONS -->
 
-<section
-id="transactions"
-class="section">
+<section id="transactions" class="section">
 
 <div class="card">
 
@@ -1097,7 +1003,6 @@ placeholder="Search description/category">
 
 </div>
 
-
 <div>
 
 <label>Account</label>
@@ -1114,7 +1019,6 @@ All Accounts
 
 </div>
 
-
 <div>
 
 <label>Type</label>
@@ -1123,30 +1027,15 @@ All Accounts
 id="historyType"
 onchange="displayTransactions()">
 
-<option value="all">
-All Types
-</option>
-
-<option value="income">
-Income
-</option>
-
-<option value="expense">
-Expense
-</option>
-
-<option value="transfer">
-Transfer
-</option>
-
-<option value="opening">
-Opening
-</option>
+<option value="all">All Types</option>
+<option value="income">Income</option>
+<option value="expense">Expense</option>
+<option value="transfer">Transfer</option>
+<option value="opening">Opening</option>
 
 </select>
 
 </div>
-
 
 <div>
 
@@ -1165,7 +1054,6 @@ onchange="displayTransactions()">
 </select>
 
 </div>
-
 
 <div>
 
@@ -1197,9 +1085,7 @@ onchange="displayTransactions()">
 
 <!-- ACCOUNTS -->
 
-<section
-id="accounts"
-class="section">
+<section id="accounts" class="section">
 
 <div class="card">
 
@@ -1216,7 +1102,6 @@ id="newAccountName"
 placeholder="e.g. Sampath Bank">
 
 </div>
-
 
 <div>
 
@@ -1237,7 +1122,6 @@ placeholder="e.g. Sampath Bank">
 
 </div>
 
-
 <div>
 
 <label>Bank / Institution</label>
@@ -1247,7 +1131,6 @@ id="newBankName"
 placeholder="Bank name">
 
 </div>
-
 
 <div>
 
@@ -1259,15 +1142,12 @@ placeholder="Optional">
 
 </div>
 
-
 <div class="full">
 
 <button
 class="primary"
 onclick="addAccount()">
-
 ➕ Add Account
-
 </button>
 
 </div>
@@ -1275,7 +1155,6 @@ onclick="addAccount()">
 </div>
 
 </div>
-
 
 <div class="card">
 
@@ -1293,9 +1172,7 @@ class="accounts">
 
 <!-- REMINDERS -->
 
-<section
-id="reminders"
-class="section">
+<section id="reminders" class="section">
 
 <div class="card">
 
@@ -1310,9 +1187,7 @@ Create reminders for bills, loans and other payments.
 <button
 class="primary"
 onclick="requestNotifications()">
-
 🔔 Enable Notifications
-
 </button>
 
 <br><br>
@@ -1329,7 +1204,6 @@ placeholder="Electricity Bill">
 
 </div>
 
-
 <div>
 
 <label>Date</label>
@@ -1339,7 +1213,6 @@ id="reminderDate"
 type="date">
 
 </div>
-
 
 <div>
 
@@ -1351,7 +1224,6 @@ type="time"
 value="09:00">
 
 </div>
-
 
 <div>
 
@@ -1366,15 +1238,12 @@ placeholder="Optional">
 
 </div>
 
-
 <div class="full">
 
 <button
 class="primary"
 onclick="addReminder()">
-
 ➕ Add Reminder
-
 </button>
 
 </div>
@@ -1382,7 +1251,6 @@ onclick="addReminder()">
 </div>
 
 </div>
-
 
 <div class="card">
 
@@ -1397,9 +1265,7 @@ onclick="addReminder()">
 
 <!-- BACKUP -->
 
-<section
-id="backup"
-class="section">
+<section id="backup" class="section">
 
 <div class="card">
 
@@ -1461,9 +1327,7 @@ onclick="exportPDF()">
 
 <!-- SETTINGS -->
 
-<section
-id="settings"
-class="section">
+<section id="settings" class="section">
 
 <div class="card">
 
@@ -1481,7 +1345,6 @@ readonly>
 
 </div>
 
-
 <div>
 
 <label>Display Name</label>
@@ -1492,85 +1355,17 @@ placeholder="Your name">
 
 </div>
 
-
 <div class="full">
 
 <button
 class="primary"
 onclick="saveProfile()">
-
 💾 Save Profile
-
 </button>
 
 </div>
 
 </div>
-
-</div>
-
-
-<div class="card">
-
-<h2>🔔 Daily Finance Reminder</h2>
-
-<div class="info">
-
-This reminds you to open the dashboard and update your finances every day.
-
-</div>
-
-<label
-style="display:flex;align-items:center;gap:8px">
-
-<input
-id="dailyReminderEnabled"
-type="checkbox"
-style="width:auto">
-
-Enable daily reminder
-
-</label>
-
-<br>
-
-<div>
-
-<label>Reminder Time</label>
-
-<input
-id="dailyReminderTime"
-type="time"
-value="09:00">
-
-</div>
-
-<br>
-
-<div>
-
-<label>Reminder Message</label>
-
-<input
-id="dailyReminderMessage"
-value="Don't forget to update your finances today!">
-
-</div>
-
-<br>
-
-<button
-class="primary"
-onclick="saveDailyReminder()">
-
-💾 Save Daily Reminder
-
-</button>
-
-<p
-id="dailyReminderStatus"
-style="color:var(--muted);font-size:13px;margin-top:10px">
-</p>
 
 </div>
 
@@ -1582,9 +1377,7 @@ style="color:var(--muted);font-size:13px;margin-top:10px">
 <button
 class="gray"
 onclick="toggleDarkMode()">
-
 🌙 Toggle Dark Mode
-
 </button>
 
 </div>
@@ -1597,9 +1390,7 @@ onclick="toggleDarkMode()">
 <button
 class="primary"
 onclick="changePassword()">
-
 🔑 Change Password
-
 </button>
 
 </div>
@@ -1622,13 +1413,10 @@ Version 3.0
 </section>
 
 </div>
-
 </div>
 
 
-<!-- ================================
-EDIT TRANSACTION MODAL
-================================ -->
+<!-- EDIT TRANSACTION -->
 
 <div
 id="editModal"
@@ -1669,7 +1457,6 @@ id="editId">
 
 </div>
 
-
 <div>
 
 <label>Date</label>
@@ -1680,7 +1467,6 @@ type="date">
 
 </div>
 
-
 <div>
 
 <label>Description</label>
@@ -1688,7 +1474,6 @@ type="date">
 <input id="editDescription">
 
 </div>
-
 
 <div>
 
@@ -1702,7 +1487,6 @@ step=".01">
 
 </div>
 
-
 <div>
 
 <label>Category</label>
@@ -1711,7 +1495,6 @@ step=".01">
 
 </div>
 
-
 <div>
 
 <label>Account</label>
@@ -1719,7 +1502,6 @@ step=".01">
 <select id="editAccount"></select>
 
 </div>
-
 
 <div id="editToBox">
 
@@ -1731,33 +1513,27 @@ step=".01">
 
 </div>
 
-
 <div class="form-actions">
 
 <button
 class="gray"
 onclick="closeModal('editModal')">
-
 Cancel
-
 </button>
 
 <button
 class="primary"
 onclick="updateTransaction()">
-
 Save Changes
-
 </button>
 
 </div>
 
 </div>
-
 </div>
 
 
-<!-- ACCOUNT MODAL -->
+<!-- EDIT ACCOUNT -->
 
 <div
 id="accountModal"
@@ -1791,7 +1567,6 @@ id="editAccountId">
 
 </div>
 
-
 <div>
 
 <label>Account Type</label>
@@ -1811,7 +1586,6 @@ id="editAccountId">
 
 </div>
 
-
 <div>
 
 <label>Bank / Institution</label>
@@ -1819,7 +1593,6 @@ id="editAccountId">
 <input id="editBankName">
 
 </div>
-
 
 <div>
 
@@ -1831,92 +1604,67 @@ id="editAccountId">
 
 </div>
 
-
 <div class="form-actions">
 
 <button
 class="gray"
 onclick="closeModal('accountModal')">
-
 Cancel
-
 </button>
 
 <button
 class="primary"
 onclick="updateAccount()">
-
 Save
-
 </button>
 
 </div>
 
 </div>
-
 </div>
 
 
 <script>
 
-/* ================================
-FIREBASE
-================================ */
+/* =========================================
+ FIREBASE
+========================================= */
 
 const firebaseConfig={
-
 apiKey:"AIzaSyCWG9Jt_wRn49MiY5qXiU8uK3FS4giMhhw",
-
 authDomain:"my-finance-dashboard-8ede7.firebaseapp.com",
-
 projectId:"my-finance-dashboard-8ede7",
-
 storageBucket:"my-finance-dashboard-8ede7.firebasestorage.app",
-
 messagingSenderId:"669620241200",
-
 appId:"1:669620241200:web:b3456fea26b2ecb7d5fef5"
-
 };
-
 
 firebase.initializeApp(firebaseConfig);
 
 const auth=firebase.auth();
-
 const db=firebase.firestore();
 
-
 let accounts=[];
-
 let transactions=[];
-
 let reminders=[];
-
 let charts={};
+
+
+/* =========================================
+ PWA INSTALL
+========================================= */
 
 let deferredInstallPrompt=null;
 
 
-/* ================================
-PWA INSTALL
-================================ */
-
-
 /*
-Chrome/Edge/Android:
-
-The browser fires this event when
-the website meets PWA install requirements.
+ Chrome/Edge fires this when the website
+ is eligible for installation.
 */
 
 window.addEventListener(
 "beforeinstallprompt",
 event=>{
-
-console.log(
-"Finance Dashboard can be installed."
-);
 
 event.preventDefault();
 
@@ -1926,96 +1674,89 @@ const button=
 document.getElementById("installButton");
 
 if(button){
-
 button.style.display="inline-block";
-
 }
 
 });
 
 
-/*
-Install button.
-*/
-
 async function installApp(){
 
-if(!deferredInstallPrompt){
+/*
+ If the browser has provided the installation
+ prompt, show it.
+*/
 
-alert(
-"The app is not ready for installation yet.\n\n"+
-"Use your browser menu and select "+
-"\"Install App\" or \"Add to Home Screen\"."
-);
-
-return;
-
-}
-
-try{
+if(deferredInstallPrompt){
 
 deferredInstallPrompt.prompt();
+
+try{
 
 const result=
 await deferredInstallPrompt.userChoice;
 
 console.log(
-"Installation result:",
+"Install result:",
 result.outcome
 );
 
 }catch(error){
 
-console.error(
-"Installation failed:",
-error
-);
+console.error(error);
 
 }
 
 deferredInstallPrompt=null;
 
-const button=
-document.getElementById("installButton");
-
-if(button){
-
-button.style.display="none";
-
-}
+return;
 
 }
 
 
 /*
-Browser fires this after successful installation.
+ If beforeinstallprompt is unavailable,
+ give the user instructions.
 */
+
+alert(
+"Installation is not currently available through the button.\n\n"+
+"On Chrome use:\n"+
+"⋮ → Install app\n\n"+
+"On Android Chrome you can also use:\n"+
+"⋮ → Add to Home screen"
+);
+
+}
+
 
 window.addEventListener(
 "appinstalled",
 ()=>{
 
 console.log(
-"Finance Dashboard installed successfully."
+"My Finance Dashboard was installed."
 );
-
-deferredInstallPrompt=null;
 
 const button=
 document.getElementById("installButton");
 
 if(button){
 
-button.style.display="none";
+button.style.display="inline-block";
+
+button.textContent="✅ App Installed";
+
+button.disabled=true;
 
 }
 
 });
 
 
-/* ================================
-SERVICE WORKER
-================================ */
+/* =========================================
+ SERVICE WORKER
+========================================= */
 
 if("serviceWorker" in navigator){
 
@@ -2031,14 +1772,14 @@ await navigator.serviceWorker.register(
 );
 
 console.log(
-"Service worker registered:",
+"Service Worker registered:",
 registration.scope
 );
 
 }catch(error){
 
 console.error(
-"Service worker registration failed:",
+"Service Worker registration failed:",
 error
 );
 
@@ -2049,9 +1790,9 @@ error
 }
 
 
-/* ================================
-HELPERS
-================================ */
+/* =========================================
+ HELPERS
+========================================= */
 
 function today(){
 
@@ -2067,13 +1808,13 @@ String(d.getDate()).padStart(2,"0");
 function money(v){
 
 return "Rs. "+
-Number(v||0).toLocaleString("en-LK",{
-
+Number(v||0).toLocaleString(
+"en-LK",
+{
 minimumFractionDigits:2,
-
 maximumFractionDigits:2
-
-});
+}
+);
 
 }
 
@@ -2125,9 +1866,9 @@ return db.collection("users")
 }
 
 
-/* ================================
-LOGIN
-================================ */
+/* =========================================
+ LOGIN
+========================================= */
 
 const savedEmail=
 localStorage.getItem("financeEmail");
@@ -2169,7 +1910,6 @@ document.getElementById(
 
 error.style.display="none";
 
-
 if(!email||!password){
 
 error.textContent=
@@ -2180,7 +1920,6 @@ error.style.display="block";
 return;
 
 }
-
 
 if(
 document.getElementById(
@@ -2201,9 +1940,7 @@ localStorage.removeItem(
 
 }
 
-
 status.textContent="Signing in...";
-
 
 try{
 
@@ -2220,8 +1957,7 @@ console.error(e);
 
 status.textContent="";
 
-error.textContent=
-friendlyError(e);
+error.textContent=friendlyError(e);
 
 error.style.display="block";
 
@@ -2248,9 +1984,7 @@ document.getElementById(
 );
 
 error.style.display="none";
-
 success.style.display="none";
-
 
 if(!email){
 
@@ -2263,12 +1997,9 @@ return;
 
 }
 
-
 try{
 
-await auth.sendPasswordResetEmail(
-email
-);
+await auth.sendPasswordResetEmail(email);
 
 success.textContent=
 "Password reset email sent. Check your inbox.";
@@ -2290,25 +2021,18 @@ error.style.display="block";
 function friendlyError(e){
 
 const map={
-
 "auth/invalid-credential":
 "Incorrect email or password.",
-
 "auth/user-not-found":
 "No account found with this email.",
-
 "auth/wrong-password":
 "Incorrect password.",
-
 "auth/invalid-email":
 "Invalid email address.",
-
 "auth/too-many-requests":
 "Too many attempts. Try again later.",
-
 "auth/network-request-failed":
 "Network error. Check your internet connection."
-
 };
 
 return map[e.code]||
@@ -2333,9 +2057,9 @@ console.error(e);
 }
 
 
-/* ================================
-AUTH
-================================ */
+/* =========================================
+ AUTH
+========================================= */
 
 auth.onAuthStateChanged(
 async user=>{
@@ -2354,7 +2078,6 @@ return;
 
 }
 
-
 document.getElementById(
 "loginScreen"
 ).style.display="none";
@@ -2362,7 +2085,6 @@ document.getElementById(
 document.getElementById(
 "app"
 ).style.display="block";
-
 
 document.getElementById(
 "userEmail"
@@ -2372,7 +2094,6 @@ document.getElementById(
 "profileEmail"
 ).value=user.email;
 
-
 try{
 
 await loadData();
@@ -2381,16 +2102,11 @@ await loadReminders();
 
 loadSettings();
 
-loadDailyReminder();
-
 updateAll();
 
 }catch(e){
 
-console.error(
-"Loading data failed:",
-e
-);
+console.error(e);
 
 alert(
 "Signed in, but some dashboard data could not be loaded: "+
@@ -2402,16 +2118,14 @@ e.message
 });
 
 
-/* ================================
-LOAD DATA
-================================ */
+/* =========================================
+ LOAD DATA
+========================================= */
 
 async function loadData(){
 
 accounts=[];
-
 transactions=[];
-
 
 const a=
 await accountsRef().get();
@@ -2424,7 +2138,6 @@ id:d.id,
 });
 
 });
-
 
 const t=
 await transactionsRef().get();
@@ -2469,7 +2182,6 @@ bank:""
 
 ];
 
-
 for(const x of defaults){
 
 const r=
@@ -2487,31 +2199,29 @@ id:r.id,
 }
 
 
-/* ================================
-NAVIGATION
-================================ */
+/* =========================================
+ NAVIGATION
+========================================= */
 
 function showSection(id,button){
 
-document.querySelectorAll(
-".section"
-).forEach(
-s=>s.classList.remove("active")
+document
+.querySelectorAll(".section")
+.forEach(s=>
+s.classList.remove("active")
 );
 
-document.getElementById(
-id
-).classList.add("active");
+document
+.getElementById(id)
+.classList.add("active");
 
-
-document.querySelectorAll(
-".nav button"
-).forEach(
-b=>b.classList.remove("active")
+document
+.querySelectorAll(".nav button")
+.forEach(b=>
+b.classList.remove("active")
 );
 
 button.classList.add("active");
-
 
 if(id==="dashboard")
 createCharts();
@@ -2528,9 +2238,9 @@ displayReminders();
 }
 
 
-/* ================================
-TRANSACTIONS
-================================ */
+/* =========================================
+ TRANSACTIONS
+========================================= */
 
 document.getElementById(
 "transactionDate"
@@ -2559,36 +2269,35 @@ document.getElementById(
 "accountLabel"
 );
 
-
 cat.style.display="block";
-
 to.style.display="none";
-
 
 if(type==="transfer"){
 
 cat.style.display="none";
-
 to.style.display="block";
 
-label.textContent="From Account";
+label.textContent=
+"From Account";
 
 }else if(type==="opening"){
 
 cat.style.display="none";
 
-label.textContent="Account";
+label.textContent=
+"Account";
 
 }else if(type==="income"){
 
-label.textContent="To Account";
+label.textContent=
+"To Account";
 
 }else{
 
-label.textContent="Account";
+label.textContent=
+"Account";
 
 }
-
 
 updateAccountDropdowns();
 
@@ -2598,15 +2307,12 @@ updateAccountDropdowns();
 function updateAccountDropdowns(){
 
 const ids=[
-
 "fromAccount",
 "toAccount",
 "historyAccount",
 "editAccount",
 "editToAccount"
-
 ];
-
 
 ids.forEach(id=>{
 
@@ -2615,11 +2321,9 @@ document.getElementById(id);
 
 if(!el)return;
 
-
 const old=el.value;
 
 el.innerHTML="";
-
 
 if(id==="historyAccount"){
 
@@ -2627,7 +2331,6 @@ const option=
 document.createElement("option");
 
 option.value="all";
-
 option.textContent=
 "All Accounts";
 
@@ -2635,20 +2338,17 @@ el.appendChild(option);
 
 }
 
-
 accounts.forEach(a=>{
 
 const option=
 document.createElement("option");
 
 option.value=a.id;
-
 option.textContent=a.name;
 
 el.appendChild(option);
 
 });
-
 
 if(old)
 el.value=old;
@@ -2697,7 +2397,6 @@ document.getElementById(
 "toAccount"
 ).value;
 
-
 if(
 !description||
 !amount||
@@ -2713,7 +2412,6 @@ return;
 
 }
 
-
 if(!account){
 
 alert(
@@ -2723,7 +2421,6 @@ alert(
 return;
 
 }
-
 
 if(
 type==="transfer"&&
@@ -2738,36 +2435,26 @@ return;
 
 }
 
-
 const data={
 
 type,
-
 description,
-
 amount,
-
 date,
-
 category,
-
 fromAccount:null,
-
 toAccount:null,
-
 createdAt:
 firebase.firestore.FieldValue
 .serverTimestamp()
 
 };
 
-
 if(type==="income")
 data.toAccount=account;
 
 if(type==="expense")
 data.fromAccount=account;
-
 
 if(type==="opening"){
 
@@ -2789,23 +2476,17 @@ return;
 }
 
 data.toAccount=account;
-
-data.category=
-"Opening Balance";
+data.category="Opening Balance";
 
 }
-
 
 if(type==="transfer"){
 
 data.fromAccount=account;
-
 data.toAccount=to;
-
 data.category="Transfer";
 
 }
-
 
 try{
 
@@ -2817,7 +2498,6 @@ id:ref.id,
 ...data
 });
 
-
 document.getElementById(
 "description"
 ).value="";
@@ -2825,7 +2505,6 @@ document.getElementById(
 document.getElementById(
 "amount"
 ).value="";
-
 
 updateAll();
 
@@ -2847,20 +2526,18 @@ e.message
 }
 
 
-/* ================================
-BALANCES
-================================ */
+/* =========================================
+ BALANCES
+========================================= */
 
 function getAccountBalance(id){
 
 let balance=0;
 
-
 transactions.forEach(t=>{
 
 const amount=
 Number(t.amount||0);
-
 
 if(
 t.type==="opening"&&
@@ -2868,20 +2545,17 @@ String(t.toAccount)===String(id)
 )
 balance+=amount;
 
-
 if(
 t.type==="income"&&
 String(t.toAccount)===String(id)
 )
 balance+=amount;
 
-
 if(
 t.type==="expense"&&
 String(t.fromAccount)===String(id)
 )
 balance-=amount;
-
 
 if(t.type==="transfer"){
 
@@ -2899,7 +2573,6 @@ balance+=amount;
 
 });
 
-
 return balance;
 
 }
@@ -2916,9 +2589,9 @@ sum+getAccountBalance(a.id),
 }
 
 
-/* ================================
-ACCOUNTS
-================================ */
+/* =========================================
+ ACCOUNTS
+========================================= */
 
 async function addAccount(){
 
@@ -2927,19 +2600,19 @@ document.getElementById(
 "newAccountName"
 ).value.trim();
 
-
 if(!name){
 
-alert("Enter account name.");
+alert(
+"Enter account name."
+);
 
 return;
 
 }
 
-
 if(
-accounts.some(
-a=>a.name.toLowerCase()===
+accounts.some(a=>
+a.name.toLowerCase()===
 name.toLowerCase()
 )
 ){
@@ -2951,7 +2624,6 @@ alert(
 return;
 
 }
-
 
 const data={
 
@@ -2974,16 +2646,13 @@ document.getElementById(
 
 };
 
-
 const ref=
 await accountsRef().add(data);
-
 
 accounts.push({
 id:ref.id,
 ...data
 });
-
 
 document.getElementById(
 "newAccountName"
@@ -2996,7 +2665,6 @@ document.getElementById(
 document.getElementById(
 "newAccountNumber"
 ).value="";
-
 
 updateAll();
 
@@ -3012,7 +2680,6 @@ document.getElementById(
 
 box.innerHTML="";
 
-
 if(!accounts.length){
 
 box.innerHTML=
@@ -3022,14 +2689,12 @@ return;
 
 }
 
-
 accounts.forEach(a=>{
 
 const div=
 document.createElement("div");
 
 div.className="account";
-
 
 div.innerHTML=`
 
@@ -3056,7 +2721,6 @@ ${money(getAccountBalance(a.id))}
 
 </div>
 
-
 <div class="account-actions">
 
 <button
@@ -3072,9 +2736,7 @@ onclick="deleteAccount('${a.id}')">
 </button>
 
 </div>
-
 `;
-
 
 box.appendChild(div);
 
@@ -3089,7 +2751,6 @@ const a=getAccount(id);
 
 if(!a)return;
 
-
 document.getElementById(
 "editAccountId"
 ).value=id;
@@ -3100,8 +2761,8 @@ document.getElementById(
 
 document.getElementById(
 "editAccountType"
-).value=
-a.type||"Bank Account";
+).value=a.type||
+"Bank Account";
 
 document.getElementById(
 "editBankName"
@@ -3111,7 +2772,6 @@ document.getElementById(
 "editAccountNumber"
 ).value=
 a.accountNumber||"";
-
 
 openModal("accountModal");
 
@@ -3124,7 +2784,6 @@ const id=
 document.getElementById(
 "editAccountId"
 ).value;
-
 
 const data={
 
@@ -3150,7 +2809,6 @@ document.getElementById(
 
 };
 
-
 if(!data.name){
 
 alert(
@@ -3161,16 +2819,13 @@ return;
 
 }
 
-
 await accountsRef()
 .doc(id)
 .update(data);
 
-
 const a=getAccount(id);
 
 Object.assign(a,data);
-
 
 closeModal("accountModal");
 
@@ -3185,7 +2840,6 @@ const a=getAccount(id);
 
 if(!a)return;
 
-
 const related=
 transactions.filter(t=>
 String(t.fromAccount)===
@@ -3193,7 +2847,6 @@ String(id)||
 String(t.toAccount)===
 String(id)
 );
-
 
 if(related.length){
 
@@ -3205,45 +2858,1348 @@ return;
 
 }
 
-
-if(!confirm(
+if(
+!confirm(
 `Delete "${a.name}"?`
-))
+)
+)
 return;
-
 
 await accountsRef()
 .doc(id)
 .delete();
 
-
 accounts=
-accounts.filter(
-x=>String(x.id)!==String(id)
+accounts.filter(x=>
+String(x.id)!==String(id)
 );
-
 
 updateAll();
 
 }
 
 
-/* ================================
-EDIT TRANSACTION
-================================ */
+/* =========================================
+ TRANSACTION HISTORY
+========================================= */
+
+function dateMatches(date,period){
+
+if(period==="all")
+return true;
+
+const d=
+new Date(
+date+"T00:00:00"
+);
+
+const now=new Date();
+
+if(period==="today")
+return d.toDateString()===
+now.toDateString();
+
+if(period==="month")
+return d.getFullYear()===
+now.getFullYear()&&
+d.getMonth()===
+now.getMonth();
+
+if(period==="year")
+return d.getFullYear()===
+now.getFullYear();
+
+if(period==="week"){
+
+const start=new Date(now);
+
+start.setDate(
+now.getDate()-now.getDay()
+);
+
+start.setHours(0,0,0,0);
+
+const end=new Date(start);
+
+end.setDate(
+start.getDate()+6
+);
+
+end.setHours(
+23,59,59,999
+);
+
+return d>=start&&d<=end;
+
+}
+
+return true;
+
+}
+
+
+function transactionAccountMatch(t,id){
+
+if(id==="all")
+return true;
+
+return String(t.fromAccount)===
+String(id)||
+String(t.toAccount)===
+String(id);
+
+}
+
+
+function getFiltered(){
+
+const search=
+document.getElementById(
+"historySearch"
+).value
+.toLowerCase()
+.trim();
+
+const account=
+document.getElementById(
+"historyAccount"
+).value;
+
+const type=
+document.getElementById(
+"historyType"
+).value;
+
+const period=
+document.getElementById(
+"historyPeriod"
+).value;
+
+const sort=
+document.getElementById(
+"historySort"
+).value;
+
+let result=
+transactions.filter(t=>{
+
+const text=
+(
+t.description+
+" "+
+(t.category||"")
+)
+.toLowerCase();
+
+return
+(!search||
+text.includes(search))&&
+transactionAccountMatch(
+t,
+account
+)&&
+(type==="all"||
+t.type===type)&&
+dateMatches(
+t.date,
+period
+);
+
+});
+
+if(sort==="newest")
+result.sort(
+(a,b)=>
+b.date.localeCompare(a.date)
+);
+
+if(sort==="oldest")
+result.sort(
+(a,b)=>
+a.date.localeCompare(b.date)
+);
+
+if(sort==="highest")
+result.sort(
+(a,b)=>
+b.amount-a.amount
+);
+
+if(sort==="lowest")
+result.sort(
+(a,b)=>
+a.amount-b.amount
+);
+
+return result;
+
+}
+
+
+function displayTransactions(){
+
+const box=
+document.getElementById(
+"transactionList"
+);
+
+const list=
+getFiltered();
+
+box.innerHTML="";
+
+if(!list.length){
+
+box.innerHTML=
+'<div class="empty">No transactions found.</div>';
+
+return;
+
+}
+
+list.forEach(t=>{
+
+let icon="💵";
+let cls="income-icon";
+let sign="+";
+let color="#16a34a";
+let account="";
+
+if(t.type==="expense"){
+
+icon="💸";
+cls="expense-icon";
+sign="-";
+color="#dc2626";
+
+account=
+getAccount(t.fromAccount)?.name||
+"";
+
+}else if(t.type==="transfer"){
+
+icon="🔄";
+cls="transfer-icon";
+color="#2563eb";
+sign="↔";
+
+account=
+(getAccount(t.fromAccount)?.name||"")+
+" → "+
+(getAccount(t.toAccount)?.name||"");
+
+}else if(t.type==="opening"){
+
+icon="🟡";
+cls="opening-icon";
+color="#d97706";
+
+account=
+getAccount(t.toAccount)?.name||
+"";
+
+}else{
+
+account=
+getAccount(t.toAccount)?.name||
+"";
+
+}
+
+const div=
+document.createElement("div");
+
+div.className="transaction";
+
+div.innerHTML=`
+
+<div class="tx-left">
+
+<div class="tx-icon ${cls}">
+${icon}
+</div>
+
+<div>
+
+<div class="tx-name">
+${escapeHTML(t.description)}
+</div>
+
+<div class="tx-meta">
+${escapeHTML(t.category||"")}
+ • ${escapeHTML(account)}
+ • ${escapeHTML(t.date)}
+</div>
+
+</div>
+
+</div>
+
+<div class="tx-right">
+
+<div
+style="font-weight:bold;color:${color}">
+
+${sign} ${money(t.amount)}
+
+</div>
+
+<div class="tx-buttons">
+
+<button
+class="edit"
+onclick="editTransaction('${t.id}')">
+✏️ Edit
+</button>
+
+<button
+class="del"
+onclick="deleteTransaction('${t.id}')">
+🗑️ Delete
+</button>
+
+</div>
+
+</div>
+`;
+
+box.appendChild(div);
+
+});
+
+}
+
+
+/* =========================================
+ STATISTICS
+========================================= */
+
+function monthTotals(){
+
+const now=new Date();
+
+let income=0;
+let expense=0;
+
+transactions.forEach(t=>{
+
+const d=
+new Date(
+t.date+"T00:00:00"
+);
+
+if(
+d.getFullYear()===
+now.getFullYear()&&
+d.getMonth()===
+now.getMonth()
+){
+
+if(t.type==="income")
+income+=Number(t.amount);
+
+if(t.type==="expense")
+expense+=Number(t.amount);
+
+}
+
+});
+
+return{
+
+income,
+
+expense,
+
+savings:
+income-expense,
+
+rate:
+income?
+((income-expense)/income)*100:
+0
+
+};
+
+}
+
+
+/* =========================================
+ CHARTS
+========================================= */
+
+function destroyChart(name){
+
+if(charts[name]){
+
+charts[name].destroy();
+
+charts[name]=null;
+
+}
+
+}
+
+
+function createCharts(){
+
+if(typeof Chart==="undefined")
+return;
+
+destroyChart("pie");
+destroyChart("income");
+destroyChart("category");
+
+const labels=
+accounts.map(a=>a.name);
+
+const balances=
+accounts.map(a=>
+Math.max(
+0,
+getAccountBalance(a.id)
+)
+);
+
+charts.pie=
+new Chart(
+document.getElementById(
+"balancePieChart"
+),
+{
+type:"doughnut",
+
+data:{
+labels,
+
+datasets:[{
+
+data:balances,
+
+backgroundColor:[
+"#2563eb",
+"#16a34a",
+"#f59e0b",
+"#8b5cf6",
+"#ef4444",
+"#06b6d4"
+]
+
+}]
+
+},
+
+options:{
+responsive:true,
+maintainAspectRatio:false
+}
+
+}
+);
+
+
+const months=[];
+const incomes=[];
+const expenses=[];
+const categoryTotals={};
+
+for(let i=5;i>=0;i--){
+
+const d=new Date();
+
+d.setMonth(
+d.getMonth()-i
+);
+
+const year=d.getFullYear();
+const month=d.getMonth();
+
+months.push(
+d.toLocaleString(
+"en-US",
+{month:"short"}
+)
+);
+
+let inc=0;
+let exp=0;
+
+transactions.forEach(t=>{
+
+const td=
+new Date(
+t.date+"T00:00:00"
+);
+
+if(
+td.getFullYear()===year&&
+td.getMonth()===month
+){
+
+if(t.type==="income")
+inc+=Number(t.amount);
+
+if(t.type==="expense"){
+
+exp+=Number(t.amount);
+
+categoryTotals[
+t.category||"Other"
+]=
+(
+categoryTotals[
+t.category||"Other"
+]||0
+)+
+Number(t.amount);
+
+}
+
+}
+
+});
+
+incomes.push(inc);
+expenses.push(exp);
+
+}
+
+
+charts.income=
+new Chart(
+document.getElementById(
+"incomeExpenseChart"
+),
+{
+type:"line",
+
+data:{
+labels:months,
+
+datasets:[
+
+{
+label:"Income",
+data:incomes,
+borderColor:"#16a34a",
+backgroundColor:
+"rgba(22,163,74,.1)",
+fill:true,
+tension:.3
+},
+
+{
+label:"Expenses",
+data:expenses,
+borderColor:"#dc2626",
+backgroundColor:
+"rgba(220,38,38,.1)",
+fill:true,
+tension:.3
+}
+
+]
+
+},
+
+options:{
+responsive:true,
+maintainAspectRatio:false
+}
+
+}
+);
+
+
+charts.category=
+new Chart(
+document.getElementById(
+"categoryChart"
+),
+{
+type:"bar",
+
+data:{
+labels:
+Object.keys(categoryTotals),
+
+datasets:[{
+
+label:"Spending",
+
+data:
+Object.values(categoryTotals),
+
+backgroundColor:"#2563eb"
+
+}]
+
+},
+
+options:{
+responsive:true,
+maintainAspectRatio:false,
+scales:{
+y:{
+beginAtZero:true
+}
+}
+}
+
+}
+);
+
+}
+
+
+/* =========================================
+ REMINDERS
+========================================= */
+
+async function requestNotifications(){
+
+if(!("Notification" in window)){
+
+alert(
+"Notifications are not supported by this browser."
+);
+
+return;
+
+}
+
+const permission=
+await Notification.requestPermission();
+
+if(permission==="granted"){
+
+alert(
+"Notifications enabled."
+);
+
+}else{
+
+alert(
+"Notification permission was not granted."
+);
+
+}
+
+}
+
+
+async function addReminder(){
+
+const title=
+document.getElementById(
+"reminderTitle"
+).value.trim();
+
+const date=
+document.getElementById(
+"reminderDate"
+).value;
+
+const time=
+document.getElementById(
+"reminderTime"
+).value;
+
+const amount=
+Number(
+document.getElementById(
+"reminderAmount"
+).value||0
+);
+
+if(!title||!date||!time){
+
+alert(
+"Enter reminder title, date and time."
+);
+
+return;
+
+}
+
+const data={
+
+title,
+date,
+time,
+amount,
+completed:false,
+
+createdAt:
+firebase.firestore.FieldValue
+.serverTimestamp()
+
+};
+
+const ref=
+await remindersRef().add(data);
+
+reminders.push({
+id:ref.id,
+...data
+});
+
+document.getElementById(
+"reminderTitle"
+).value="";
+
+document.getElementById(
+"reminderAmount"
+).value="";
+
+displayReminders();
+
+}
+
+
+async function loadReminders(){
+
+reminders=[];
+
+const snap=
+await remindersRef().get();
+
+snap.forEach(d=>{
+
+reminders.push({
+id:d.id,
+...d.data()
+});
+
+});
+
+displayReminders();
+
+}
+
+
+function displayReminders(){
+
+const box=
+document.getElementById(
+"reminderList"
+);
+
+if(!box)return;
+
+box.innerHTML="";
+
+if(!reminders.length){
+
+box.innerHTML=
+'<div class="empty">No reminders yet.</div>';
+
+return;
+
+}
+
+reminders
+.slice()
+.sort(
+(a,b)=>
+(a.date+" "+a.time)
+.localeCompare(
+(b.date+" "+b.time
+)
+)
+.forEach(r=>{
+
+const div=
+document.createElement("div");
+
+div.className="reminder";
+
+div.innerHTML=`
+
+<div>
+
+<strong>
+🔔 ${escapeHTML(r.title)}
+</strong>
+
+<div
+style="color:var(--muted);font-size:13px;margin-top:5px">
+
+${escapeHTML(r.date)}
+at
+${escapeHTML(r.time)}
+
+${r.amount?
+" • "+money(r.amount):
+""}
+
+</div>
+
+</div>
+
+<button
+class="del"
+onclick="deleteReminder('${r.id}')">
+Delete
+</button>
+
+`;
+
+box.appendChild(div);
+
+});
+
+}
+
+
+async function deleteReminder(id){
+
+if(
+!confirm(
+"Delete this reminder?"
+)
+)
+return;
+
+await remindersRef()
+.doc(id)
+.delete();
+
+reminders=
+reminders.filter(
+r=>r.id!==id
+);
+
+displayReminders();
+
+}
+
+
+/* =========================================
+ EXPORT
+========================================= */
+
+function downloadBlob(blob,name){
+
+const a=
+document.createElement("a");
+
+a.href=
+URL.createObjectURL(blob);
+
+a.download=name;
+
+document.body.appendChild(a);
+
+a.click();
+
+a.remove();
+
+setTimeout(
+()=>{
+URL.revokeObjectURL(a.href);
+},
+1000
+);
+
+}
+
+
+function exportCSV(){
+
+const rows=[
+
+[
+"Date",
+"Type",
+"Description",
+"Category",
+"Amount",
+"Account",
+"To Account"
+]
+
+];
+
+transactions.forEach(t=>{
+
+rows.push([
+
+t.date,
+t.type,
+t.description,
+t.category||"",
+t.amount,
+getAccount(
+t.fromAccount
+)?.name||"",
+getAccount(
+t.toAccount
+)?.name||""
+
+]);
+
+});
+
+const csv=
+rows.map(r=>
+r.map(v=>
+`"${String(v??"")
+.replace(/"/g,'""')}"`
+).join(",")
+).join("\n");
+
+downloadBlob(
+
+new Blob(
+[csv],
+{type:"text/csv"}
+),
+
+"finance-transactions.csv"
+
+);
+
+}
+
+
+function exportExcel(){
+
+if(typeof XLSX==="undefined"){
+
+alert(
+"Excel library is not available."
+);
+
+return;
+
+}
+
+const rows=
+transactions.map(t=>({
+
+Date:t.date,
+
+Type:t.type,
+
+Description:t.description,
+
+Category:t.category||"",
+
+Amount:Number(t.amount),
+
+Account:
+getAccount(
+t.fromAccount
+)?.name||"",
+
+ToAccount:
+getAccount(
+t.toAccount
+)?.name||""
+
+}));
+
+const ws=
+XLSX.utils.json_to_sheet(rows);
+
+const wb=
+XLSX.utils.book_new();
+
+XLSX.utils.book_append_sheet(
+wb,
+ws,
+"Transactions"
+);
+
+XLSX.writeFile(
+wb,
+"finance-dashboard.xlsx"
+);
+
+}
+
+
+function exportPDF(){
+
+if(!window.jspdf){
+
+alert(
+"PDF library is not available."
+);
+
+return;
+
+}
+
+const {jsPDF}=
+window.jspdf;
+
+const doc=new jsPDF();
+
+doc.setFontSize(18);
+
+doc.text(
+"My Finance Dashboard",
+15,
+20
+);
+
+doc.setFontSize(12);
+
+doc.text(
+"Total Balance: "+
+money(totalBalance()),
+15,
+30
+);
+
+const m=monthTotals();
+
+doc.text(
+"Monthly Income: "+
+money(m.income),
+15,
+40
+);
+
+doc.text(
+"Monthly Expenses: "+
+money(m.expense),
+15,
+50
+);
+
+doc.text(
+"Monthly Savings: "+
+money(m.savings),
+15,
+60
+);
+
+let y=75;
+
+transactions
+.slice()
+.sort(
+(a,b)=>
+b.date.localeCompare(a.date)
+)
+.slice(0,30)
+.forEach(t=>{
+
+if(y>275){
+
+doc.addPage();
+
+y=20;
+
+}
+
+doc.setFontSize(9);
+
+doc.text(
+`${t.date} | ${t.type} | ${t.description} | Rs. ${Number(t.amount).toFixed(2)}`,
+15,
+y
+);
+
+y+=7;
+
+});
+
+doc.save(
+"finance-dashboard.pdf"
+);
+
+}
+
+
+/* =========================================
+ BACKUP
+========================================= */
+
+function downloadJSON(){
+
+const backup={
+
+version:3,
+
+exportedAt:
+new Date().toISOString(),
+
+accounts,
+transactions,
+reminders
+
+};
+
+downloadBlob(
+
+new Blob(
+[
+JSON.stringify(
+backup,
+null,
+2
+)
+],
+{
+type:"application/json"
+}
+),
+
+"finance-backup.json"
+
+);
+
+}
+
+
+async function restoreBackup(event){
+
+const file=
+event.target.files[0];
+
+if(!file)return;
+
+if(
+!confirm(
+"Restore this backup? Existing records will remain."
+)
+)
+return;
+
+try{
+
+const text=
+await file.text();
+
+const backup=
+JSON.parse(text);
+
+if(
+!backup.accounts&&
+!backup.transactions
+){
+
+throw new Error(
+"Invalid backup file."
+);
+
+}
+
+for(
+const a of backup.accounts||[]
+){
+
+const data={...a};
+
+delete data.id;
+
+await accountsRef()
+.add(data);
+
+}
+
+for(
+const t of backup.transactions||[]
+){
+
+const data={...t};
+
+delete data.id;
+delete data.createdAt;
+
+await transactionsRef()
+.add(data);
+
+}
+
+for(
+const r of backup.reminders||[]
+){
+
+const data={...r};
+
+delete data.id;
+delete data.createdAt;
+
+await remindersRef()
+.add(data);
+
+}
+
+await loadData();
+
+await loadReminders();
+
+updateAll();
+
+alert(
+"Backup restored successfully."
+);
+
+}catch(e){
+
+alert(
+"Restore failed: "+
+e.message
+);
+
+}
+
+event.target.value="";
+
+}
+
+
+/* =========================================
+ PROFILE
+========================================= */
+
+async function saveProfile(){
+
+const name=
+document.getElementById(
+"displayName"
+).value.trim();
+
+if(!name){
+
+alert(
+"Enter your display name."
+);
+
+return;
+
+}
+
+await db.collection("users")
+.doc(auth.currentUser.uid)
+.set({
+
+displayName:name,
+
+email:
+auth.currentUser.email,
+
+updatedAt:
+firebase.firestore.FieldValue
+.serverTimestamp()
+
+},{
+merge:true
+});
+
+alert(
+"Profile saved."
+);
+
+}
+
+
+async function loadProfile(){
+
+try{
+
+const doc=
+await db.collection("users")
+.doc(auth.currentUser.uid)
+.get();
+
+if(doc.exists){
+
+document.getElementById(
+"displayName"
+).value=
+doc.data().displayName||"";
+
+}
+
+}catch(e){
+
+console.error(
+"Profile loading:",
+e
+);
+
+}
+
+}
+
+
+/* =========================================
+ SETTINGS
+========================================= */
+
+function toggleDarkMode(){
+
+const dark=
+document.body.classList.toggle(
+"dark"
+);
+
+localStorage.setItem(
+"financeDark",
+dark?"1":"0"
+);
+
+}
+
+
+function loadSettings(){
+
+if(
+localStorage.getItem(
+"financeDark"
+)==="1"
+){
+
+document.body.classList.add(
+"dark"
+);
+
+}
+
+loadProfile();
+
+}
+
+
+function openModal(id){
+
+document.getElementById(
+id
+).style.display="flex";
+
+}
+
+
+function closeModal(id){
+
+document.getElementById(
+id
+).style.display="none";
+
+}
+
+
+/* =========================================
+ EDIT TRANSACTION
+========================================= */
 
 function editTransaction(id){
 
 const t=
 transactions.find(
-x=>String(x.id)===String(id)
+x=>String(x.id)===
+String(id)
 );
 
 if(!t)return;
 
-
 updateAccountDropdowns();
-
 
 document.getElementById(
 "editId"
@@ -3267,28 +4223,32 @@ document.getElementById(
 
 document.getElementById(
 "editCategory"
-).value=t.category||"";
+).value=
+t.category||"";
 
 document.getElementById(
 "editAccount"
 ).value=
-t.fromAccount||t.toAccount||"";
+t.fromAccount||
+t.toAccount||
+"";
 
 document.getElementById(
 "editToAccount"
 ).value=
-t.toAccount||"";
-
+t.toAccount||
+"";
 
 document.getElementById(
 "editToBox"
 ).style.display=
-t.type==="transfer"
-?"block"
-:"none";
+t.type==="transfer"?
+"block":
+"none";
 
-
-openModal("editModal");
+openModal(
+"editModal"
+);
 
 }
 
@@ -3300,20 +4260,18 @@ document.getElementById(
 "editId"
 ).value;
 
-
 const t=
 transactions.find(
-x=>String(x.id)===String(id)
+x=>String(x.id)===
+String(id)
 );
 
 if(!t)return;
-
 
 const type=
 document.getElementById(
 "editType"
 ).value;
-
 
 const data={
 
@@ -3347,7 +4305,6 @@ toAccount:null
 
 };
 
-
 const account=
 document.getElementById(
 "editAccount"
@@ -3357,7 +4314,6 @@ const to=
 document.getElementById(
 "editToAccount"
 ).value;
-
 
 if(
 !data.description||
@@ -3373,7 +4329,6 @@ return;
 
 }
 
-
 if(type==="income")
 data.toAccount=account;
 
@@ -3382,7 +4337,6 @@ data.fromAccount=account;
 
 if(type==="opening")
 data.toAccount=account;
-
 
 if(type==="transfer"){
 
@@ -3397,21 +4351,19 @@ return;
 }
 
 data.fromAccount=account;
-
 data.toAccount=to;
 
 }
-
 
 await transactionsRef()
 .doc(id)
 .update(data);
 
-
 Object.assign(t,data);
 
-
-closeModal("editModal");
+closeModal(
+"editModal"
+);
 
 updateAll();
 
@@ -3420,1682 +4372,31 @@ updateAll();
 
 async function deleteTransaction(id){
 
-if(!confirm(
+if(
+!confirm(
 "Delete this transaction?"
-))
+)
+)
 return;
-
 
 await transactionsRef()
 .doc(id)
 .delete();
-
 
 transactions=
 transactions.filter(
-t=>String(t.id)!==String(id)
+t=>String(t.id)!==
+String(id)
 );
-
 
 updateAll();
 
 }
 
 
-/* ================================
-HISTORY
-================================ */
-
-function dateMatches(date,period){
-
-if(period==="all")
-return true;
-
-
-const d=
-new Date(
-date+"T00:00:00"
-);
-
-const now=new Date();
-
-
-if(period==="today")
-return d.toDateString()===
-now.toDateString();
-
-
-if(period==="month")
-return d.getFullYear()===
-now.getFullYear()&&
-d.getMonth()===
-now.getMonth();
-
-
-if(period==="year")
-return d.getFullYear()===
-now.getFullYear();
-
-
-if(period==="week"){
-
-const start=new Date(now);
-
-start.setDate(
-now.getDate()-now.getDay()
-);
-
-start.setHours(0,0,0,0);
-
-
-const end=new Date(start);
-
-end.setDate(
-start.getDate()+6
-);
-
-end.setHours(
-23,59,59,999
-);
-
-
-return d>=start&&d<=end;
-
-}
-
-
-return true;
-
-}
-
-
-function transactionAccountMatch(t,id){
-
-if(id==="all")
-return true;
-
-
-return String(t.fromAccount)===
-String(id)||
-String(t.toAccount)===
-String(id);
-
-}
-
-
-function getFiltered(){
-
-const search=
-document.getElementById(
-"historySearch"
-).value.toLowerCase().trim();
-
-
-const account=
-document.getElementById(
-"historyAccount"
-).value;
-
-
-const type=
-document.getElementById(
-"historyType"
-).value;
-
-
-const period=
-document.getElementById(
-"historyPeriod"
-).value;
-
-
-const sort=
-document.getElementById(
-"historySort"
-).value;
-
-
-let result=
-transactions.filter(t=>{
-
-const text=
-(t.description+" "+(t.category||""))
-.toLowerCase();
-
-
-return(
-(!search||text.includes(search))&&
-transactionAccountMatch(t,account)&&
-(type==="all"||t.type===type)&&
-dateMatches(t.date,period)
-);
-
-});
-
-
-if(sort==="newest")
-result.sort(
-(a,b)=>b.date.localeCompare(a.date)
-);
-
-if(sort==="oldest")
-result.sort(
-(a,b)=>a.date.localeCompare(b.date)
-);
-
-if(sort==="highest")
-result.sort(
-(a,b)=>b.amount-a.amount
-);
-
-if(sort==="lowest")
-result.sort(
-(a,b)=>a.amount-b.amount
-);
-
-
-return result;
-
-}
-
-
-function displayTransactions(){
-
-const box=
-document.getElementById(
-"transactionList"
-);
-
-const list=getFiltered();
-
-box.innerHTML="";
-
-
-if(!list.length){
-
-box.innerHTML=
-'<div class="empty">No transactions found.</div>';
-
-return;
-
-}
-
-
-list.forEach(t=>{
-
-let icon="💵";
-
-let cls="income-icon";
-
-let sign="+";
-
-let color="#16a34a";
-
-let account="";
-
-
-if(t.type==="expense"){
-
-icon="💸";
-
-cls="expense-icon";
-
-sign="-";
-
-color="#dc2626";
-
-account=
-getAccount(t.fromAccount)?.name||"";
-
-}else if(t.type==="transfer"){
-
-icon="🔄";
-
-cls="transfer-icon";
-
-color="#2563eb";
-
-sign="↔";
-
-account=
-(getAccount(t.fromAccount)?.name||"")+
-" → "+
-(getAccount(t.toAccount)?.name||"");
-
-}else if(t.type==="opening"){
-
-icon="🟡";
-
-cls="opening-icon";
-
-color="#d97706";
-
-account=
-getAccount(t.toAccount)?.name||"";
-
-}else{
-
-account=
-getAccount(t.toAccount)?.name||"";
-
-}
-
-
-const div=
-document.createElement("div");
-
-div.className="transaction";
-
-
-div.innerHTML=`
-
-<div class="tx-left">
-
-<div class="tx-icon ${cls}">
-${icon}
-</div>
-
-<div>
-
-<div class="tx-name">
-${escapeHTML(t.description)}
-</div>
-
-<div class="tx-meta">
-
-${escapeHTML(t.category||"")}
-
-•
-
-${escapeHTML(account)}
-
-•
-
-${escapeHTML(t.date)}
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="tx-right">
-
-<div
-style="font-weight:bold;color:${color}">
-
-${sign} ${money(t.amount)}
-
-</div>
-
-
-<div class="tx-buttons">
-
-<button
-class="edit"
-onclick="editTransaction('${t.id}')">
-
-✏️ Edit
-
-</button>
-
-<button
-class="del"
-onclick="deleteTransaction('${t.id}')">
-
-🗑️ Delete
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-
-box.appendChild(div);
-
-});
-
-}
-
-
-/* ================================
-STATISTICS
-================================ */
-
-function monthTotals(){
-
-const now=new Date();
-
-let income=0;
-
-let expense=0;
-
-
-transactions.forEach(t=>{
-
-const d=
-new Date(
-t.date+"T00:00:00"
-);
-
-
-if(
-d.getFullYear()===
-now.getFullYear()&&
-d.getMonth()===
-now.getMonth()
-){
-
-if(t.type==="income")
-income+=Number(t.amount);
-
-if(t.type==="expense")
-expense+=Number(t.amount);
-
-}
-
-});
-
-
-return{
-
-income,
-
-expense,
-
-savings:
-income-expense,
-
-rate:
-income?
-((income-expense)/income)*100:
-0
-
-};
-
-}
-
-
-/* ================================
-CHARTS
-================================ */
-
-function destroyChart(name){
-
-if(charts[name]){
-
-charts[name].destroy();
-
-charts[name]=null;
-
-}
-
-}
-
-
-function createCharts(){
-
-if(typeof Chart==="undefined")
-return;
-
-
-destroyChart("pie");
-
-destroyChart("income");
-
-destroyChart("category");
-
-destroyChart("growth");
-
-
-const labels=
-accounts.map(a=>a.name);
-
-
-const balances=
-accounts.map(a=>
-Math.max(
-0,
-getAccountBalance(a.id)
-)
-);
-
-
-charts.pie=
-new Chart(
-document.getElementById(
-"balancePieChart"
-),
-{
-
-type:"doughnut",
-
-data:{
-
-labels,
-
-datasets:[{
-
-data:balances,
-
-backgroundColor:[
-
-"#2563eb",
-"#16a34a",
-"#f59e0b",
-"#8b5cf6",
-"#ef4444",
-"#06b6d4"
-
-]
-
-}]
-
-},
-
-options:{
-
-responsive:true,
-
-maintainAspectRatio:false
-
-}
-
-}
-);
-
-
-const months=[];
-
-const incomes=[];
-
-const expenses=[];
-
-const categoryTotals={};
-
-
-for(let i=5;i>=0;i--){
-
-const d=new Date();
-
-d.setMonth(
-d.getMonth()-i
-);
-
-
-const year=d.getFullYear();
-
-const month=d.getMonth();
-
-
-months.push(
-d.toLocaleString(
-"en-US",
-{month:"short"}
-)
-);
-
-
-let inc=0;
-
-let exp=0;
-
-
-transactions.forEach(t=>{
-
-const td=
-new Date(
-t.date+"T00:00:00"
-);
-
-
-if(
-td.getFullYear()===year&&
-td.getMonth()===month
-){
-
-if(t.type==="income")
-inc+=Number(t.amount);
-
-
-if(t.type==="expense"){
-
-exp+=Number(t.amount);
-
-
-categoryTotals[
-t.category||"Other"
-]=
-(categoryTotals[
-t.category||"Other"
-]||0)+
-Number(t.amount);
-
-}
-
-}
-
-});
-
-
-incomes.push(inc);
-
-expenses.push(exp);
-
-}
-
-
-charts.income=
-new Chart(
-document.getElementById(
-"incomeExpenseChart"
-),
-{
-
-type:"line",
-
-data:{
-
-labels:months,
-
-datasets:[
-
-{
-
-label:"Income",
-
-data:incomes,
-
-borderColor:"#16a34a",
-
-backgroundColor:
-"rgba(22,163,74,.1)",
-
-fill:true,
-
-tension:.3
-
-},
-
-{
-
-label:"Expenses",
-
-data:expenses,
-
-borderColor:"#dc2626",
-
-backgroundColor:
-"rgba(220,38,38,.1)",
-
-fill:true,
-
-tension:.3
-
-}
-
-]
-
-},
-
-options:{
-
-responsive:true,
-
-maintainAspectRatio:false
-
-}
-
-}
-);
-
-
-charts.category=
-new Chart(
-document.getElementById(
-"categoryChart"
-),
-{
-
-type:"bar",
-
-data:{
-
-labels:
-Object.keys(categoryTotals),
-
-datasets:[{
-
-label:"Spending",
-
-data:
-Object.values(categoryTotals),
-
-backgroundColor:"#2563eb"
-
-}]
-
-},
-
-options:{
-
-responsive:true,
-
-maintainAspectRatio:false,
-
-scales:{
-y:{beginAtZero:true}
-}
-
-}
-
-}
-);
-
-}
-
-
-/* ================================
-REMINDERS
-================================ */
-
-async function requestNotifications(){
-
-if(!("Notification" in window)){
-
-alert(
-"Notifications are not supported by this browser."
-);
-
-return;
-
-}
-
-
-const permission=
-await Notification.requestPermission();
-
-
-if(permission==="granted"){
-
-alert(
-"Notifications enabled."
-);
-
-}else{
-
-alert(
-"Notification permission was not granted."
-);
-
-}
-
-}
-
-
-async function addReminder(){
-
-const title=
-document.getElementById(
-"reminderTitle"
-).value.trim();
-
-
-const date=
-document.getElementById(
-"reminderDate"
-).value;
-
-
-const time=
-document.getElementById(
-"reminderTime"
-).value;
-
-
-const amount=
-Number(
-document.getElementById(
-"reminderAmount"
-).value||0
-);
-
-
-if(!title||!date||!time){
-
-alert(
-"Enter reminder title, date and time."
-);
-
-return;
-
-}
-
-
-const data={
-
-title,
-
-date,
-
-time,
-
-amount,
-
-completed:false,
-
-createdAt:
-firebase.firestore.FieldValue
-.serverTimestamp()
-
-};
-
-
-const ref=
-await remindersRef().add(data);
-
-
-reminders.push({
-id:ref.id,
-...data
-});
-
-
-document.getElementById(
-"reminderTitle"
-).value="";
-
-document.getElementById(
-"reminderAmount"
-).value="";
-
-
-displayReminders();
-
-}
-
-
-async function loadReminders(){
-
-reminders=[];
-
-
-const snap=
-await remindersRef().get();
-
-
-snap.forEach(d=>{
-
-reminders.push({
-id:d.id,
-...d.data()
-});
-
-});
-
-
-displayReminders();
-
-}
-
-
-function displayReminders(){
-
-const box=
-document.getElementById(
-"reminderList"
-);
-
-if(!box)return;
-
-
-box.innerHTML="";
-
-
-if(!reminders.length){
-
-box.innerHTML=
-'<div class="empty">No reminders yet.</div>';
-
-return;
-
-}
-
-
-reminders
-.slice()
-.sort(
-(a,b)=>
-(a.date+" "+a.time)
-.localeCompare(
-b.date+" "+b.time
-)
-)
-.forEach(r=>{
-
-const div=
-document.createElement("div");
-
-div.className="reminder";
-
-
-div.innerHTML=`
-
-<div>
-
-<strong>
-🔔 ${escapeHTML(r.title)}
-</strong>
-
-<div
-style="color:var(--muted);font-size:13px;margin-top:5px">
-
-${escapeHTML(r.date)}
-
-at
-
-${escapeHTML(r.time)}
-
-${r.amount?
-" • "+money(r.amount):
-""}
-
-</div>
-
-</div>
-
-
-<button
-class="del"
-onclick="deleteReminder('${r.id}')">
-
-Delete
-
-</button>
-
-`;
-
-
-box.appendChild(div);
-
-});
-
-}
-
-
-async function deleteReminder(id){
-
-if(!confirm(
-"Delete this reminder?"
-))
-return;
-
-
-await remindersRef()
-.doc(id)
-.delete();
-
-
-reminders=
-reminders.filter(
-r=>r.id!==id
-);
-
-
-displayReminders();
-
-}
-
-
-/* ================================
-DAILY REMINDER
-================================ */
-
-function saveDailyReminder(){
-
-const enabled=
-document.getElementById(
-"dailyReminderEnabled"
-).checked;
-
-
-const time=
-document.getElementById(
-"dailyReminderTime"
-).value||
-"09:00";
-
-
-const message=
-document.getElementById(
-"dailyReminderMessage"
-).value.trim()||
-"Don't forget to update your finances today!";
-
-
-localStorage.setItem(
-"financeDailyReminderEnabled",
-enabled?"1":"0"
-);
-
-localStorage.setItem(
-"financeDailyReminderTime",
-time
-);
-
-localStorage.setItem(
-"financeDailyReminderMessage",
-message
-);
-
-
-document.getElementById(
-"dailyReminderStatus"
-).textContent=
-"Daily reminder settings saved.";
-
-
-if(enabled){
-
-requestNotifications();
-
-}
-
-}
-
-
-function loadDailyReminder(){
-
-const enabled=
-localStorage.getItem(
-"financeDailyReminderEnabled"
-)==="1";
-
-
-const time=
-localStorage.getItem(
-"financeDailyReminderTime"
-)||
-"09:00";
-
-
-const message=
-localStorage.getItem(
-"financeDailyReminderMessage"
-)||
-"Don't forget to update your finances today!";
-
-
-document.getElementById(
-"dailyReminderEnabled"
-).checked=enabled;
-
-document.getElementById(
-"dailyReminderTime"
-).value=time;
-
-document.getElementById(
-"dailyReminderMessage"
-).value=message;
-
-}
-
-
-function checkDailyReminder(){
-
-if(
-localStorage.getItem(
-"financeDailyReminderEnabled"
-)!=="1"
-)
-return;
-
-
-if(
-!("Notification" in window)||
-Notification.permission!=="granted"
-)
-return;
-
-
-const time=
-localStorage.getItem(
-"financeDailyReminderTime"
-)||
-"09:00";
-
-
-const now=new Date();
-
-
-const current=
-String(now.getHours()).padStart(2,"0")+
-":"+
-String(now.getMinutes()).padStart(2,"0");
-
-
-const last=
-localStorage.getItem(
-"financeDailyReminderLast"
-);
-
-
-const todayDate=today();
-
-
-if(
-current===time&&
-last!==todayDate
-){
-
-const message=
-localStorage.getItem(
-"financeDailyReminderMessage"
-)||
-"Don't forget to update your finances today!";
-
-
-new Notification(
-"💰 Finance Dashboard",
-{
-body:message
-}
-);
-
-
-localStorage.setItem(
-"financeDailyReminderLast",
-todayDate
-);
-
-}
-
-}
-
-
-setInterval(
-checkDailyReminder,
-60000
-);
-
-
-/* ================================
-EXPORT
-================================ */
-
-function downloadBlob(blob,name){
-
-const a=
-document.createElement("a");
-
-
-a.href=
-URL.createObjectURL(blob);
-
-a.download=name;
-
-
-document.body.appendChild(a);
-
-a.click();
-
-a.remove();
-
-
-setTimeout(
-()=>{
-URL.revokeObjectURL(a.href);
-},
-1000
-);
-
-}
-
-
-function exportCSV(){
-
-const rows=[
-
-[
-"Date",
-"Type",
-"Description",
-"Category",
-"Amount",
-"Account",
-"To Account"
-]
-
-];
-
-
-transactions.forEach(t=>{
-
-rows.push([
-
-t.date,
-
-t.type,
-
-t.description,
-
-t.category||"",
-
-t.amount,
-
-getAccount(
-t.fromAccount
-)?.name||"",
-
-getAccount(
-t.toAccount
-)?.name||""
-
-]);
-
-});
-
-
-const csv=
-rows.map(
-r=>
-r.map(
-v=>
-`"${String(v??"")
-.replace(/"/g,'""')}"`
-).join(",")
-).join("\n");
-
-
-downloadBlob(
-
-new Blob(
-[csv],
-{type:"text/csv"}
-),
-
-"finance-transactions.csv"
-
-);
-
-}
-
-
-function exportExcel(){
-
-if(typeof XLSX==="undefined"){
-
-alert(
-"Excel library is not available."
-);
-
-return;
-
-}
-
-
-const rows=
-transactions.map(t=>({
-
-Date:t.date,
-
-Type:t.type,
-
-Description:t.description,
-
-Category:t.category||"",
-
-Amount:Number(t.amount),
-
-Account:
-getAccount(
-t.fromAccount
-)?.name||"",
-
-ToAccount:
-getAccount(
-t.toAccount
-)?.name||""
-
-}));
-
-
-const ws=
-XLSX.utils.json_to_sheet(rows);
-
-
-const wb=
-XLSX.utils.book_new();
-
-
-XLSX.utils.book_append_sheet(
-wb,
-ws,
-"Transactions"
-);
-
-
-XLSX.writeFile(
-wb,
-"finance-dashboard.xlsx"
-);
-
-}
-
-
-function exportPDF(){
-
-if(!window.jspdf){
-
-alert(
-"PDF library is not available."
-);
-
-return;
-
-}
-
-
-const {jsPDF}=window.jspdf;
-
-
-const doc=new jsPDF();
-
-
-doc.setFontSize(18);
-
-doc.text(
-"My Finance Dashboard",
-15,
-20
-);
-
-
-doc.setFontSize(12);
-
-
-doc.text(
-"Total Balance: "+
-money(totalBalance()),
-15,
-30
-);
-
-
-const m=monthTotals();
-
-
-doc.text(
-"Monthly Income: "+
-money(m.income),
-15,
-40
-);
-
-
-doc.text(
-"Monthly Expenses: "+
-money(m.expense),
-15,
-50
-);
-
-
-doc.text(
-"Monthly Savings: "+
-money(m.savings),
-15,
-60
-);
-
-
-let y=75;
-
-
-transactions
-.slice()
-.sort(
-(a,b)=>
-b.date.localeCompare(a.date)
-)
-.slice(0,30)
-.forEach(t=>{
-
-if(y>275){
-
-doc.addPage();
-
-y=20;
-
-}
-
-
-doc.setFontSize(9);
-
-
-doc.text(
-
-`${t.date} | ${t.type} | ${t.description} | Rs. ${Number(t.amount).toFixed(2)}`,
-
-15,
-
-y
-
-);
-
-
-y+=7;
-
-});
-
-
-doc.save(
-"finance-dashboard.pdf"
-);
-
-}
-
-
-/* ================================
-BACKUP
-================================ */
-
-function downloadJSON(){
-
-const backup={
-
-version:3,
-
-exportedAt:
-new Date().toISOString(),
-
-accounts,
-
-transactions,
-
-reminders
-
-};
-
-
-downloadBlob(
-
-new Blob(
-
-[
-JSON.stringify(
-backup,
-null,
-2
-)
-],
-
-{
-type:"application/json"
-}
-
-),
-
-"finance-backup.json"
-
-);
-
-}
-
-
-async function restoreBackup(event){
-
-const file=
-event.target.files[0];
-
-
-if(!file)return;
-
-
-if(!confirm(
-"Restore this backup? Existing records will remain."
-))
-return;
-
-
-try{
-
-const text=
-await file.text();
-
-
-const backup=
-JSON.parse(text);
-
-
-if(
-!backup.accounts&&
-!backup.transactions
-){
-
-throw new Error(
-"Invalid backup file."
-);
-
-}
-
-
-for(
-const a of backup.accounts||[]
-){
-
-const data={...a};
-
-delete data.id;
-
-await accountsRef()
-.add(data);
-
-}
-
-
-for(
-const t of backup.transactions||[]
-){
-
-const data={...t};
-
-delete data.id;
-
-delete data.createdAt;
-
-await transactionsRef()
-.add(data);
-
-}
-
-
-for(
-const r of backup.reminders||[]
-){
-
-const data={...r};
-
-delete data.id;
-
-delete data.createdAt;
-
-await remindersRef()
-.add(data);
-
-}
-
-
-await loadData();
-
-await loadReminders();
-
-updateAll();
-
-
-alert(
-"Backup restored successfully."
-);
-
-
-}catch(e){
-
-alert(
-"Restore failed: "+
-e.message
-);
-
-}
-
-
-event.target.value="";
-
-}
-
-
-/* ================================
-PROFILE
-================================ */
-
-async function saveProfile(){
-
-const name=
-document.getElementById(
-"displayName"
-).value.trim();
-
-
-if(!name){
-
-alert(
-"Enter your display name."
-);
-
-return;
-
-}
-
-
-await db.collection("users")
-.doc(auth.currentUser.uid)
-.set({
-
-displayName:name,
-
-email:auth.currentUser.email,
-
-updatedAt:
-firebase.firestore.FieldValue
-.serverTimestamp()
-
-},{
-merge:true
-});
-
-
-alert(
-"Profile saved."
-);
-
-}
-
-
-async function loadProfile(){
-
-try{
-
-const doc=
-await db.collection("users")
-.doc(auth.currentUser.uid)
-.get();
-
-
-if(doc.exists){
-
-document.getElementById(
-"displayName"
-).value=
-doc.data().displayName||"";
-
-}
-
-}catch(e){
-
-console.error(
-"Profile loading:",
-e
-);
-
-}
-
-}
-
-
-/* ================================
-SETTINGS
-================================ */
-
-function toggleDarkMode(){
-
-const dark=
-document.body.classList.toggle(
-"dark"
-);
-
-
-localStorage.setItem(
-"financeDark",
-dark?"1":"0"
-);
-
-}
-
-
-function loadSettings(){
-
-if(
-localStorage.getItem(
-"financeDark"
-)==="1"
-){
-
-document.body.classList.add(
-"dark"
-);
-
-}
-
-
-loadProfile();
-
-}
-
-
-function openModal(id){
-
-document.getElementById(
-id
-).style.display="flex";
-
-}
-
-
-function closeModal(id){
-
-document.getElementById(
-id
-).style.display="none";
-
-}
-
-
-/* ================================
-UPDATE
-================================ */
+/* =========================================
+ UPDATE
+========================================= */
 
 function updateAll(){
 
@@ -5104,39 +4405,32 @@ document.getElementById(
 ).textContent=
 money(totalBalance());
 
-
 const m=monthTotals();
-
 
 document.getElementById(
 "monthIncome"
 ).textContent=
 money(m.income);
 
-
 document.getElementById(
 "monthExpense"
 ).textContent=
 money(m.expense);
-
 
 document.getElementById(
 "monthSavings"
 ).textContent=
 money(m.savings);
 
-
 document.getElementById(
 "savingsRate"
 ).textContent=
 m.rate.toFixed(1)+"%";
 
-
 document.getElementById(
 "transactionCount"
 ).textContent=
 transactions.length;
-
 
 updateAccountDropdowns();
 
@@ -5151,34 +4445,13 @@ createCharts();
 }
 
 
-/* ================================
-EDIT TYPE
-================================ */
+/* =========================================
+ MODALS
+========================================= */
 
-document.getElementById(
-"editType"
-).addEventListener(
-"change",
-function(){
-
-document.getElementById(
-"editToBox"
-).style.display=
-this.value==="transfer"
-?"block"
-:"none";
-
-}
-);
-
-
-/* ================================
-MODAL BACKDROP
-================================ */
-
-document.querySelectorAll(
-".modal"
-).forEach(modal=>{
+document
+.querySelectorAll(".modal")
+.forEach(modal=>{
 
 modal.addEventListener(
 "click",
@@ -5194,7 +4467,18 @@ modal.style.display="none";
 
 });
 
-</script>
 
-</body>
-</html>
+document.getElementById(
+"editType"
+).addEventListener(
+"change",
+function(){
+
+document.getElementById(
+"editToBox"
+).style.display=
+this.value==="transfer"?
+"block":
+"none";
+
+});
