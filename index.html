@@ -587,6 +587,22 @@ label{
  display:none;
 }
 
+.daily-reminder-box{
+ border:1px solid var(--border);
+ border-radius:12px;
+ padding:16px;
+ margin-top:15px;
+}
+
+.daily-status{
+ margin-top:12px;
+ padding:10px;
+ border-radius:8px;
+ background:rgba(37,99,235,.08);
+ color:var(--muted);
+ font-size:13px;
+}
+
 @media(max-width:900px){
  .stats{grid-template-columns:repeat(3,1fr)}
  .filters{grid-template-columns:repeat(2,1fr)}
@@ -1047,6 +1063,80 @@ You can allow browser notifications and create reminders for bills, loans and ot
 </div>
 
 
+<!-- DAILY FINANCE UPDATE -->
+
+<div class="card">
+
+<h2>📅 Daily Finance Update</h2>
+
+<div class="info">
+Get a daily notification reminding you to update your income,
+expenses and transactions.
+</div>
+
+<div class="daily-reminder-box">
+
+<div class="grid">
+
+<div>
+<label>Daily Reminder Time</label>
+
+<input
+id="dailyReminderTime"
+type="time"
+value="20:00"
+>
+</div>
+
+<div style="display:flex;align-items:end">
+
+<label style="display:flex;align-items:center;gap:8px;margin:0">
+
+<input
+id="dailyReminderEnabled"
+type="checkbox"
+style="width:auto"
+>
+
+Enable Daily Reminder
+
+</label>
+
+</div>
+
+<div class="full">
+
+<button
+class="primary"
+onclick="saveDailyReminder()"
+>
+💾 Save Daily Reminder
+</button>
+
+<button
+class="gray"
+onclick="testDailyReminder()"
+style="margin-left:8px"
+>
+🔔 Test Notification
+</button>
+
+</div>
+
+</div>
+
+<div
+id="dailyReminderStatus"
+class="daily-status"
+>
+Daily reminder is currently OFF.
+</div>
+
+</div>
+
+</div>
+
+
 <div class="card">
 
 <h2>Your Reminders</h2>
@@ -1359,6 +1449,8 @@ let charts={};
 
 let deferredInstallPrompt=null;
 
+let dailyReminderTimer=null;
+
 
 /* =====================================================
  PWA INSTALL
@@ -1378,7 +1470,10 @@ async function installApp(){
 
 if(!deferredInstallPrompt){
 
-alert("If the install button is not available, use your browser menu and choose 'Install app' or 'Add to Home screen'.");
+alert(
+"This app is not currently available for installation. " +
+"Make sure you are using HTTPS and a supported browser."
+);
 
 return;
 
@@ -1386,13 +1481,21 @@ return;
 
 deferredInstallPrompt.prompt();
 
-await deferredInstallPrompt.userChoice;
+const result=await deferredInstallPrompt.userChoice;
+
+console.log("Install result:",result.outcome);
 
 deferredInstallPrompt=null;
 
 document.getElementById("installButton").style.display="none";
 
 }
+
+window.addEventListener("appinstalled",()=>{
+
+document.getElementById("installButton").style.display="none";
+
+});
 
 if("serviceWorker" in navigator){
 
@@ -1628,6 +1731,8 @@ await loadData();
 
 loadSettings();
 
+loadDailyReminderSettings();
+
 updateAll();
 
 loadReminders();
@@ -1676,8 +1781,6 @@ accounts.push({id:r.id,...x});
 
 }
 
-}
-
 
 /* =====================================================
  NAVIGATION
@@ -1699,7 +1802,13 @@ if(id==="transactions")displayTransactions();
 
 if(id==="accounts")displayAccounts();
 
-if(id==="reminders")displayReminders();
+if(id==="reminders"){
+
+displayReminders();
+
+loadDailyReminderSettings();
+
+}
 
 }
 
@@ -2567,11 +2676,8 @@ charts[name]=null;
 function createCharts(){
 
 destroyChart("pie");
-
 destroyChart("income");
-
 destroyChart("category");
-
 destroyChart("growth");
 
 const labels=accounts.map(a=>a.name);
@@ -2810,7 +2916,7 @@ options:{responsive:true,maintainAspectRatio:false}
 
 
 /* =====================================================
- REMINDERS
+ PAYMENT REMINDERS
 ===================================================== */
 
 async function requestNotifications(){
@@ -2975,7 +3081,9 @@ if(!r.completed&&r.date===date&&r.time===time){
 
 new Notification("Finance Reminder",{
 
-body:r.title+(r.amount?" - "+money(r.amount):"")
+body:r.title+(r.amount?" - "+money(r.amount):""),
+
+icon:"icon-192.png"
 
 });
 
@@ -2984,6 +3092,277 @@ body:r.title+(r.amount?" - "+money(r.amount):"")
 });
 
 }
+
+
+/* =====================================================
+ DAILY FINANCE UPDATE REMINDER
+===================================================== */
+
+function getDailyReminderSettings(){
+
+return {
+
+enabled:
+localStorage.getItem("dailyReminderEnabled")==="1",
+
+time:
+localStorage.getItem("dailyReminderTime")||"20:00"
+
+};
+
+}
+
+
+function loadDailyReminderSettings(){
+
+const settings=getDailyReminderSettings();
+
+const enabled=document.getElementById("dailyReminderEnabled");
+
+const time=document.getElementById("dailyReminderTime");
+
+if(enabled){
+
+enabled.checked=settings.enabled;
+
+}
+
+if(time){
+
+time.value=settings.time;
+
+}
+
+updateDailyReminderStatus();
+
+startDailyReminder();
+
+}
+
+
+async function saveDailyReminder(){
+
+const enabled=document.getElementById("dailyReminderEnabled").checked;
+
+const time=document.getElementById("dailyReminderTime").value;
+
+if(!time){
+
+alert("Please select a reminder time.");
+
+return;
+
+}
+
+if(enabled){
+
+if(!("Notification" in window)){
+
+alert("Your browser does not support notifications.");
+
+document.getElementById("dailyReminderEnabled").checked=false;
+
+return;
+
+}
+
+const permission=await Notification.requestPermission();
+
+if(permission!=="granted"){
+
+alert("Notification permission was not granted.");
+
+document.getElementById("dailyReminderEnabled").checked=false;
+
+localStorage.setItem("dailyReminderEnabled","0");
+
+updateDailyReminderStatus();
+
+return;
+
+}
+
+}
+
+localStorage.setItem(
+"dailyReminderEnabled",
+enabled?"1":"0"
+);
+
+localStorage.setItem(
+"dailyReminderTime",
+time
+);
+
+updateDailyReminderStatus();
+
+startDailyReminder();
+
+alert(
+enabled
+?"Daily finance reminder enabled."
+:"Daily finance reminder disabled."
+);
+
+}
+
+
+async function testDailyReminder(){
+
+if(!("Notification" in window)){
+
+alert("Your browser does not support notifications.");
+
+return;
+
+}
+
+let permission=Notification.permission;
+
+if(permission!=="granted"){
+
+permission=await Notification.requestPermission();
+
+}
+
+if(permission!=="granted"){
+
+alert("Please allow notifications in your browser first.");
+
+return;
+
+}
+
+new Notification(
+
+"My Finance Dashboard 💰",
+
+{
+
+body:
+"Time to update your finances! Record today's income and expenses.",
+
+icon:"icon-192.png",
+
+badge:"icon-192.png"
+
+}
+
+);
+
+}
+
+
+function updateDailyReminderStatus(){
+
+const status=document.getElementById("dailyReminderStatus");
+
+if(!status)return;
+
+const settings=getDailyReminderSettings();
+
+if(!settings.enabled){
+
+status.textContent=
+"🔕 Daily reminder is currently OFF.";
+
+return;
+
+}
+
+status.textContent=
+"🔔 Daily reminder is ON. You will be reminded every day at "+
+settings.time+
+" to update your finances.";
+
+}
+
+
+function startDailyReminder(){
+
+if(dailyReminderTimer){
+
+clearInterval(dailyReminderTimer);
+
+}
+
+dailyReminderTimer=setInterval(
+
+checkDailyReminder,
+
+30000
+
+);
+
+checkDailyReminder();
+
+}
+
+
+function checkDailyReminder(){
+
+const settings=getDailyReminderSettings();
+
+if(!settings.enabled)return;
+
+if(!("Notification" in window))return;
+
+if(Notification.permission!=="granted")return;
+
+const now=new Date();
+
+const currentTime=
+
+String(now.getHours()).padStart(2,"0")+
+":"+
+String(now.getMinutes()).padStart(2,"0");
+
+const todayDate=today();
+
+const lastReminder=
+
+localStorage.getItem(
+"lastDailyFinanceReminder"
+);
+
+if(
+
+currentTime===settings.time&&
+lastReminder!==todayDate
+
+){
+
+new Notification(
+
+"My Finance Dashboard 💰",
+
+{
+
+body:
+"Time to update your finances! Don't forget to record today's transactions.",
+
+icon:"icon-192.png",
+
+badge:"icon-192.png"
+
+}
+
+);
+
+localStorage.setItem(
+
+"lastDailyFinanceReminder",
+
+todayDate
+
+);
+
+}
+
+}
+
+
+/* Check normal reminders every minute */
 
 setInterval(checkReminders,60000);
 
